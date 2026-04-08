@@ -1,0 +1,382 @@
+{
+  "metadata": {
+    "titleTemplate": "%s — AKAR ÖRME",
+    "defaultTitle": "AKAR ÖRME — 高端针织面料制造商",
+    "description": "Akar Örme — 为全球时尚品牌提供优质针织面料生产。数十年纺织专业经验，精密针织制造。",
+    "keywords": ["针织", "针织面料", "纺织制造", "面料生产", "时尚制造", "优质纱线", "Akar Örme"]
+  },
+
+  "nav": {
+    "home": "首页",
+    "about": "关于我们",
+    "collections": "产品系列",
+    "technology": "生产技术",
+    "references": "合作伙伴",
+    "contact": "联系我们",
+    "toggleMenu": "菜单"
+  },
+
+  "hero": {
+    "label": "高端针织面料制造",
+    "heading1": "每一针",
+    "heading2": "都是",
+    "highlight": "品质",
+    "description": "数十年纺织经验融入每一米面料。从优质纱线到成品面料——为全球顶级时装品牌量身打造。",
+    "cta1": "浏览产品系列",
+    "cta2": "申请样品",
+    "scroll": "下滑"
+  },
+
+  "brandStory": {
+    "label": "始于2000年",
+    "heading": "精工织造，",
+    "highlight": "匠心传承",
+    "paragraph1": "二十多年来，Akar Örme 一直是全球顶级针织品牌背后值得信赖的生产合作伙伴。我们位于伊斯坦布尔的15,000平方米工厂拥有120多台先进针织机、专用染色车间和质量实验室——全部按照 ISO 9001 和 OEKO-TEX® 标准运营。",
+    "paragraph2": "我们不只是生产面料——我们根据每个品牌的愿景定制纺织解决方案，从纱线选择到最终检验。",
+    "link": "了解我们的故事"
+  },
+
+  "fabricCards": {
+    "label": "我们的面料",
+    "heading": "卓越品质",
+    "highlight": "面料",
+    "description": "六大核心面料系列，采用先进圆形和横编针织机生产——每款面料都针对特定用途精心调校。"
+  },
+
+  "modelGrid": {
+    "label": "精选款式",
+    "heading": "产品",
+    "highlight": "系列",
+    "description": "从经典 Polo 衫到时尚针织——每件产品均为全球时尚品牌精密制造。",
+    "viewDetails": "查看详情",
+    "viewAll": "查看全部系列"
+  },
+
+  "cta": {
+    "label": "开启合作",
+    "heading": "准备好",
+    "highlight": "携手共创了吗？",
+    "description": "无论您需要500米还是50,000米——我们的团队随时为您的品牌打造完美的针织方案。",
+    "button1": "联系我们",
+    "button2": "查看合作伙伴"
+  },
+
+  "footer": {
+    "copyright": "© {year} Akar Örme 版权所有。"
+  },
+
+  "about": {
+    "metaTitle": "关于我们",
+    "metaDescription": "了解 Akar Örme 25年以上高端针织制造历程。工厂理念、使命与愿景。",
+    "heroTitle": "了解",
+    "heroHighlight": "我们",
+    "heroSubtitle": "25年以上精密针织制造经验——从12台机器的工坊成长为世界级生产基地。",
+    "philosophyLabel": "我们的驱动力",
+    "philosophyTitle": "生产",
+    "philosophyHighlight": "理念",
+    "values": [
+      {
+        "title": "精密",
+        "description": "每一针都经过校准，每个张力都经过测量。我们将针织制造视为一门精确科学。"
+      },
+      {
+        "title": "创新",
+        "description": "持续投入研发与新一代针织技术，始终站在纺织生产的最前沿。"
+      },
+      {
+        "title": "可持续",
+        "description": "从无水染色试点到太阳能驱动——负责任的生产是我们的基因。"
+      }
+    ],
+    "missionTitle": "我们的使命",
+    "missionText": "通过尖端技术、严格品控和深度协作，提供超越合作伙伴期望的优质针织面料和成品。",
+    "visionTitle": "我们的愿景",
+    "visionText": "以先进技术、负责任实践和对工艺的坚定承诺，引领可持续针织制造的未来。到2030年，我们的目标是实现全面碳中和生产。",
+    "factoryTitle": "走进",
+    "factoryHighlight": "我们的工厂",
+    "factoryDesc": "探索我们位于伊斯坦布尔的15,000平方米生产基地。",
+    "factoryLabels": ["针织车间", "纱线仓库", "质量实验室", "染色车间", "后整理产线"]
+  },
+
+  "collections": {
+    "metaTitle": "产品系列",
+    "metaDescription": "浏览 AKAR ÖRME 完整针织产品系列——可按类别、季节和机号筛选。",
+    "heroTitle": "针织",
+    "heroHighlight": "产品系列",
+    "heroSubtitle": "浏览我们的产品目录——每件产品均为全球顶级时尚品牌精密制造。"
+  },
+
+  "contact": {
+    "metaTitle": "联系我们",
+    "metaDescription": "联系 Akar Örme，咨询针织生产、样品申请、工厂参观及合作机会。",
+    "heroTitle": "联系",
+    "heroHighlight": "我们",
+    "heroSubtitle": "正在筹划新项目？我们的生产团队随时为您服务。"
+  },
+
+  "references": {
+    "metaTitle": "合作伙伴",
+    "metaDescription": "Akar Örme 与30多个国家全球时尚品牌的可靠合作关系。",
+    "heroTitle": "可靠的",
+    "heroHighlight": "合作伙伴",
+    "heroSubtitle": "受到30多个国家500多个品牌的信赖——以品质和可靠性建立长期合作关系。"
+  },
+
+  "notFound": {
+    "title": "404",
+    "description": "您访问的页面不存在。",
+    "link": "返回首页"
+  },
+
+  "contactForm": {
+    "heading": "给我们留言",
+    "subheading": "填写下方表单，我们的团队将尽快与您联系。",
+    "subjects": {
+      "placeholder": "请选择主题",
+      "manufacturing": "生产咨询",
+      "partnership": "合作洽谈",
+      "sampling": "样品申请",
+      "visit": "工厂参观",
+      "other": "其他"
+    },
+    "fields": {
+      "fullName": "姓名",
+      "email": "邮箱",
+      "company": "公司",
+      "phone": "电话",
+      "subject": "主题",
+      "message": "留言"
+    },
+    "placeholders": {
+      "name": "您的姓名",
+      "email": "example@company.com",
+      "company": "公司名称",
+      "phone": "+90 (___) ___ __ __",
+      "message": "请简要介绍您的项目..."
+    },
+    "sendButton": "发送",
+    "sending": "发送中...",
+    "sent": "消息已发送 ✓",
+    "error": "发送失败，请重试。",
+    "infoCards": {
+      "address": "工厂地址",
+      "addressLines": ["Merkez Mh. Papatya Sk. No:4 Kat:4", "Güngören, İstanbul"],
+      "email": "邮箱",
+      "phone": "电话",
+      "hours": "工作时间",
+      "hourLines": ["周一至周五: 09:00 – 18:00", "周六: 休息", "周日: 休息"]
+    }
+  },
+
+  "collectionFilter": {
+    "all": "全部",
+    "men": "男款",
+    "women": "女款",
+    "winter": "冬季",
+    "summer": "夏季",
+    "fine": "细针",
+    "heavy": "粗针",
+    "viewDetails": "查看详情",
+    "noMatch": "没有找到匹配所选筛选条件的款式。"
+  },
+
+  "modelDetail": {
+    "backToCollections": "返回产品系列",
+    "availableColours": "可选颜色",
+    "requestProduction": "申请生产",
+    "orderSample": "订购样品",
+    "tabs": {
+      "overview": "概览",
+      "technical": "技术参数",
+      "gallery": "图库"
+    },
+    "overviewExtra": "我们的每件产品在发货前都经过严格的质量检测——包括纱线张力测试、色牢度分析和尺寸检测——确保每批次均符合国际标准。"
+  },
+
+  "timeline": {
+    "label": "发展历程",
+    "heading": "从创立",
+    "highlight": "到今天"
+  },
+
+  "referenceLogos": {
+    "heading": "信赖",
+    "highlight": "我们的品牌",
+    "description": "我们自豪地为全球领先的时装品牌、零售商和自有品牌提供服务。"
+  },
+
+  "exportMap": {
+    "heading": "出口",
+    "highlight": "网络",
+    "istanbul": "伊斯坦布尔",
+    "activeMarkets": "活跃市场",
+    "expanding": "拓展中"
+  },
+
+  "technology": {
+    "metaTitle": "生产技术",
+    "metaDescription": "了解 Akar Örme 的生产技术——3D针织查看器、织纹模拟和工厂数据看板。",
+    "heroTitle": "生产",
+    "heroHighlight": "技术",
+    "heroSubtitle": "通过互动工具深入了解我们的面料品质、设备能力和生产流程。",
+    "sectionTitle": "数字",
+    "sectionHighlight": "展厅",
+    "sectionDesc": "我们崇尚透明。这些互动工具让您在参观工厂之前，就能充分了解我们的生产品质和制造规模。",
+    "launchModule": "探索",
+    "modules": [
+      {
+        "title": "3D 针织查看器",
+        "description": "360°旋转、缩放查看针织款式，以逼真的光影和纹理效果预览不同配色方案。",
+        "tags": ["Three.js", "WebGL", "360°", "实时"]
+      },
+      {
+        "title": "织纹模拟",
+        "description": "选择纱线类型、编织技术和机号，逐步查看面料的生成过程。",
+        "tags": ["互动", "教学", "纺织科学", "分步"]
+      },
+      {
+        "title": "工厂数据",
+        "description": "通过动态图表查看机器设备、产能分布、机号配比和全球出口地图。",
+        "tags": ["动态图表", "世界地图", "数据驱动", "实时"]
+      }
+    ]
+  },
+
+  "viewer": {
+    "metaTitle": "3D 针织查看器",
+    "metaDescription": "以3D方式查看 Akar Örme 针织款式。旋转、缩放，详细观察纱线纹理。",
+    "heroTitle": "3D",
+    "heroHighlight": "查看器",
+    "heroSubtitle": "在3D互动环境中旋转、缩放和探索我们的针织产品。",
+    "breadcrumb": "3D 查看器",
+    "infoTitle": "近距离",
+    "infoHighlight": "查看产品",
+    "infoDesc": "我们的3D查看器采用逼真的针织纹理和基于物理的光照效果，在屏幕上还原面料表面。每个线圈、光线反射和面料垂坠感都是实时计算的。",
+    "features": [
+      { "title": "360° 旋转", "desc": "从任意角度查看产品。" },
+      { "title": "滚轮缩放", "desc": "放大查看针织纹理细节。" },
+      { "title": "切换颜色", "desc": "预览不同纱线配色。" },
+      { "title": "正面/背面", "desc": "对比查看产品两面。" }
+    ],
+    "productionTitle": "可量产的款式",
+    "productionDesc": "展示的每款产品都代表我们的实际生产能力。申请样品以亲身感受品质。"
+  },
+
+  "patterns": {
+    "metaTitle": "织纹模拟",
+    "metaDescription": "探索纱线类型、编织技术和机号如何组合形成独特面料。Akar Örme 互动纺织学习模块。",
+    "heroTitle": "织纹",
+    "heroHighlight": "模拟",
+    "heroSubtitle": "选择纱线、技术和机号——实时查看生成的面料效果。",
+    "breadcrumb": "织纹模拟"
+  },
+
+  "dashboard": {
+    "metaTitle": "工厂数据",
+    "metaDescription": "了解 Akar Örme 的生产能力——128台以上针织机、日产能25,000米、出口32个以上国家。",
+    "heroTitle": "工厂",
+    "heroHighlight": "数据",
+    "heroSubtitle": "产能数据、设备阵容和全球出口网络——一览无余。",
+    "breadcrumb": "工厂数据"
+  },
+
+  "knitwearViewer": {
+    "colors": { "navy": "藏青", "charcoal": "炭灰", "cream": "米白", "wine": "酒红", "sage": "鼠尾草绿", "gold": "金色" },
+    "badge": "3D 互动",
+    "hint": "拖动旋转 · 滚轮缩放",
+    "infoTitle": "针织纹理",
+    "infoDesc": "逼真的纱线纹理模拟让您在屏幕上看到每一个线圈。旋转模型时光线角度随之变化，面料表面细节一览无余。",
+    "colourLabel": "颜色",
+    "viewLabel": "视角",
+    "front": "正面",
+    "back": "背面"
+  },
+
+  "patternExplorer": {
+    "back": "← 返回",
+    "next": "下一步 →",
+    "steps": {
+      "yarn": { "title": "选择纱线类型", "desc": "选择决定面料基本特性的原材料。" },
+      "technique": { "title": "选择编织技术", "desc": "所选技术决定面料的弹性、质感和垂坠度。" },
+      "gauge": { "title": "选择机号", "desc": "机号直接影响面料的厚度、重量和手感。" }
+    },
+    "weightLabel": "克重:",
+    "resultTitle": "面料结果",
+    "resultDesc": "根据您的选择生成的面料如下。",
+    "bestFor": "最适合",
+    "performance": "性能",
+    "stats": { "stretchH": "横向弹性", "stretchV": "纵向弹性", "warmth": "保暖性", "breathability": "透气性", "durability": "耐久性" },
+    "startOver": "↻ 重新开始",
+    "stepLabels": { "yarn": "纱线", "technique": "技术", "gauge": "机号", "result": "结果" }
+  },
+
+  "factoryDashboard": {
+    "machineFleet": "设备阵容",
+    "machinesSubtitle": "4大类别共 {total} 台设备",
+    "gaugeDistribution": "机号分布",
+    "gaugeSubtitle": "按机号类别划分的产能",
+    "exportNetwork": "出口网络",
+    "exportSubtitle": "悬停地图探索出口目的地",
+    "factory": "工厂",
+    "activeMarket": "活跃市场",
+    "istanbulHQ": "伊斯坦布尔总部",
+    "regions": { "europe": "欧洲", "asia": "亚洲", "americas": "美洲", "africa": "非洲" },
+    "metrics": {
+      "machines": { "label": "针织机", "description": "最先进的圆机和平面机" },
+      "capacity": { "label": "日产能", "description": "每日生产的优质面料米数" },
+      "gauges": { "label": "机号类型", "description": "从 3GG 超重到 28GG 超细" },
+      "yarns": { "label": "纱线种类", "description": "天然、合成和混纺纱线选项" },
+      "countries": { "label": "出口国家", "description": "服务五大洲的交付" },
+      "employees": { "label": "专家团队", "description": "技术员、设计师和质量团队" }
+    },
+    "machineTypeNames": {
+      "circular": "圆机",
+      "flat": "平机",
+      "jacquard": "提花",
+      "seamless": "无缝（整件成型）"
+    },
+    "gaugeNames": {
+      "ultraFine": "超细",
+      "fine": "细",
+      "medium": "中等",
+      "heavy": "重",
+      "ultraHeavy": "超重"
+    }
+  },
+
+  "data": {
+    "fabrics": [
+      { "name": "汗布", "gauge": "28 GG", "composition": "100% Supima棉", "description": "高端针织的经典基础——光滑正面，细腻底部线圈。Supima 棉汗布为T恤、内衣和日常高端单品提供卓越的柔软度和完美垂坠感。" },
+      { "name": "棉毛布", "gauge": "24 GG", "composition": "100% 紧密纺棉", "description": "双面稳定，品质不打折。两面外观一致的棉毛布非常适合 Polo 衫、结构层次和需要无额外重量挺括感的服装。" },
+      { "name": "珠地", "gauge": "14 GG", "composition": "100% 长绒棉", "description": "定义现代 Polo 衫的经典华夫格纹理。长绒棉珠地面料透气、尺寸稳定，经得住反复洗涤。" },
+      { "name": "毛圈布", "gauge": "20 GG", "composition": "80% 棉 / 20% 涤纶", "description": "内面柔软毛圈，外面光滑平整——每件高品质卫衣背后的面料。棉涤混纺完美平衡舒适性、结构感和易打理性能。" },
+      { "name": "米兰诺罗纹", "gauge": "12 GG", "composition": "50% 美利奴 / 50% 腈纶", "description": "致密、挺括、触感奢华——米兰诺罗纹非常适合定制针织西装外套和完美保形的建筑感廓形。" },
+      { "name": "绞花与提花", "gauge": "7 GG", "composition": "80% 羊毛 / 20% 尼龙", "description": "诉说故事的复杂针法图案。粗针提花和绞花面料为秋冬系列和传统风格时装注入匠心质感。" }
+    ],
+    "timeline": [
+      { "year": 2000, "title": "创立", "description": "Akar Örme 在伊斯坦布尔创立，拥有12台圆形针织机，立志打造世界级针织面料。" },
+      { "year": 2003, "title": "首次出口", "description": "与一家北欧时尚品牌签订首个国际订单，迈出全球化的第一步。" },
+      { "year": 2006, "title": "ISO 9001 认证", "description": "获得 ISO 9001 质量管理体系认证，在各部门建立起严格的生产标准。" },
+      { "year": 2010, "title": "工厂扩建", "description": "搬入15,000平方米综合工厂，配备内部染色、后整理和质量实验室。" },
+      { "year": 2014, "title": "OEKO-TEX® 认证", "description": "获得 OEKO-TEX® Standard 100 认证，确保每款面料均符合最高安全与可持续标准。" },
+      { "year": 2018, "title": "120+ 台设备", "description": "设备超过120台圆形针织机，机号从3 GG到28 GG，覆盖各类生产需求。" },
+      { "year": 2022, "title": "可持续制造", "description": "引入无水染色技术和太阳能驱动产线，朝着2030年碳中和目标迈出坚实步伐。" },
+      { "year": 2025, "title": "今天", "description": "服务32个国家500多个全球品牌——持续投资针织制造的未来。" }
+    ],
+    "stats": [
+      { "label": "合作品牌", "value": 500 },
+      { "label": "出口国家", "value": 32 },
+      { "label": "年经验", "value": 25 },
+      { "label": "米/年", "value": 8, "suffix": "M+" }
+    ]
+  },
+
+  "common": {
+    "home": "首页",
+    "about": "关于我们",
+    "collections": "产品系列",
+    "technology": "生产技术",
+    "references": "合作伙伴",
+    "contact": "联系我们"
+  }
+}

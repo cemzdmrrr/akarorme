@@ -1,0 +1,382 @@
+{
+  "metadata": {
+    "titleTemplate": "%s — AKAR ÖRME",
+    "defaultTitle": "AKAR ÖRME — Premium Triko Kumaş Üreticisi",
+    "description": "Akar Örme — Dünya markalarına özel triko kumaş ve konfeksiyon üretimi. 25 yıllık tecrübe, 15.000 m² tesis, ISO 9001 & OEKO-TEX® sertifikalı.",
+    "keywords": ["triko", "örme kumaş", "tekstil üretimi", "kumaş imalatı", "fason üretim", "premium iplik", "Akar Örme", "İstanbul tekstil"]
+  },
+
+  "nav": {
+    "home": "Ana Sayfa",
+    "about": "Hakkımızda",
+    "collections": "Koleksiyonlar",
+    "technology": "Teknoloji",
+    "references": "Referanslar",
+    "contact": "İletişim",
+    "toggleMenu": "Menüyü aç/kapat"
+  },
+
+  "hero": {
+    "label": "Triko Kumaş & Konfeksiyon",
+    "heading1": "Her Dikişte",
+    "heading2": "Aynı",
+    "highlight": "Kalite",
+    "description": "25 yılı aşkın deneyimimizle, premium iplikten son ürüne kadar dünyanın önde gelen moda markalarına güvenle üretim yapıyoruz.",
+    "cta1": "Koleksiyonları İncele",
+    "cta2": "Numune Talep Et",
+    "scroll": "AŞAĞI KAYDIR"
+  },
+
+  "brandStory": {
+    "label": "2000 Yılından Bugüne",
+    "heading": "İplikten Kumaşa,",
+    "highlight": "Kumaştan Markaya",
+    "paragraph1": "Akar Örme, 2000 yılından bu yana dünyanın en prestijli triko markalarının arkasındaki güvenilir üretim ortağıdır. İstanbul Güngören'deki 15.000 m²'lik entegre tesisimizde 120'yi aşkın son teknoloji örme makinesi, kendi boyahanemiz ve akredite kalite laboratuvarımızla ISO 9001 ve OEKO-TEX® standartlarında üretim gerçekleştiriyoruz.",
+    "paragraph2": "Sadece kumaş üretmiyoruz — her markanın ihtiyacına özel, iplik seçiminden son kalite kontrole kadar uçtan uca tekstil çözümleri sunuyoruz.",
+    "link": "Hikayemizin Devamı"
+  },
+
+  "fabricCards": {
+    "label": "Kumaş Çeşitlerimiz",
+    "heading": "Üstün Kaliteli",
+    "highlight": "Kumaşlar",
+    "description": "Son teknoloji yuvarlak ve düz örme makinelerimizde üretilen altı ana kumaş grubumuz — her biri farklı kullanım alanlarına göre özenle geliştirilmiştir."
+  },
+
+  "modelGrid": {
+    "label": "Öne Çıkan Modeller",
+    "heading": "Model",
+    "highlight": "Koleksiyonumuz",
+    "description": "Klasik pololardan güncel triko tasarımlara kadar her model, küresel moda standartlarında titizlikle üretilmektedir.",
+    "viewDetails": "Detayları İncele",
+    "viewAll": "Tüm Koleksiyonu Gör"
+  },
+
+  "cta": {
+    "label": "Projenizi Başlatın",
+    "heading": "Birlikte",
+    "highlight": "Üretelim mi?",
+    "description": "İster 500 metre ister 50.000 metre olsun — deneyimli ekibimiz markanıza özel triko çözümünü birlikte geliştirmek için hazır.",
+    "button1": "Bizimle İletişime Geçin",
+    "button2": "Referanslarımızı İnceleyin"
+  },
+
+  "footer": {
+    "copyright": "© {year} Akar Örme. Tüm hakları saklıdır."
+  },
+
+  "about": {
+    "metaTitle": "Hakkımızda",
+    "metaDescription": "Akar Örme'nin 25 yılı aşkın triko üretim hikayesi, fabrika felsefemiz, misyon ve vizyonumuz.",
+    "heroTitle": "Bizi Yakından",
+    "heroHighlight": "Tanıyın",
+    "heroSubtitle": "12 makineli küçük bir atölyeden, 120+ makineli dünya standartlarında bir üretim tesisine uzanan 25 yıllık yolculuğumuz.",
+    "philosophyLabel": "Değerlerimiz",
+    "philosophyTitle": "Üretim",
+    "philosophyHighlight": "Felsefemiz",
+    "values": [
+      {
+        "title": "Titizlik",
+        "description": "Her ilmeğin ayarı, her ipliğin gerginliği ölçülür ve kontrol edilir. Triko üretimini bir mühendislik disiplini olarak ele alıyoruz."
+      },
+      {
+        "title": "Yenilikçilik",
+        "description": "Ar-Ge çalışmalarımız ve yeni nesil örme teknolojilerine yaptığımız sürekli yatırımlarla sektörün öncü firmalarından biri olmaya devam ediyoruz."
+      },
+      {
+        "title": "Sürdürülebilirlik",
+        "description": "Susuz boyama uygulamalarından güneş enerjisiyle çalışan tesislere kadar, çevreye duyarlı üretim anlayışımızın merkezinde yer almaktadır."
+      }
+    ],
+    "missionTitle": "Misyonumuz",
+    "missionText": "İleri teknoloji, sıkı kalite kontrolü ve iş ortaklarımızla kurduğumuz yakın iş birliğiyle, beklentileri aşan triko kumaş ve konfeksiyon üretimi gerçekleştirmek.",
+    "visionTitle": "Vizyonumuz",
+    "visionText": "Teknoloji, sürdürülebilirlik ve ustalık üçgeninde triko sektörünün geleceğine yön vermek. 2030 yılına kadar karbon nötr üretim hedefimize ulaşmak için kararlılıkla çalışıyoruz.",
+    "factoryTitle": "Fabrikamızdan",
+    "factoryHighlight": "Kareler",
+    "factoryDesc": "İstanbul'daki 15.000 m²'lik üretim tesisimizden görüntüler.",
+    "factoryLabels": ["Örme Bölümü", "İplik Deposu", "Kalite Laboratuvarı", "Boyahane", "Terbiye Hattı"]
+  },
+
+  "collections": {
+    "metaTitle": "Koleksiyonlar",
+    "metaDescription": "AKAR ÖRME triko koleksiyonunu keşfedin — kategori, sezon ve makine numarasına göre filtreleyin.",
+    "heroTitle": "Triko",
+    "heroHighlight": "Koleksiyonumuz",
+    "heroSubtitle": "Dünya standartlarında üretilen triko modellerimizi inceleyin ve markanıza en uygun ürünleri keşfedin."
+  },
+
+  "contact": {
+    "metaTitle": "İletişim",
+    "metaDescription": "Akar Örme ile iletişime geçin. Üretim talebi, numune siparişi, fabrika ziyareti ve iş birliği fırsatları için bize ulaşın.",
+    "heroTitle": "Bizimle",
+    "heroHighlight": "İletişime Geçin",
+    "heroSubtitle": "Yeni bir proje mi planlıyorsunuz? Üretim ekibimiz sizinle görüşmek için hazır."
+  },
+
+  "references": {
+    "metaTitle": "Referanslar",
+    "metaDescription": "Akar Örme'nin 30'u aşkın ülkedeki iş ortaklıkları ve referans markaları.",
+    "heroTitle": "İş",
+    "heroHighlight": "Ortaklarımız",
+    "heroSubtitle": "30'dan fazla ülkede 500'ü aşkın markanın tercihi — kalite ve güvenilirlik üzerine kurulu uzun soluklu iş birlikleri."
+  },
+
+  "notFound": {
+    "title": "404",
+    "description": "Aradığınız sayfa bulunamadı.",
+    "link": "Ana Sayfaya Dön"
+  },
+
+  "contactForm": {
+    "heading": "Bize Yazın",
+    "subheading": "Formu doldurun, ekibimiz en kısa sürede size dönüş yapsın.",
+    "subjects": {
+      "placeholder": "Konu seçiniz",
+      "manufacturing": "Üretim Talebi",
+      "partnership": "İş Birliği / Ortaklık",
+      "sampling": "Numune Talebi",
+      "visit": "Fabrika Ziyareti",
+      "other": "Diğer"
+    },
+    "fields": {
+      "fullName": "Ad Soyad",
+      "email": "E-posta",
+      "company": "Firma",
+      "phone": "Telefon",
+      "subject": "Konu",
+      "message": "Mesajınız"
+    },
+    "placeholders": {
+      "name": "Adınız Soyadınız",
+      "email": "ornek@firmaniz.com",
+      "company": "Firma Adı",
+      "phone": "+90 (___) ___ __ __",
+      "message": "Projeniz hakkında kısaca bilgi veriniz..."
+    },
+    "sendButton": "Gönder",
+    "sending": "Gönderiliyor...",
+    "sent": "Mesajınız iletildi ✓",
+    "error": "Mesaj gönderilemedi. Lütfen tekrar deneyiniz.",
+    "infoCards": {
+      "address": "Fabrika Adresi",
+      "addressLines": ["Merkez Mh. Papatya Sk. No:4 Kat:4", "Güngören, İstanbul"],
+      "email": "E-posta",
+      "phone": "Telefon",
+      "hours": "Çalışma Saatleri",
+      "hourLines": ["Pazartesi – Cuma: 09:00 – 18:00", "Cumartesi: Kapalı", "Pazar: Kapalı"]
+    }
+  },
+
+  "collectionFilter": {
+    "all": "Tümü",
+    "men": "Erkek",
+    "women": "Kadın",
+    "winter": "Kış",
+    "summer": "Yaz",
+    "fine": "İnce Örme",
+    "heavy": "Kalın Örme",
+    "viewDetails": "Detayları İncele",
+    "noMatch": "Seçtiğiniz filtreye uygun model bulunamadı."
+  },
+
+  "modelDetail": {
+    "backToCollections": "Koleksiyona Dön",
+    "availableColours": "Renk Seçenekleri",
+    "requestProduction": "Üretim Talebi Oluştur",
+    "orderSample": "Numune Sipariş Ver",
+    "tabs": {
+      "overview": "genel bakış",
+      "technical": "teknik bilgiler",
+      "gallery": "galeri"
+    },
+    "overviewExtra": "Tüm ürünlerimiz sevkiyat öncesinde detaylı kalite kontrolden geçer — iplik gerilim testi, renk haslığı analizi ve ölçü kontrolü dahil — böylece her partinin uluslararası standartlara uygunluğu garanti altına alınır."
+  },
+
+  "timeline": {
+    "label": "Yolculuğumuz",
+    "heading": "Kuruluştan",
+    "highlight": "Bugüne"
+  },
+
+  "referenceLogos": {
+    "heading": "Güvenilen",
+    "highlight": "Markalar",
+    "description": "Dünya çapında tanınan moda markaları, perakende zincirleri ve özel etiketli üreticilerle çalışıyoruz."
+  },
+
+  "exportMap": {
+    "heading": "İhracat",
+    "highlight": "Ağımız",
+    "istanbul": "İSTANBUL",
+    "activeMarkets": "Aktif Pazarlar",
+    "expanding": "Gelişen Pazarlar"
+  },
+
+  "technology": {
+    "metaTitle": "Teknoloji",
+    "metaDescription": "Akar Örme'nin üretim teknolojilerini yakından tanıyın — 3D triko görüntüleyici, desen simülasyonu ve fabrika verileri.",
+    "heroTitle": "Üretim",
+    "heroHighlight": "Teknolojimiz",
+    "heroSubtitle": "Kumaş kalitemizi, makine parkurumuzu ve üretim süreçlerimizi interaktif araçlarla deneyimleyin.",
+    "sectionTitle": "Dijital",
+    "sectionHighlight": "Atölyemiz",
+    "sectionDesc": "Üretim süreçlerimizi şeffaf bir şekilde paylaşıyoruz. Aşağıdaki interaktif modüllerle fabrikamızı ziyaret etmeden önce kapasitemizi ve kalitemizi yakından inceleyin.",
+    "launchModule": "İncele",
+    "modules": [
+      {
+        "title": "3D Triko Görüntüleyici",
+        "description": "Örme modelleri 360° döndürün, yakınlaştırın ve farklı renk seçeneklerini gerçekçi ışık/doku simülasyonuyla inceleyin.",
+        "tags": ["Three.js", "WebGL", "360°", "Gerçek Zamanlı"]
+      },
+      {
+        "title": "Desen Simülasyonu",
+        "description": "İplik, teknik ve numara kombinasyonları seçerek kumaşın nasıl oluştuğunu adım adım görün.",
+        "tags": ["İnteraktif", "Eğitici", "Tekstil Bilgisi", "Adım Adım"]
+      },
+      {
+        "title": "Fabrika Verileri",
+        "description": "Makine parkurumuz, üretim kapasitemiz, numara dağılımımız ve ihracat haritamızı canlı grafiklerle inceleyin.",
+        "tags": ["Canlı Grafikler", "Dünya Haritası", "Veri Odaklı", "Gerçek Zamanlı"]
+      }
+    ]
+  },
+
+  "viewer": {
+    "metaTitle": "3D Triko Görüntüleyici",
+    "metaDescription": "Akar Örme triko modellerini 3D olarak inceleyin. Döndürün, yakınlaştırın, farklı renk seçeneklerini deneyin.",
+    "heroTitle": "3D",
+    "heroHighlight": "Görüntüleyici",
+    "heroSubtitle": "Triko modellerimizi 3 boyutlu ortamda döndürün, yakınlaştırın ve detaylı inceleyin.",
+    "breadcrumb": "3D Görüntüleyici",
+    "infoTitle": "Modelleri",
+    "infoHighlight": "Yakından İnceleyin",
+    "infoDesc": "3D görüntüleyicimiz, gerçekçi iplik dokusu ve fizik tabanlı aydınlatma kullanarak kumaş yüzeyini ekranınıza taşır. Her ilmek, ışık yansıması ve kumaş düşüşü anlık olarak hesaplanır.",
+    "features": [
+      { "title": "360° Döndürme", "desc": "Modeli istediğiniz açıdan inceleyin." },
+      { "title": "Yakınlaştırma", "desc": "Kaydırarak örme doku detayına inin." },
+      { "title": "Renk Seçimi", "desc": "Farklı iplik renklerini deneyin." },
+      { "title": "Ön / Arka", "desc": "Giysinin yüz ve arka yüzünü karşılaştırın." }
+    ],
+    "productionTitle": "Üretime Hazır Modeller",
+    "productionDesc": "Gördüğünüz her model gerçek üretim kalitemizi temsil eder. Kumaşın tuşesini hissetmek için numune talep edebilirsiniz."
+  },
+
+  "patterns": {
+    "metaTitle": "Desen Simülasyonu",
+    "metaDescription": "İplik türü, örme tekniği ve numara seçerek kumaşın nasıl oluştuğunu adım adım keşfedin. Akar Örme interaktif tekstil modülü.",
+    "heroTitle": "Desen",
+    "heroHighlight": "Simülasyonu",
+    "heroSubtitle": "İplik, teknik ve numara kombinasyonuyla oluşan kumaşı anlık olarak görün.",
+    "breadcrumb": "Desen Simülasyonu"
+  },
+
+  "dashboard": {
+    "metaTitle": "Fabrika Verileri",
+    "metaDescription": "Akar Örme üretim kapasitesi — 128+ örme makinesi, günlük 25.000m kapasite, 32+ ülkeye ihracat.",
+    "heroTitle": "Fabrika",
+    "heroHighlight": "Verileri",
+    "heroSubtitle": "Üretim kapasitemiz, makine parkurumuz ve küresel ihracat ağımız — tek ekranda.",
+    "breadcrumb": "Fabrika Verileri"
+  },
+
+  "knitwearViewer": {
+    "colors": { "navy": "Lacivert", "charcoal": "Antrasit", "cream": "Krem", "wine": "Bordo", "sage": "Adaçayı", "gold": "Altın" },
+    "badge": "3D İnteraktif",
+    "hint": "Döndürmek için sürükleyin · Yakınlaştırmak için kaydırın",
+    "infoTitle": "Örme Doku",
+    "infoDesc": "Gerçekçi iplik dokusu simülasyonu sayesinde her ilmeği ekranınızda görebilirsiniz. Modeli döndürdükçe ışık açısı değişir ve kumaş yüzeyindeki detaylar ortaya çıkar.",
+    "colourLabel": "Renk",
+    "viewLabel": "Görünüm",
+    "front": "ön",
+    "back": "arka"
+  },
+
+  "patternExplorer": {
+    "back": "← Geri",
+    "next": "Sonraki →",
+    "steps": {
+      "yarn": { "title": "İplik Türü Seçin", "desc": "Kumaşın temel karakterini belirleyen hammaddeyi seçin." },
+      "technique": { "title": "Örme Tekniği Seçin", "desc": "Seçtiğiniz teknik kumaşın esnekliğini, dokusunu ve düşüşünü belirler." },
+      "gauge": { "title": "Numara Seçin", "desc": "Numara, kumaşın kalınlığını, ağırlığını ve tuşesini doğrudan etkiler." }
+    },
+    "weightLabel": "Ağırlık:",
+    "resultTitle": "Kumaş Sonucu",
+    "resultDesc": "Seçimlerinize göre oluşan kumaş aşağıda.",
+    "bestFor": "En Uygun",
+    "performance": "Performans",
+    "stats": { "stretchH": "Yatay Esneklik", "stretchV": "Dikey Esneklik", "warmth": "Sıcak Tutma", "breathability": "Hava Geçirgenliği", "durability": "Dayanıklılık" },
+    "startOver": "↻ Baştan Başla",
+    "stepLabels": { "yarn": "İplik", "technique": "Teknik", "gauge": "Numara", "result": "Sonuç" }
+  },
+
+  "factoryDashboard": {
+    "machineFleet": "Makine Parkuru",
+    "machinesSubtitle": "4 kategoride toplam {total} makine",
+    "gaugeDistribution": "Numara Dağılımı",
+    "gaugeSubtitle": "Numara gruplarına göre üretim kapasitesi",
+    "exportNetwork": "İhracat Ağı",
+    "exportSubtitle": "Haritayı keşfetmek için üzerine gelin",
+    "factory": "Fabrika",
+    "activeMarket": "Aktif Pazar",
+    "istanbulHQ": "İSTANBUL MRK",
+    "regions": { "europe": "avrupa", "asia": "asya", "americas": "amerika", "africa": "afrika" },
+    "metrics": {
+      "machines": { "label": "Örme Makineleri", "description": "En yeni dairesel ve düz örme makineleri" },
+      "capacity": { "label": "Günlük Kapasite", "description": "Günlük üretilen premium kumaş metre sayısı" },
+      "gauges": { "label": "Numara Türleri", "description": "3 GG ultra kalından 28 GG ultra inceye kadar" },
+      "yarns": { "label": "İplik Seçenekleri", "description": "Doğal, sentetik ve karışık iplik çeşitleri" },
+      "countries": { "label": "İhracat Ülkeleri", "description": "Beş kıtaya hizmet veren teslimatlar" },
+      "employees": { "label": "Uzman Kadro", "description": "Yetenekli teknisyenler, tasarımcılar ve kalite ekipleri" }
+    },
+    "machineTypeNames": {
+      "circular": "Dairesel Örme",
+      "flat": "Düz Örme",
+      "jacquard": "Jakarlı",
+      "seamless": "Dikişsiz (Whole Garment)"
+    },
+    "gaugeNames": {
+      "ultraFine": "Ultra İnce",
+      "fine": "İnce",
+      "medium": "Orta",
+      "heavy": "Ağır",
+      "ultraHeavy": "Ultra Ağır"
+    }
+  },
+
+  "data": {
+    "fabrics": [
+      { "name": "Süprem", "gauge": "28 GG", "composition": "%100 Supima Pamuk", "description": "Triko üretimin temel taşı — düzgün yüzey, ince ilmek yapısı. Supima pamuğun doğal yumuşaklığıyla tişört, iç giyim ve günlük premium ürünlerde kusursuz döküş sağlar." },
+      { "name": "İnterlok", "gauge": "24 GG", "composition": "%100 Kompakt Pamuk", "description": "Çift yüzlü, dengeli ve stabil yapısıyla öne çıkar. Her iki tarafı aynı görünen interlok; polo yaka, katmanlı kombinler ve gövdeli tasarımlar için ideal bir tercihtir." },
+      { "name": "Pike Örme", "gauge": "14 GG", "composition": "%100 Uzun Elyaf Pamuk", "description": "Polo tişörtün vazgeçilmezi olan kabartmalı gofret dokusu. Uzun elyaf pamuktan ürettiğimiz pike kumaş nefes alır, formunu korur ve yıkamadan yıkamaya dayanıklılığını sürdürür." },
+      { "name": "Üç İplik", "gauge": "20 GG", "composition": "%80 Pamuk / %20 Polyester", "description": "İçi yumuşak havlı, dışı düzgün yüzeyli — premium sweatshirt'lerin olmazsa olmazı. Pamuk-polyester karışımımız konforu, dayanıklılığı ve kolay bakımı bir arada sunar." },
+      { "name": "Milano Ribana", "gauge": "12 GG", "composition": "%50 Merinos / %50 Akrilik", "description": "Sıkı, dolgulu ve lüks hissi veren yapısıyla öne çıkar. Milano ribana, formunu asla kaybetmeyen triko ceketler ve mimari kesimli tasarımlar için biçilmiş kaftandır." },
+      { "name": "Saç Örgü & Jakar", "gauge": "7 GG", "composition": "%80 Yün / %20 Naylon", "description": "Kumaşa karakter katan zengin ilmek desenleri. Kalın numara jakar ve saç örgü örmelerimiz, kış koleksiyonlarına ve vintage esintili tasarımlara zanaat değeri katar." }
+    ],
+    "timeline": [
+      { "year": 2000, "title": "Kuruluş", "description": "Akar Örme, 12 yuvarlak örme makinesiyle İstanbul'da kuruldu. Hedef: dünya standartlarında triko kumaş üretmek." },
+      { "year": 2003, "title": "İlk İhracat", "description": "İskandinav bir moda markasıyla ilk uluslararası anlaşmamızı imzaladık ve küresel pazara adım attık." },
+      { "year": 2006, "title": "ISO 9001 Sertifikası", "description": "ISO 9001 kalite yönetim belgesi alarak üretimin her aşamasında uluslararası standartları benimsedik." },
+      { "year": 2010, "title": "Fabrika Genişlemesi", "description": "Boyahane, terbiye tesisi ve kalite laboratuvarı dahil 15.000 m²'lik entegre üretim tesisine taşındık." },
+      { "year": 2014, "title": "OEKO-TEX® Sertifikası", "description": "OEKO-TEX® Standard 100 belgesiyle tüm kumaşlarımızın insan sağlığına uygunluğunu belgeledik." },
+      { "year": 2018, "title": "120+ Makine", "description": "Makine parkurumuz 120'yi aşarak 3 GG'den 28 GG'ye kadar her numara grubunda üretim kapasitesine ulaştık." },
+      { "year": 2022, "title": "Sürdürülebilir Üretim", "description": "Susuz boyama teknolojisi ve güneş enerjili üretim hatlarıyla 2030 karbon nötr hedefimize doğru ilk adımları attık." },
+      { "year": 2025, "title": "Bugün", "description": "32 ülkede 500'ü aşkın markaya hizmet veriyoruz ve triko üretiminin geleceğine yatırım yapmaya devam ediyoruz." }
+    ],
+    "stats": [
+      { "label": "Marka Ortağı", "value": 500 },
+      { "label": "İhracat Ülkesi", "value": 32 },
+      { "label": "Yıllık Deneyim", "value": 25 },
+      { "label": "Metre / Yıl", "value": 8, "suffix": "M+" }
+    ]
+  },
+
+  "common": {
+    "home": "Ana Sayfa",
+    "about": "Hakkımızda",
+    "collections": "Koleksiyonlar",
+    "technology": "Teknoloji",
+    "references": "Referanslar",
+    "contact": "İletişim"
+  }
+}

@@ -1,0 +1,382 @@
+{
+  "metadata": {
+    "titleTemplate": "%s — AKAR ÖRME",
+    "defaultTitle": "AKAR ÖRME — Precision Knitwear Manufacturing",
+    "description": "Akar Örme — Premium tricot production for global fashion brands. Precision knitwear manufacturing with decades of textile expertise.",
+    "keywords": ["knitwear", "tricot", "textile manufacturing", "knitted fabric", "fashion manufacturing", "premium yarn", "Akar Örme"]
+  },
+
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "collections": "Collections",
+    "technology": "Technology",
+    "references": "References",
+    "contact": "Contact",
+    "toggleMenu": "Toggle menu"
+  },
+
+  "hero": {
+    "label": "Premium Knitwear Manufacturing",
+    "heading1": "Precision in",
+    "heading2": "Every",
+    "highlight": "Thread",
+    "description": "Decades of textile expertise woven into every metre. From premium yarn to finished fabric — engineered for the world's leading fashion houses.",
+    "cta1": "Explore Collections",
+    "cta2": "Request a Sample",
+    "scroll": "SCROLL"
+  },
+
+  "brandStory": {
+    "label": "Since 2000",
+    "heading": "Crafting Excellence,",
+    "highlight": "Thread by Thread",
+    "paragraph1": "For over two decades, Akar Örme has been the trusted production partner behind some of the world's finest knitwear labels. Our 15,000 m² facility in İstanbul houses 120+ state-of-the-art knitting machines, a dedicated dyeing department, and a quality laboratory — all operating under ISO 9001 and OEKO-TEX® standards.",
+    "paragraph2": "We don't just manufacture fabric — we engineer textile solutions tailored to each brand's vision, from yarn selection to final inspection.",
+    "link": "Read Our Full Story"
+  },
+
+  "fabricCards": {
+    "label": "Our Fabrics",
+    "heading": "Engineered",
+    "highlight": "Textiles",
+    "description": "Six core fabric families produced on state-of-the-art circular and flatbed knitting machines — each tuned for specific end-use requirements."
+  },
+
+  "modelGrid": {
+    "label": "Featured Models",
+    "heading": "Our",
+    "highlight": "Collection",
+    "description": "From classic polos to contemporary knitwear — every piece is precision-engineered for global fashion brands.",
+    "viewDetails": "View Details",
+    "viewAll": "View All Collections"
+  },
+
+  "cta": {
+    "label": "Start Your Project",
+    "heading": "Ready to Bring Your",
+    "highlight": "Vision to Life?",
+    "description": "Whether you need 500 metres or 50,000 — our team is ready to engineer the perfect knitwear solution for your brand.",
+    "button1": "Get In Touch",
+    "button2": "View Our References"
+  },
+
+  "footer": {
+    "copyright": "© {year} Akar Örme. All rights reserved."
+  },
+
+  "about": {
+    "metaTitle": "About Us",
+    "metaDescription": "Learn about Akar Örme's 25+ year history in premium knitwear manufacturing. Our factory philosophy, mission, and vision.",
+    "heroTitle": "About",
+    "heroHighlight": "Us",
+    "heroSubtitle": "25+ years of precision knitwear manufacturing — from a 12-machine workshop to a world-class production facility.",
+    "philosophyLabel": "What Drives Us",
+    "philosophyTitle": "Our",
+    "philosophyHighlight": "Philosophy",
+    "values": [
+      {
+        "title": "Precision",
+        "description": "Every stitch is calibrated, every tension measured. We treat knitwear manufacturing as an exact science."
+      },
+      {
+        "title": "Innovation",
+        "description": "Continuous investment in R&D and next-gen knitting technology keeps us at the leading edge of textile production."
+      },
+      {
+        "title": "Sustainability",
+        "description": "From waterless dyeing pilots to solar-powered operations — responsible production is woven into our DNA."
+      }
+    ],
+    "missionTitle": "Our Mission",
+    "missionText": "To deliver premium knitwear fabrics and finished garments that exceed our partners' expectations — through cutting-edge technology, rigorous quality control, and a deeply collaborative approach to manufacturing.",
+    "visionTitle": "Our Vision",
+    "visionText": "To lead the future of sustainable knitwear manufacturing through cutting-edge technology, responsible practices, and unwavering commitment to craftsmanship. By 2030, we aim to achieve fully carbon-neutral production.",
+    "factoryTitle": "Inside Our",
+    "factoryHighlight": "Factory",
+    "factoryDesc": "A glimpse into our 15,000 m² production facility in İstanbul.",
+    "factoryLabels": ["Knitting Floor", "Yarn Storage", "Quality Lab", "Dyeing Department", "Finishing Line"]
+  },
+
+  "collections": {
+    "metaTitle": "Collections",
+    "metaDescription": "Explore the full AKAR ÖRME knitwear collection — filterable by category, season, and gauge.",
+    "heroTitle": "Our",
+    "heroHighlight": "Collections",
+    "heroSubtitle": "Browse our full catalogue of knitwear models — each precision-engineered for the world's leading fashion brands."
+  },
+
+  "contact": {
+    "metaTitle": "Contact",
+    "metaDescription": "Get in touch with Akar Örme. Contact our team for knitwear manufacturing inquiries, factory visits, and partnership opportunities.",
+    "heroTitle": "Get In",
+    "heroHighlight": "Touch",
+    "heroSubtitle": "Ready to start your next knitwear project? Reach out to our team — we'd love to hear from you."
+  },
+
+  "references": {
+    "metaTitle": "References",
+    "metaDescription": "Akar Örme's trusted partnerships with global fashion brands across 30+ countries.",
+    "heroTitle": "Our",
+    "heroHighlight": "References",
+    "heroSubtitle": "Trusted by 500+ brands across 30+ countries — building long-term partnerships through quality and reliability."
+  },
+
+  "notFound": {
+    "title": "404",
+    "description": "The page you're looking for doesn't exist.",
+    "link": "Back to Home"
+  },
+
+  "contactForm": {
+    "heading": "Send Us a Message",
+    "subheading": "Fill in the form below and our team will get back to you within 24 hours.",
+    "subjects": {
+      "placeholder": "Select a subject",
+      "manufacturing": "Manufacturing Inquiry",
+      "partnership": "Partnership / Collaboration",
+      "sampling": "Sampling Request",
+      "visit": "Factory Visit",
+      "other": "Other"
+    },
+    "fields": {
+      "fullName": "Full Name",
+      "email": "Email",
+      "company": "Company",
+      "phone": "Phone",
+      "subject": "Subject",
+      "message": "Message"
+    },
+    "placeholders": {
+      "name": "John Doe",
+      "email": "john@company.com",
+      "company": "Company Ltd.",
+      "phone": "+90 (___) ___ __ __",
+      "message": "Tell us about your project..."
+    },
+    "sendButton": "Send Message",
+    "sending": "Sending...",
+    "sent": "Message Sent ✓",
+    "error": "Failed to send message. Please try again.",
+    "infoCards": {
+      "address": "Factory Address",
+      "addressLines": ["Merkez Mh. Papatya Sk. No:4 Kat:4", "Güngören, İstanbul"],
+      "email": "Email",
+      "phone": "Phone",
+      "hours": "Working Hours",
+      "hourLines": ["Mon – Fri: 09:00 – 18:00", "Sat: Closed", "Sun: Closed"]
+    }
+  },
+
+  "collectionFilter": {
+    "all": "All",
+    "men": "Men",
+    "women": "Women",
+    "winter": "Winter",
+    "summer": "Summer",
+    "fine": "Fine Knit",
+    "heavy": "Heavy Knit",
+    "viewDetails": "View Details",
+    "noMatch": "No models match the selected filter."
+  },
+
+  "modelDetail": {
+    "backToCollections": "Back to Collections",
+    "availableColours": "Available Colours",
+    "requestProduction": "Request Production",
+    "orderSample": "Order Sample",
+    "tabs": {
+      "overview": "overview",
+      "technical": "technical",
+      "gallery": "gallery"
+    },
+    "overviewExtra": "Each piece undergoes rigorous quality inspection before shipping — from yarn tension testing to colorfastness analysis — ensuring every batch meets the exacting standards of global fashion brands."
+  },
+
+  "timeline": {
+    "label": "Our Journey",
+    "heading": "Company",
+    "highlight": "Timeline"
+  },
+
+  "referenceLogos": {
+    "heading": "Trusted",
+    "highlight": "Partners",
+    "description": "We proudly serve leading fashion houses, retailers, and private-label brands worldwide."
+  },
+
+  "exportMap": {
+    "heading": "Global",
+    "highlight": "Export Map",
+    "istanbul": "ISTANBUL",
+    "activeMarkets": "Active Markets",
+    "expanding": "Expanding"
+  },
+
+  "technology": {
+    "metaTitle": "Technology",
+    "metaDescription": "Explore Akar Örme's interactive technology modules — 3D knitwear viewer, knit pattern explorer, and factory capability dashboard.",
+    "heroTitle": "Our",
+    "heroHighlight": "Technology",
+    "heroSubtitle": "Interactive modules showcasing our textile expertise, production capability, and innovative approach to knitwear manufacturing.",
+    "sectionTitle": "Explore Our",
+    "sectionHighlight": "Capabilities",
+    "sectionDesc": "We believe in transparency. These interactive tools let you experience our production quality, textile knowledge, and manufacturing scale before stepping into our factory.",
+    "launchModule": "Launch Module",
+    "modules": [
+      {
+        "title": "3D Knitwear Viewer",
+        "description": "Rotate, zoom, and explore garments in an immersive WebGL 3D viewer with realistic knit textures and lighting.",
+        "tags": ["Three.js", "WebGL", "360°", "Real-time"]
+      },
+      {
+        "title": "Knit Pattern Explorer",
+        "description": "Select yarn, technique, and gauge in an interactive step-by-step module — see the resulting fabric and performance metrics.",
+        "tags": ["Interactive", "Educational", "Textile Science", "Step-based"]
+      },
+      {
+        "title": "Factory Dashboard",
+        "description": "Animated production statistics, machine fleet breakdown, gauge distribution, and interactive export world map.",
+        "tags": ["Animated Charts", "World Map", "Data-driven", "Real-time"]
+      }
+    ]
+  },
+
+  "viewer": {
+    "metaTitle": "3D Knitwear Viewer",
+    "metaDescription": "Explore Akar Örme knitwear models in an interactive 3D viewer. Rotate, zoom, and examine yarn textures in detail.",
+    "heroTitle": "3D Knitwear",
+    "heroHighlight": "Viewer",
+    "heroSubtitle": "Rotate, zoom, and explore our precision-knit garments in an immersive 3D experience.",
+    "breadcrumb": "3D Viewer",
+    "infoTitle": "Interactive Garment",
+    "infoHighlight": "Exploration",
+    "infoDesc": "Our 3D viewer uses procedural knit textures and physically-based rendering to simulate realistic yarn behaviour. Every stitch loop, light reflection, and fabric drape is computed in real time.",
+    "features": [
+      { "title": "360° Rotation", "desc": "Drag to rotate the garment freely." },
+      { "title": "Scroll Zoom", "desc": "Zoom into the knit texture detail." },
+      { "title": "Colour Switch", "desc": "Preview multiple yarn colorways." },
+      { "title": "Front / Back", "desc": "Toggle between garment sides." }
+    ],
+    "productionTitle": "Production-Ready Models",
+    "productionDesc": "Each model shown represents actual production capability. Request a sample to feel the real texture and quality."
+  },
+
+  "patterns": {
+    "metaTitle": "Knit Pattern Explorer",
+    "metaDescription": "Discover how yarn type, knitting technique, and gauge combine to create unique fabrics. An interactive textile learning module by Akar Örme.",
+    "heroTitle": "Knit Pattern",
+    "heroHighlight": "Explorer",
+    "heroSubtitle": "Select yarn, technique and gauge — see the resulting fabric in real time.",
+    "breadcrumb": "Pattern Explorer"
+  },
+
+  "dashboard": {
+    "metaTitle": "Factory Dashboard",
+    "metaDescription": "Explore Akar Örme's production capability — 128+ knitting machines, 25,000m daily capacity, and exports to 32+ countries.",
+    "heroTitle": "Factory",
+    "heroHighlight": "Dashboard",
+    "heroSubtitle": "Real-time production metrics, machine fleet data, and our global export network — all in one view.",
+    "breadcrumb": "Factory Dashboard"
+  },
+
+  "knitwearViewer": {
+    "colors": { "navy": "Navy", "charcoal": "Charcoal", "cream": "Cream", "wine": "Wine", "sage": "Sage", "gold": "Gold" },
+    "badge": "3D Interactive",
+    "hint": "Drag to rotate · Scroll to zoom",
+    "infoTitle": "Knitwear Texture",
+    "infoDesc": "Procedural knit normal map simulates real yarn loops. The lighting reveals texture depth and stitch detail as you rotate the model.",
+    "colourLabel": "Colour",
+    "viewLabel": "View",
+    "front": "front",
+    "back": "back"
+  },
+
+  "patternExplorer": {
+    "back": "← Back",
+    "next": "Next →",
+    "steps": {
+      "yarn": { "title": "Select Yarn Type", "desc": "Choose the fibre that defines the fabric's core character." },
+      "technique": { "title": "Select Knitting Technique", "desc": "The structure determines stretch, texture, and drape." },
+      "gauge": { "title": "Select Gauge", "desc": "Gauge controls fabric density, weight, and feel." }
+    },
+    "weightLabel": "Weight:",
+    "resultTitle": "Fabric Result",
+    "resultDesc": "Here's the fabric your selections produce.",
+    "bestFor": "Best For",
+    "performance": "Performance",
+    "stats": { "stretchH": "Stretch (H)", "stretchV": "Stretch (V)", "warmth": "Warmth", "breathability": "Breathability", "durability": "Durability" },
+    "startOver": "↻ Start Over",
+    "stepLabels": { "yarn": "Yarn", "technique": "Technique", "gauge": "Gauge", "result": "Result" }
+  },
+
+  "factoryDashboard": {
+    "machineFleet": "Machine Fleet",
+    "machinesSubtitle": "{total} machines across 4 categories",
+    "gaugeDistribution": "Gauge Distribution",
+    "gaugeSubtitle": "Production capacity by gauge category",
+    "exportNetwork": "Export Network",
+    "exportSubtitle": "Interactive map — hover to explore destinations",
+    "factory": "Factory",
+    "activeMarket": "Active Market",
+    "istanbulHQ": "ISTANBUL HQ",
+    "regions": { "europe": "europe", "asia": "asia", "americas": "americas", "africa": "africa" },
+    "metrics": {
+      "machines": { "label": "Knitting Machines", "description": "State-of-the-art circular and flat knitting machines" },
+      "capacity": { "label": "Daily Capacity", "description": "Metres of premium fabric produced daily" },
+      "gauges": { "label": "Gauge Types", "description": "From 3GG ultra-heavy to 28GG ultra-fine" },
+      "yarns": { "label": "Yarn Varieties", "description": "Natural, synthetic, and blended yarn options" },
+      "countries": { "label": "Export Countries", "description": "Delivering to five continents worldwide" },
+      "employees": { "label": "Expert Staff", "description": "Skilled technicians, designers, and quality teams" }
+    },
+    "machineTypeNames": {
+      "circular": "Circular Knitting",
+      "flat": "Flat Knitting",
+      "jacquard": "Jacquard",
+      "seamless": "Seamless (Whole Garment)"
+    },
+    "gaugeNames": {
+      "ultraFine": "Ultra-Fine",
+      "fine": "Fine",
+      "medium": "Medium",
+      "heavy": "Heavy",
+      "ultraHeavy": "Ultra-Heavy"
+    }
+  },
+
+  "data": {
+    "fabrics": [
+      { "name": "Single Jersey", "gauge": "28 GG", "composition": "100% Supima Cotton", "description": "The classic foundation of premium knitwear — smooth face, subtle back loops. Our Supima cotton single jersey offers exceptional softness with perfect drape for T-shirts, underwear, and luxe basics." },
+      { "name": "Interlock", "gauge": "24 GG", "composition": "100% Compact Cotton", "description": "Double-faced stability without compromise. Interlock's identical look on both sides makes it ideal for polo shirts, structured layers, and garments that need body without weight." },
+      { "name": "Piqué Knit", "gauge": "14 GG", "composition": "100% Long-Staple Cotton", "description": "The distinctive waffle-like texture that defines the modern polo. Our long-staple cotton piqué is breathable, dimensionally stable, and built for repeated wash cycles." },
+      { "name": "French Terry", "gauge": "20 GG", "composition": "80% Cotton / 20% Polyester", "description": "Soft loops on the inside, smooth on the outside — the fabric behind every premium sweatshirt. Our cotton-poly blend balances comfort, structure, and easy-care performance." },
+      { "name": "Milano Rib", "gauge": "12 GG", "composition": "50% Merino / 50% Acrylic", "description": "Dense, firm, and luxuriously structured — Milano rib is perfect for tailored knitwear, blazers, and architectural silhouettes that hold their shape impeccably." },
+      { "name": "Cable & Jacquard", "gauge": "7 GG", "composition": "80% Wool / 20% Nylon", "description": "Complex stitch patterns that tell a story. Our heavy-gauge jacquard and cable fabrics bring artisan-level texture to cold-weather collections and heritage-inspired fashion." }
+    ],
+    "timeline": [
+      { "year": 2000, "title": "Foundation", "description": "Akar Örme was founded in İstanbul with 12 circular knitting machines and a vision to deliver world-class knitwear." },
+      { "year": 2003, "title": "First Export", "description": "Secured first international contract with a Scandinavian fashion house, marking the start of our global journey." },
+      { "year": 2006, "title": "ISO 9001 Certification", "description": "Achieved ISO 9001 quality management certification, establishing rigorous production standards across all departments." },
+      { "year": 2010, "title": "Factory Expansion", "description": "Expanded to a 15,000 m² integrated facility with in-house dyeing, finishing, and quality laboratory." },
+      { "year": 2014, "title": "OEKO-TEX® Standard", "description": "Earned OEKO-TEX® Standard 100 certification, ensuring every fabric meets the highest safety and sustainability benchmarks." },
+      { "year": 2018, "title": "120+ Machines", "description": "Fleet surpassed 120 circular knitting machines, covering gauges from 3 GG to 28 GG for any production requirement." },
+      { "year": 2022, "title": "Sustainable Manufacturing", "description": "Adopted waterless dyeing pilots and solar-powered operations as part of our 2030 carbon-neutral commitment." },
+      { "year": 2025, "title": "Today & Beyond", "description": "Serving 500+ global brands across 32 countries — and still investing in the future of knitwear." }
+    ],
+    "stats": [
+      { "label": "Brand Partners", "value": 500 },
+      { "label": "Export Countries", "value": 32 },
+      { "label": "Years of Trust", "value": 25 },
+      { "label": "Metres / Year", "value": 8, "suffix": "M+" }
+    ]
+  },
+
+  "common": {
+    "home": "Home",
+    "about": "About",
+    "collections": "Collections",
+    "technology": "Technology",
+    "references": "References",
+    "contact": "Contact"
+  }
+}
