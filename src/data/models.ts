@@ -1,7 +1,20 @@
 import type { KnitwearModel } from '@/types';
 import type { AdminModel } from '@/types/admin';
 
-function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
+const ADMIN_MODELS_STORAGE_KEY = 'admin_models';
+
+function dedupeBySlug(models: KnitwearModel[]): KnitwearModel[] {
+  const map = new Map<string, KnitwearModel>();
+
+  for (const model of models) {
+    if (!model?.slug) continue;
+    map.set(model.slug, model);
+  }
+
+  return Array.from(map.values());
+}
+
+export function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
   return models
     .filter((m) => m.status === 'published')
     .map((m) => ({
@@ -9,20 +22,20 @@ function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
       name: m.name,
       tagline: m.tagline,
       description: m.description,
-      tags: [],
+      tags: m.tags || [],
       image: m.images?.[0] || '',
       gallery: m.images || [],
       colors: m.colors || [],
       specs: m.technicalDetails || [],
-      featured: m.featured,
+      featured: Boolean(m.featured),
     }));
 }
 
 /**
- * Static model catalogue — CMS-ready.
+ * Static fallback catalogue.
  *
- * To migrate to a headless CMS (Sanity, Contentful, Strapi, etc.)
- * replace this array with an API fetch that returns KnitwearModel[].
+ * This stays as a safe SSR/SSG fallback, but site components should prefer
+ * `getHydratedModels()` / `useSiteModels()` so admin-created models are also shown.
  */
 export const models: KnitwearModel[] = [
   {
@@ -281,25 +294,75 @@ export const models: KnitwearModel[] = [
   },
 ];
 
+function parseAdminModelsFromStorage(raw: string | null): KnitwearModel[] {
+  if (!raw) return [];
+
+  try {
+    const parsed = JSON.parse(raw) as AdminModel[];
+    if (!Array.isArray(parsed)) return [];
+    return adminModelsToKnitwear(parsed);
+  } catch {
+    return [];
+  }
+}
+
+export function getStaticModels(): KnitwearModel[] {
+  return [...models];
+}
+
 /**
- * Tüm modelleri döndürür (sadece statik dosya, SSR/SSG uyumlu)
- * Admin panelinde eklenen modelleri göstermek için client-side'da ayrı bir hook kullanılmalı.
+ * SSR/SSG-safe fallback.
+ * Existing server code can keep using this.
  */
-export function getAllModels(): KnitwearModel[] {
-  return models;
+export function useSiteModels(): KnitwearModel[] {
+  return getStaticModels();
 }
 
-/** Featured subset for homepage */
+/**
+ * Client-side hydrated source.
+ * Merges admin-created published models with static catalogue.
+ * Admin models win on slug collision.
+ */
+export function getHydratedModels(): KnitwearModel[] {
+  if (typeof window === 'undefined') {
+    return getStaticModels();
+  }
+
+  const adminModels = parseAdminModelsFromStorage(
+    window.localStorage.getItem(ADMIN_MODELS_STORAGE_KEY),
+  );
+
+  return dedupeBySlug([...getStaticModels(), ...adminModels]);
+}
+
 export function getFeaturedModels(): KnitwearModel[] {
-  return getAllModels().filter((m) => m.featured);
+  return useSiteModels().filter((m) => m.featured);
 }
 
-/** Single model by slug (for dynamic route) */
+export function getHydratedFeaturedModels(): KnitwearModel[] {
+  return getHydratedModels().filter((m) => m.featured);
+}
+
 export function getModelBySlug(slug: string): KnitwearModel | undefined {
-  return getAllModels().find((m) => m.slug === slug);
+  return useSiteModels().find((m) => m.slug === slug);
 }
 
-/** All unique slugs (for generateStaticParams) */
-export function getAllModelSlugs(): string[] {
-  return getAllModels().map((m) => m.slug);
+export function getHydratedModelBySlug(slug: string): KnitwearModel | undefined {
+  return getHydratedModels().find((m) => m.slug === slug);
 }
+
+export function useSiteModelslugs(): string[] {
+  return useSiteModels().map((m) => m.slug);
+}
+
+export function getHydratedModelSlugs(): string[] {
+  return getHydratedModels().map((m) => m.slug);
+}
+
+/**
+ * Admin panel kaydı güncellendiğinde site tarafında aynı sekmede de canlı yenileme alınsın.
+ * Admin kaydet/sil işleminden sonra şunu çağır:
+ *   window.dispatchEvent(new Event('admin-models-updated'))
+ */
+export const ADMIN_MODELS_UPDATED_EVENT = 'admin-models-updated';
+export const ADMIN_MODELS_STORAGE = ADMIN_MODELS_STORAGE_KEY;

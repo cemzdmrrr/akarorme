@@ -6,10 +6,10 @@ import { getDictionary } from '@/i18n/getDictionary';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ModelDetail from '@/components/ModelDetail';
-import { getModelBySlug, getAllModelSlugs } from '@/data/models';
+import { getModelBySlug, useSiteModelslugs } from '@/data/models';
 
 export function generateStaticParams() {
-  const slugs = getAllModelSlugs();
+  const slugs = useSiteModelslugs();
   return locales.flatMap((locale) =>
     slugs.map((slug) => ({ locale, slug }))
   );

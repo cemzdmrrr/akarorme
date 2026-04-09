@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
 import CollectionFilter from '@/components/CollectionFilter';
-import { getAllModels } from '@/data/models';
+import { useSiteModels } from '@/data/models';
 
 export async function generateMetadata({
   params,
@@ -25,7 +25,7 @@ export default async function CollectionsPage({
   params: { locale: Locale };
 }) {
   const dict = await getDictionary(params.locale);
-  const models = getAllModels();
+  const models = useSiteModels();
 
   return (
     <>
