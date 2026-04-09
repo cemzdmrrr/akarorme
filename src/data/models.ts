@@ -1,4 +1,12 @@
+
 import type { KnitwearModel } from '@/types';
+// LocalStorage tabanlı admin-store fonksiyonlarını import et
+let adminStore: any = null;
+if (typeof window !== 'undefined') {
+  try {
+    adminStore = require('@/lib/admin-store');
+  } catch {}
+}
 
 /**
  * Static model catalogue — CMS-ready.
@@ -263,22 +271,40 @@ export const models: KnitwearModel[] = [
   },
 ];
 
-/** Retrieve all models */
+/** Retrieve all models (localStorage öncelikli) */
 export function getAllModels(): KnitwearModel[] {
+  if (typeof window !== 'undefined' && adminStore?.getModels) {
+    // AdminModel -> KnitwearModel dönüşümü
+    const adminModels = adminStore.getModels();
+    if (Array.isArray(adminModels) && adminModels.length > 0) {
+      return adminModels.filter((m: any) => m.status === 'published').map((m: any) => ({
+        slug: m.slug,
+        name: m.name,
+        tagline: m.tagline,
+        description: m.description,
+        tags: [], // AdminModel'de yok, istenirse eklenebilir
+        image: m.images?.[0] || '',
+        gallery: m.images || [],
+        colors: m.colors || [],
+        specs: m.technicalDetails || [],
+        featured: m.featured,
+      }));
+    }
+  }
   return models;
 }
 
 /** Featured subset for homepage */
 export function getFeaturedModels(): KnitwearModel[] {
-  return models.filter((m) => m.featured);
+  return getAllModels().filter((m) => m.featured);
 }
 
 /** Single model by slug (for dynamic route) */
 export function getModelBySlug(slug: string): KnitwearModel | undefined {
-  return models.find((m) => m.slug === slug);
+  return getAllModels().find((m) => m.slug === slug);
 }
 
 /** All unique slugs (for generateStaticParams) */
 export function getAllModelSlugs(): string[] {
-  return models.map((m) => m.slug);
+  return getAllModels().map((m) => m.slug);
 }
