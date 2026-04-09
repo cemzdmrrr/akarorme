@@ -1,7 +1,4 @@
-
 import type { KnitwearModel } from '@/types';
-// LocalStorage tabanlı admin-store fonksiyonlarını import et
-// Next.js SSR/SSG uyumlu: localStorage sadece client'ta erişilebilir
 import type { AdminModel } from '@/types/admin';
 
 function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
@@ -12,7 +9,7 @@ function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
       name: m.name,
       tagline: m.tagline,
       description: m.description,
-      tags: [], // AdminModel'de yok, istenirse eklenebilir
+      tags: [],
       image: m.images?.[0] || '',
       gallery: m.images || [],
       colors: m.colors || [],
