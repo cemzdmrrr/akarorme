@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import BrandStory from '@/components/BrandStory';
 import FabricCards from '@/components/FabricCards';
-import ModelGrid from '@/components/ModelGrid';
+import ModelGridClient from '@/components/ModelGridClient';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
 import { getFeaturedModels } from '@/data/models';
@@ -24,7 +24,7 @@ export default async function HomePage({
         <HeroSection dict={dict.hero} locale={params.locale} />
         <BrandStory dict={dict.brandStory} locale={params.locale} />
         <FabricCards dict={dict.fabricCards} fabrics={dict.data.fabrics} />
-        <ModelGrid models={featured} dict={dict.modelGrid} locale={params.locale} />
+        <ModelGridClient staticModels={featured} dict={dict.modelGrid} locale={params.locale} onlyFeatured />
         <CTASection dict={dict.cta} locale={params.locale} />
       </main>
       <Footer locale={params.locale} dict={{ nav: dict.nav, footer: dict.footer }} />
