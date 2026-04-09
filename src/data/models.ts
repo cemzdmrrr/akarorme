@@ -284,20 +284,11 @@ export const models: KnitwearModel[] = [
   },
 ];
 
-/** Retrieve all models (localStorage öncelikli) */
-  if (typeof window !== 'undefined') {
-    try {
-      const raw = localStorage.getItem('admin_models');
-      if (raw) {
-        const adminModels: AdminModel[] = JSON.parse(raw);
-        if (Array.isArray(adminModels) && adminModels.length > 0) {
-          return adminModelsToKnitwear(adminModels);
-        }
-      }
-    } catch {
-      // ignore
-    }
-  }
+/**
+ * Tüm modelleri döndürür (sadece statik dosya, SSR/SSG uyumlu)
+ * Admin panelinde eklenen modelleri göstermek için client-side'da ayrı bir hook kullanılmalı.
+ */
+export function getAllModels(): KnitwearModel[] {
   return models;
 }
 
