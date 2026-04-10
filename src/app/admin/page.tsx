@@ -29,17 +29,17 @@ export default function DashboardPage() {
   if (!stats) return <div className="flex items-center justify-center h-full"><div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" /></div>;
 
   const statCards = [
-    { label: 'Total Models', value: stats.totalModels, color: 'bg-blue-500', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', href: '/admin/models' },
-    { label: 'Collections', value: stats.totalCollections, color: 'bg-emerald-500', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', href: '/admin/collections' },
-    { label: 'References', value: stats.totalReferences, color: 'bg-purple-500', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', href: '/admin/references' },
-    { label: 'Unread Messages', value: stats.unreadMessages, color: 'bg-amber-500', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', href: '/admin/messages' },
-    { label: 'Fabric Types', value: stats.totalFabrics, color: 'bg-rose-500', icon: 'M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z', href: '/admin/fabrics' },
-    { label: 'Media Files', value: stats.totalMedia, color: 'bg-cyan-500', icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', href: '/admin/media' },
+    { label: 'Toplam Model', value: stats.totalModels, color: 'bg-blue-500', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', href: '/admin/models' },
+    { label: 'Koleksiyonlar', value: stats.totalCollections, color: 'bg-emerald-500', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', href: '/admin/collections' },
+    { label: 'Referanslar', value: stats.totalReferences, color: 'bg-purple-500', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', href: '/admin/references' },
+    { label: 'Okunmamış Mesajlar', value: stats.unreadMessages, color: 'bg-amber-500', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', href: '/admin/messages' },
+    { label: 'Kumaş Türleri', value: stats.totalFabrics, color: 'bg-rose-500', icon: 'M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z', href: '/admin/fabrics' },
+    { label: 'Medya Dosyaları', value: stats.totalMedia, color: 'bg-cyan-500', icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', href: '/admin/media' },
   ];
 
   return (
     <>
-      <AdminHeader title="Dashboard" subtitle="Website overview" onMenuToggle={toggleSidebar} />
+      <AdminHeader title="Gösterge Paneli" subtitle="Web sitesi genel bakış" onMenuToggle={toggleSidebar} />
 
       <div className="p-4 sm:p-6 space-y-6">
         {/* Stat Cards */}
@@ -61,8 +61,8 @@ export default function DashboardPage() {
           {/* Recent Models */}
           <div className="lg:col-span-2 rounded-xl bg-white border border-gray-200">
             <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
-              <h2 className="text-sm font-semibold text-gray-900">Recent Models</h2>
-              <Link href="/admin/models" className="text-xs text-blue-600 hover:text-blue-800">View all &rarr;</Link>
+              <h2 className="text-sm font-semibold text-gray-900">Son Modeller</h2>
+              <Link href="/admin/models" className="text-xs text-blue-600 hover:text-blue-800">Tümünü gör &rarr;</Link>
             </div>
             <div className="divide-y divide-gray-50">
               {recentModels.map((model) => (
@@ -81,12 +81,12 @@ export default function DashboardPage() {
                   <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium ${
                     model.status === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-600'
                   }`}>
-                    {model.status === 'published' ? 'Published' : 'Draft'}
+                    {model.status === 'published' ? 'Yayında' : 'Taslak'}
                   </span>
                 </div>
               ))}
               {recentModels.length === 0 && (
-                <p className="px-5 py-8 text-center text-sm text-gray-400">No models yet</p>
+                <p className="px-5 py-8 text-center text-sm text-gray-400">Henüz model yok</p>
               )}
             </div>
           </div>
@@ -94,7 +94,7 @@ export default function DashboardPage() {
           {/* Activity Feed */}
           <div className="rounded-xl bg-white border border-gray-200">
             <div className="border-b border-gray-100 px-5 py-4">
-              <h2 className="text-sm font-semibold text-gray-900">Activity Feed</h2>
+              <h2 className="text-sm font-semibold text-gray-900">Aktivite Akışı</h2>
             </div>
             <div className="divide-y divide-gray-50 max-h-[400px] overflow-y-auto">
               {activity.map((entry) => (
@@ -105,12 +105,12 @@ export default function DashboardPage() {
                     <span className="font-medium">&ldquo;{entry.entityName}&rdquo;</span>
                   </p>
                   <p className="text-[11px] text-gray-400 mt-0.5">
-                    {new Date(entry.timestamp).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    {new Date(entry.timestamp).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
               ))}
               {activity.length === 0 && (
-                <p className="px-5 py-8 text-center text-sm text-gray-400">No activity yet</p>
+                <p className="px-5 py-8 text-center text-sm text-gray-400">Henüz aktivite yok</p>
               )}
             </div>
           </div>
@@ -119,8 +119,8 @@ export default function DashboardPage() {
         {/* Recent Messages */}
         <div className="rounded-xl bg-white border border-gray-200">
           <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
-            <h2 className="text-sm font-semibold text-gray-900">Recent Messages</h2>
-            <Link href="/admin/messages" className="text-xs text-blue-600 hover:text-blue-800">View all &rarr;</Link>
+            <h2 className="text-sm font-semibold text-gray-900">Son Mesajlar</h2>
+            <Link href="/admin/messages" className="text-xs text-blue-600 hover:text-blue-800">Tümünü gör &rarr;</Link>
           </div>
           <div className="divide-y divide-gray-50">
             {recentMessages.map((msg) => (
@@ -133,13 +133,13 @@ export default function DashboardPage() {
                   </div>
                   <p className="text-sm text-gray-600 mt-0.5 truncate">{msg.subject}</p>
                   <p className="text-xs text-gray-400 mt-1">
-                    {new Date(msg.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {new Date(msg.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </p>
                 </div>
               </div>
             ))}
             {recentMessages.length === 0 && (
-              <p className="px-5 py-8 text-center text-sm text-gray-400">No messages yet</p>
+              <p className="px-5 py-8 text-center text-sm text-gray-400">Henüz mesaj yok</p>
             )}
           </div>
         </div>
@@ -150,19 +150,19 @@ export default function DashboardPage() {
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
             </svg>
-            <span className="text-sm font-medium">Add New Model</span>
+            <span className="text-sm font-medium">Yeni Model Ekle</span>
           </Link>
           <Link href="/admin/collections?action=new" className="flex items-center gap-3 rounded-xl bg-white border border-gray-200 px-5 py-4 text-gray-900 hover:bg-gray-50 transition-colors">
             <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
             </svg>
-            <span className="text-sm font-medium">New Collection</span>
+            <span className="text-sm font-medium">Yeni Koleksiyon</span>
           </Link>
           <Link href="/admin/media" className="flex items-center gap-3 rounded-xl bg-white border border-gray-200 px-5 py-4 text-gray-900 hover:bg-gray-50 transition-colors">
             <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
             </svg>
-            <span className="text-sm font-medium">Upload Media</span>
+            <span className="text-sm font-medium">Medya Yükle</span>
           </Link>
         </div>
       </div>

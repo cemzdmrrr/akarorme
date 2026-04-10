@@ -23,7 +23,7 @@ export function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
       name: m.name,
       tagline: m.tagline,
       description: m.description,
-      tags: m.tags || [],
+      tags: m.category ? [m.category] : [],
       image: m.images?.[0] || '',
       gallery: m.images || [],
       colors: m.colors || [],

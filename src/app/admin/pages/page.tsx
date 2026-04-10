@@ -66,7 +66,7 @@ export default function PagesPage() {
   };
 
   const removeSection = (id: string) => {
-    if (!confirm('Remove this section?')) return;
+    if (!confirm('Bu bölümü kaldırmak istiyor musunuz?')) return;
     setSections((s) => s.filter((sec) => sec.id !== id));
     setSaved(false);
   };
@@ -109,8 +109,8 @@ export default function PagesPage() {
   return (
     <>
       <AdminHeader
-        title="Pages"
-        subtitle="Edit website page content"
+        title="Sayfalar"
+        subtitle="Web sitesi sayfa içeriğini düzenleyin"
         onMenuToggle={toggleSidebar}
         actions={
           activePage && (
@@ -128,7 +128,7 @@ export default function PagesPage() {
               ) : (
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
               )}
-              {saved ? 'Saved!' : 'Save Changes'}
+              {saved ? 'Kaydedildi!' : 'Değişiklikleri Kaydet'}
             </button>
           )
         }
@@ -166,11 +166,11 @@ export default function PagesPage() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-[11px] text-gray-400">
-                      Updated: {new Date(activePage.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      Güncellendi: {new Date(activePage.updatedAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </span>
                     <button onClick={() => setAddingSection(true)} className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-medium">
                       <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-                      Add Section
+                      Bölüm Ekle
                     </button>
                   </div>
                 </div>
@@ -178,19 +178,19 @@ export default function PagesPage() {
                 {/* Add section form */}
                 {addingSection && (
                   <div className="mb-5 rounded-lg border border-blue-100 bg-blue-50/50 p-4 space-y-3">
-                    <p className="text-sm font-medium text-gray-900">New Section</p>
+                    <p className="text-sm font-medium text-gray-900">Yeni Bölüm</p>
                     <div className="grid sm:grid-cols-3 gap-3">
-                      <input value={newLabel} onChange={(e) => { setNewLabel(e.target.value); setNewKey(e.target.value.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')); }} placeholder="Label (e.g. Hero Title)" className={inputCls} />
-                      <input value={newKey} onChange={(e) => setNewKey(e.target.value)} placeholder="Key (e.g. hero_title)" className={inputCls} />
+                      <input value={newLabel} onChange={(e) => { setNewLabel(e.target.value); setNewKey(e.target.value.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')); }} placeholder="Etiket (ör. Hero Başlığı)" className={inputCls} />
+                      <input value={newKey} onChange={(e) => setNewKey(e.target.value)} placeholder="Anahtar (ör. hero_baslik)" className={inputCls} />
                       <select value={newType} onChange={(e) => setNewType(e.target.value as PageSection['type'])} className={inputCls}>
-                        <option value="text">Text</option>
-                        <option value="textarea">Textarea</option>
-                        <option value="image">Image</option>
+                        <option value="text">Metin</option>
+                        <option value="textarea">Metin Alanı</option>
+                        <option value="image">Görsel</option>
                       </select>
                     </div>
                     <div className="flex justify-end gap-2">
-                      <button onClick={() => setAddingSection(false)} className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50">Cancel</button>
-                      <button onClick={addSection} disabled={!newLabel.trim()} className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50">Add</button>
+                      <button onClick={() => setAddingSection(false)} className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50">İptal</button>
+                      <button onClick={addSection} disabled={!newLabel.trim()} className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50">Ekle</button>
                     </div>
                   </div>
                 )}
@@ -252,7 +252,7 @@ export default function PagesPage() {
 
                 {sections.length === 0 && (
                   <p className="py-8 text-center text-sm text-gray-400">
-                    No sections yet.{' '}<button onClick={() => setAddingSection(true)} className="text-blue-600 hover:text-blue-800">Add your first section</button>
+                    No sections yet.{' '}<button onClick={() => setAddingSection(true)} className="text-blue-600 hover:text-blue-800">İlk bölümünüzü ekleyin</button>
                   </p>
                 )}
               </div>
@@ -260,8 +260,8 @@ export default function PagesPage() {
               <div className="rounded-xl border border-dashed border-gray-200 p-4 text-center">
                 <p className="text-xs text-gray-400">
                   {sections.filter((s) => !s.visible).length > 0
-                    ? `${sections.filter((s) => !s.visible).length} section(s) hidden — won't appear on the live website.`
-                    : 'All sections visible. Changes will be reflected on the live website after saving.'}
+                    ? `${sections.filter((s) => !s.visible).length} bölüm gizli — web sitesinde görünmeyecek.`
+                    : 'Tüm bölümler görünür. Değişiklikler kaydedildikten sonra web sitesine yansıyacaktır.'}
                 </p>
               </div>
             </div>

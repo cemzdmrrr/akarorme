@@ -43,7 +43,7 @@ export default function MessagesPage() {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Delete this message?')) {
+    if (confirm('Bu mesajı silmek istiyor musunuz?')) {
       deleteMessage(id);
       if (selected?.id === id) setSelected(null);
       refresh();
@@ -53,8 +53,8 @@ export default function MessagesPage() {
   return (
     <>
       <AdminHeader
-        title="Contact Messages"
-        subtitle={`${unreadCount} unread · ${respondedCount} responded`}
+        title="İletişim Mesajları"
+        subtitle={`${unreadCount} okunmamış · ${respondedCount} yanıtlandı`}
         onMenuToggle={toggleSidebar}
       />
 
@@ -69,7 +69,7 @@ export default function MessagesPage() {
                 filter === f ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
-              {f}{f === 'unread' && unreadCount > 0 ? ` (${unreadCount})` : ''}
+              {f === 'all' ? 'Tümü' : f === 'unread' ? 'Okunmamış' : f === 'read' ? 'Okunmuş' : 'Yanıtlandı'}{f === 'unread' && unreadCount > 0 ? ` (${unreadCount})` : ''}
             </button>
           ))}
         </div>
@@ -99,15 +99,15 @@ export default function MessagesPage() {
                     <p className="text-xs text-gray-400 mt-1 truncate">{msg.message}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <p className="text-[11px] text-gray-400">
-                        {new Date(msg.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        {new Date(msg.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                       </p>
-                      {msg.responded && <span className="text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Responded</span>}
+                      {msg.responded && <span className="text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Yanıtlandı</span>}
                     </div>
                   </div>
                 </button>
               ))}
               {filtered.length === 0 && (
-                <p className="px-5 py-12 text-center text-sm text-gray-400">No messages</p>
+                <p className="px-5 py-12 text-center text-sm text-gray-400">Mesaj yok</p>
               )}
             </div>
           </div>
@@ -145,11 +145,11 @@ export default function MessagesPage() {
 
                 <div className="border-t border-gray-100 pt-4 mt-6 space-y-2">
                   <p className="text-xs text-gray-400">
-                    Received: {new Date(selected.createdAt).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    Alındı: {new Date(selected.createdAt).toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </p>
                   {selected.responded && selected.respondedAt && (
                     <p className="text-xs text-emerald-600">
-                      Responded: {new Date(selected.respondedAt).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      Yanıtlandı: {new Date(selected.respondedAt).toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </p>
                   )}
                 </div>
@@ -161,7 +161,7 @@ export default function MessagesPage() {
                     className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
                   >
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                    Reply via Email
+                    E-posta ile Yanıtla
                   </a>
                   {!selected.responded && (
                     <button
@@ -169,13 +169,13 @@ export default function MessagesPage() {
                       className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 px-4 py-2.5 text-sm font-medium text-emerald-700 hover:bg-emerald-50 transition-colors"
                     >
                       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                      Mark as Responded
+                      Yanıtlandı Olarak İşaretle
                     </button>
                   )}
                   {selected.responded && (
                     <span className="inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700">
                       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                      Responded
+                      Yanıtlandı
                     </span>
                   )}
                 </div>

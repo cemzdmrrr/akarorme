@@ -11,7 +11,7 @@ function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
       name: m.name,
       tagline: m.tagline,
       description: m.description,
-      tags: [], // Admin panelinde tag yoksa boş bırak
+      tags: m.category ? [m.category] : [],
       image: m.images?.[0] || '',
       gallery: m.images || [],
       colors: m.colors || [],
@@ -24,22 +24,25 @@ export function useClientModels(staticModels: KnitwearModel[], onlyFeatured = fa
   const [models, setModels] = useState<KnitwearModel[]>(staticModels);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      const raw = localStorage.getItem('admin_models');
-      if (raw) {
-        const adminModels: AdminModel[] = JSON.parse(raw);
-        let result = adminModelsToKnitwear(adminModels);
+    // Fetch latest models from API (source of truth: Vercel Blob)
+    // This ensures admin changes are reflected without waiting for ISR
+    let cancelled = false;
+    fetch('/api/models')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: AdminModel[] | null) => {
+        if (cancelled || !data || !Array.isArray(data)) return;
+        let result = adminModelsToKnitwear(data);
         if (onlyFeatured) {
           result = result.filter((m) => m.featured);
         }
         if (result.length > 0) {
           setModels(result);
         }
-      }
-    } catch {
-      // ignore
-    }
+      })
+      .catch(() => {
+        // Silent fail — use server-rendered static models
+      });
+    return () => { cancelled = true; };
   }, [onlyFeatured]);
 
   return models;

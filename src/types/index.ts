@@ -18,13 +18,7 @@ export interface KnitwearModel {
   featured: boolean;
 }
 
-export type Tag =
-  | 'men'
-  | 'women'
-  | 'winter'
-  | 'summer'
-  | 'fine'
-  | 'heavy';
+export type Tag = string;
 
 export interface ColorSwatch {
   name: string;

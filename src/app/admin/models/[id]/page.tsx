@@ -27,11 +27,11 @@ export default function EditModelPage() {
   if (notFound) {
     return (
       <>
-        <AdminHeader title="Model Not Found" onMenuToggle={toggleSidebar} />
+        <AdminHeader title="Model Bulunamadı" onMenuToggle={toggleSidebar} />
         <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-          <p className="text-lg">The model you&apos;re looking for doesn&apos;t exist.</p>
+          <p className="text-lg">Aradığınız model bulunamadı.</p>
           <button onClick={() => router.push('/admin/models')} className="mt-4 text-sm text-blue-600 hover:text-blue-800">
-            &larr; Back to Models
+            &larr; Modellere Dön
           </button>
         </div>
       </>
@@ -44,18 +44,18 @@ export default function EditModelPage() {
 
   return (
     <>
-      <AdminHeader title={`Edit: ${model.name}`} subtitle={model.collection} onMenuToggle={toggleSidebar} />
+      <AdminHeader title={`Düzenle: ${model.name}`} subtitle={model.collection} onMenuToggle={toggleSidebar} />
       <div className="p-4 sm:p-6 max-w-4xl">
         <ModelForm
           initial={model}
-          submitLabel={saving ? 'Saving…' : 'Save Changes'}
+          submitLabel={saving ? 'Kaydediliyor…' : 'Değişiklikleri Kaydet'}
           onSubmit={async (data) => {
             setSaving(true);
             try {
               await apiUpdateModel(model.id, data);
               router.push('/admin/models');
             } catch (err) {
-              alert(err instanceof Error ? err.message : 'Failed to update model');
+              alert(err instanceof Error ? err.message : 'Model güncellenemedi');
               setSaving(false);
             }
           }}

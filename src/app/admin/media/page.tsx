@@ -52,7 +52,7 @@ export default function MediaPage() {
   }, [activeFolder]);
 
   const handleDelete = (id: string) => {
-    if (confirm('Delete this file?')) { deleteMediaItem(id); setSelected(null); refresh(); }
+    if (confirm('Bu dosyayı silmek istiyor musunuz?')) { deleteMediaItem(id); setSelected(null); refresh(); }
   };
 
   const handleSaveDetail = () => {
@@ -76,8 +76,8 @@ export default function MediaPage() {
   return (
     <>
       <AdminHeader
-        title="Media Library"
-        subtitle={`${filtered.length} file${filtered.length !== 1 ? 's' : ''}${activeFolder !== 'all' ? ` in ${activeFolder}` : ''}`}
+        title="Medya Kütüphanesi"
+        subtitle={`${filtered.length} dosya${activeFolder !== 'all' ? ` - ${activeFolder}` : ''}`}
         onMenuToggle={toggleSidebar}
         actions={
           <div className="flex items-center gap-2">
@@ -91,7 +91,7 @@ export default function MediaPage() {
             </div>
             <button onClick={() => document.getElementById('media-upload')?.click()} className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-              Upload
+              Yükle
             </button>
             <input id="media-upload" type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFiles(e.target.files)} />
           </div>
@@ -103,10 +103,10 @@ export default function MediaPage() {
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1 max-w-xs">
             <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search files..." className="w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100" />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Dosya ara..." className="w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100" />
           </div>
           <div className="flex gap-1 overflow-x-auto">
-            <button onClick={() => setActiveFolder('all')} className={`whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium transition-colors ${activeFolder === 'all' ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-100'}`}>All</button>
+            <button onClick={() => setActiveFolder('all')} className={`whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium transition-colors ${activeFolder === 'all' ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-100'}`}>Tümü</button>
             {folders.map((f) => (
               <button key={f} onClick={() => setActiveFolder(f)} className={`whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium capitalize transition-colors ${activeFolder === f ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-100'}`}>{f}</button>
             ))}
@@ -121,8 +121,8 @@ export default function MediaPage() {
           className={`flex flex-col items-center rounded-xl border-2 border-dashed p-8 transition-colors ${dragOver ? 'border-blue-400 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}
         >
           <svg className="h-10 w-10 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-          <p className="text-sm text-gray-500">Drag & drop files here, or <button onClick={() => document.getElementById('media-upload')?.click()} className="text-blue-600 font-medium">browse</button></p>
-          <p className="text-xs text-gray-400 mt-1">PNG, JPG, WebP up to 10MB</p>
+          <p className="text-sm text-gray-500">Dosyaları sürükleyip bırakın veya <button onClick={() => document.getElementById('media-upload')?.click()} className="text-blue-600 font-medium">gözatın</button></p>
+          <p className="text-xs text-gray-400 mt-1">PNG, JPG, WebP maks. 10MB</p>
         </div>
 
         <div className="flex gap-6">
@@ -167,8 +167,8 @@ export default function MediaPage() {
             )}
             {filtered.length === 0 && (
               <div className="text-center py-16 text-gray-400">
-                <p className="text-sm">{search ? 'No files match your search' : 'No media files yet'}</p>
-                <p className="text-xs mt-1">Upload images to get started</p>
+                <p className="text-sm">{search ? 'Aramanızla eşleşen dosya yok' : 'Henüz medya dosyası yok'}</p>
+                <p className="text-xs mt-1">Başlamak için görsel yükleyin</p>
               </div>
             )}
           </div>
@@ -182,31 +182,31 @@ export default function MediaPage() {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={selectedItem.url} alt={selectedItem.alt || selectedItem.name} className="h-full w-full object-contain" />
                   ) : (
-                    <div className="h-full w-full flex items-center justify-center bg-gray-200 text-gray-400 text-xs">Preview</div>
+                    <div className="h-full w-full flex items-center justify-center bg-gray-200 text-gray-400 text-xs">Önizleme</div>
                   )}
                 </div>
                 <div className="p-4 space-y-3">
                   <p className="text-sm font-medium text-gray-900 break-all">{selectedItem.name}</p>
                   <div className="space-y-1.5 text-xs text-gray-500">
-                    <p>Type: {selectedItem.type}</p>
-                    <p>Size: {formatSize(selectedItem.size)}</p>
-                    {selectedItem.width && <p>Dimensions: {selectedItem.width} × {selectedItem.height}px</p>}
-                    <p>Uploaded: {new Date(selectedItem.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                    <p>Tür: {selectedItem.type}</p>
+                    <p>Boyut: {formatSize(selectedItem.size)}</p>
+                    {selectedItem.width && <p>Boyutlar: {selectedItem.width} × {selectedItem.height}px</p>}
+                    <p>Yüklendi: {new Date(selectedItem.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
                   </div>
                   {/* Editable fields */}
                   <div className="border-t border-gray-100 pt-3 space-y-2">
                     <div>
-                      <label className="block text-[11px] font-medium text-gray-500 mb-1">Alt Text</label>
-                      <input value={editAlt} onChange={(e) => setEditAlt(e.target.value)} className="w-full rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-900 focus:border-blue-400 focus:outline-none" placeholder="Describe image..." />
+                      <label className="block text-[11px] font-medium text-gray-500 mb-1">Alt Metin</label>
+                      <input value={editAlt} onChange={(e) => setEditAlt(e.target.value)} className="w-full rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-900 focus:border-blue-400 focus:outline-none" placeholder="Görseli açıklayın..." />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-medium text-gray-500 mb-1">Folder</label>
+                      <label className="block text-[11px] font-medium text-gray-500 mb-1">Klasör</label>
                       <input value={editFolder} onChange={(e) => setEditFolder(e.target.value)} className="w-full rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-900 focus:border-blue-400 focus:outline-none" placeholder="general" />
                     </div>
-                    <button onClick={handleSaveDetail} className="w-full rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700">Save Details</button>
+                    <button onClick={handleSaveDetail} className="w-full rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700">Detayları Kaydet</button>
                   </div>
                   <div className="flex gap-2 pt-1">
-                    <button onClick={() => handleDelete(selectedItem.id)} className="flex-1 rounded-lg border border-red-200 px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition-colors">Delete</button>
+                    <button onClick={() => handleDelete(selectedItem.id)} className="flex-1 rounded-lg border border-red-200 px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition-colors">Sil</button>
                   </div>
                 </div>
               </div>

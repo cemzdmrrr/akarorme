@@ -35,17 +35,17 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-bold tracking-wider text-gray-900">AKAR ÖRME</h1>
-          <p className="mt-1 text-sm text-gray-500">Content Management System</p>
+          <p className="mt-1 text-sm text-gray-500">İçerik Yönetim Sistemi</p>
         </div>
 
         {/* Card */}
         <div className="rounded-2xl bg-white border border-gray-200 p-8 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-900 mb-1">Sign In</h2>
-          <p className="text-sm text-gray-500 mb-6">Enter your credentials to access the admin panel.</p>
+          <h2 className="text-lg font-semibold text-gray-900 mb-1">Giriş Yap</h2>
+          <p className="text-sm text-gray-500 mb-6">Yönetim paneline erişmek için kimlik bilgilerinizi girin.</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Username</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Kullanıcı Adı</label>
               <input
                 type="text"
                 required
@@ -57,7 +57,7 @@ export default function LoginPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Şifre</label>
               <input
                 type="password"
                 required
@@ -83,7 +83,7 @@ export default function LoginPage() {
               {loading && (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
               )}
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
             </button>
           </form>
         </div>

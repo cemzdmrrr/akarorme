@@ -40,7 +40,7 @@ export default function ReferencesPage() {
     resetForm(); refresh();
   };
 
-  const handleDelete = (id: string) => { if (confirm('Delete this reference?')) { deleteReference(id); refresh(); } };
+  const handleDelete = (id: string) => { if (confirm('Bu referansı silmek istiyor musunuz?')) { deleteReference(id); refresh(); } };
 
   const handleLogoUpload = (file: File) => {
     const reader = new FileReader();
@@ -58,13 +58,13 @@ export default function ReferencesPage() {
   return (
     <>
       <AdminHeader
-        title="References"
-        subtitle={`${refs.length} brand partners`}
+        title="Referanslar"
+        subtitle={`${refs.length} marka ortağı`}
         onMenuToggle={toggleSidebar}
         actions={
           <button onClick={openNew} className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-            Add Reference
+            Referans Ekle
           </button>
         }
       />
@@ -74,29 +74,29 @@ export default function ReferencesPage() {
         {showForm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={resetForm}>
             <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">{editing ? 'Edit Reference' : 'New Reference'}</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">{editing ? 'Referansı Düzenle' : 'Yeni Referans'}</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Company Name *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Şirket Adı *</label>
                   <input required value={name} onChange={(e) => setName(e.target.value)} className={inputCls} placeholder="e.g. NordMode" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Initials</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Kısaltma</label>
                     <input value={initials} onChange={(e) => setInitials(e.target.value.toUpperCase().slice(0, 3))} className={inputCls} placeholder="NM" maxLength={3} />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Country *</label>
-                    <input required value={country} onChange={(e) => setCountry(e.target.value)} className={inputCls} placeholder="e.g. Sweden" />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Ülke *</label>
+                    <input required value={country} onChange={(e) => setCountry(e.target.value)} className={inputCls} placeholder="ör. İsveç" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Website URL</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Web Sitesi URL</label>
                   <input value={website} onChange={(e) => setWebsite(e.target.value)} className={inputCls} placeholder="https://www.example.com" type="url" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                  <textarea rows={2} value={description} onChange={(e) => setDescription(e.target.value)} className={inputCls} placeholder="Brief description of the company..." />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Açıklama</label>
+                  <textarea rows={2} value={description} onChange={(e) => setDescription(e.target.value)} className={inputCls} placeholder="Şirket hakkında kısa açıklama..." />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Logo</label>
@@ -117,8 +117,8 @@ export default function ReferencesPage() {
                   </div>
                 </div>
                 <div className="flex justify-end gap-3 pt-2">
-                  <button type="button" onClick={resetForm} className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
-                  <button type="submit" className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700">{editing ? 'Save' : 'Create'}</button>
+                  <button type="button" onClick={resetForm} className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">İptal</button>
+                  <button type="submit" className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700">{editing ? 'Kaydet' : 'Oluştur'}</button>
                 </div>
               </form>
             </div>
@@ -169,15 +169,15 @@ export default function ReferencesPage() {
 
         {refs.length === 0 && (
           <div className="text-center py-16 text-gray-400">
-            <p className="text-sm">No references yet</p>
-            <button onClick={openNew} className="mt-2 text-sm text-blue-600 hover:text-blue-800">Add your first reference</button>
+            <p className="text-sm">Henüz referans yok</p>
+            <button onClick={openNew} className="mt-2 text-sm text-blue-600 hover:text-blue-800">İlk referansınızı ekleyin</button>
           </div>
         )}
 
         {/* Country summary */}
         {Object.keys(grouped).length > 0 && (
           <div className="rounded-xl bg-white border border-gray-200 p-5">
-            <h3 className="text-sm font-semibold text-gray-900 mb-3">By Country</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-3">Ülkeye Göre</h3>
             <div className="flex flex-wrap gap-2">
               {Object.entries(grouped).sort((a,b) => b[1].length - a[1].length).map(([c, list]) => (
                 <span key={c} className="inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 text-xs text-gray-700">

@@ -57,7 +57,7 @@ export default function CollectionsPage() {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Delete this collection? Models will not be deleted.')) {
+    if (confirm('Bu koleksiyonu silmek istiyor musunuz? Modeller silinmeyecektir.')) {
       deleteCollection(id);
       refresh();
     }
@@ -70,13 +70,13 @@ export default function CollectionsPage() {
   return (
     <>
       <AdminHeader
-        title="Collections"
-        subtitle={`${collections.length} collections`}
+        title="Koleksiyonlar"
+        subtitle={`${collections.length} koleksiyon`}
         onMenuToggle={toggleSidebar}
         actions={
           <button onClick={openNew} className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-            New Collection
+            Yeni Koleksiyon
           </button>
         }
       />
@@ -86,29 +86,29 @@ export default function CollectionsPage() {
         {showForm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => resetForm()}>
             <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">{editing ? 'Edit Collection' : 'New Collection'}</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">{editing ? 'Koleksiyonu Düzenle' : 'Yeni Koleksiyon'}</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Collection Name *</label>
-                  <input required value={name} onChange={(e) => setName(e.target.value)} className={inputCls} placeholder="e.g. Summer Essentials" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Koleksiyon Adı *</label>
+                  <input required value={name} onChange={(e) => setName(e.target.value)} className={inputCls} placeholder="ör. Yaz Koleksiyonu" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Season</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Sezon</label>
                   <select value={season} onChange={(e) => setSeason(e.target.value)} className={inputCls}>
                     {['SS25', 'FW25', 'SS26', 'FW26'].map((s) => <option key={s}>{s}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                  <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} className={inputCls} placeholder="Collection description..." />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Açıklama</label>
+                  <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} className={inputCls} placeholder="Koleksiyon açıklaması..." />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Cover Image URL</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Kapak Görseli URL</label>
                   <input value={coverImage} onChange={(e) => setCoverImage(e.target.value)} className={inputCls} placeholder="/images/..." />
                 </div>
                 <div className="flex justify-end gap-3 pt-2">
-                  <button type="button" onClick={resetForm} className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
-                  <button type="submit" className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700">{editing ? 'Save' : 'Create'}</button>
+                  <button type="button" onClick={resetForm} className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">İptal</button>
+                  <button type="submit" className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700">{editing ? 'Kaydet' : 'Oluştur'}</button>
                 </div>
               </form>
             </div>
@@ -134,7 +134,7 @@ export default function CollectionsPage() {
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="text-sm font-semibold text-gray-900">{col.name}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">{col.season} &middot; {countModels(col.name)} models</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{col.season} &middot; {countModels(col.name)} model</p>
                   </div>
                   <div className="flex gap-1">
                     <button onClick={() => openEdit(col)} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600">
@@ -153,8 +153,8 @@ export default function CollectionsPage() {
 
         {collections.length === 0 && (
           <div className="text-center py-16 text-gray-400">
-            <p className="text-sm">No collections yet</p>
-            <button onClick={openNew} className="mt-2 text-sm text-blue-600 hover:text-blue-800">Create your first collection</button>
+            <p className="text-sm">Henüz koleksiyon yok</p>
+            <button onClick={openNew} className="mt-2 text-sm text-blue-600 hover:text-blue-800">İlk koleksiyonunuzu oluşturun</button>
           </div>
         )}
       </div>

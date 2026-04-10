@@ -29,18 +29,18 @@ export default function AdminB2BOverview() {
   const activeProd = productions.filter((p) => !['completed'].includes(p.status)).length;
 
   const stats = [
-    { label: 'Active Clients', value: approvedClients, color: 'bg-blue-50 text-blue-700', href: '/admin/b2b/clients' },
-    { label: 'Pending Registrations', value: pendingClients.length, color: 'bg-yellow-50 text-yellow-700', href: '/admin/b2b/clients' },
-    { label: 'Pending Samples', value: pendingSamples, color: 'bg-purple-50 text-purple-700', href: '/admin/b2b/samples' },
-    { label: 'Active Production', value: activeProd, color: 'bg-green-50 text-green-700', href: '/admin/b2b/production' },
-    { label: 'Unread Messages', value: unreadConvos, color: 'bg-red-50 text-red-700', href: '/admin/b2b/messages' },
+    { label: 'Aktif Müşteriler', value: approvedClients, color: 'bg-blue-50 text-blue-700', href: '/admin/b2b/clients' },
+    { label: 'Bekleyen Kayıtlar', value: pendingClients.length, color: 'bg-yellow-50 text-yellow-700', href: '/admin/b2b/clients' },
+    { label: 'Bekleyen Numuneler', value: pendingSamples, color: 'bg-purple-50 text-purple-700', href: '/admin/b2b/samples' },
+    { label: 'Aktif Üretim', value: activeProd, color: 'bg-green-50 text-green-700', href: '/admin/b2b/production' },
+    { label: 'Okunmamış Mesajlar', value: unreadConvos, color: 'bg-red-50 text-red-700', href: '/admin/b2b/messages' },
   ];
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">B2B Portal Management</h1>
-        <p className="mt-1 text-sm text-gray-500">Overview of the B2B customer portal activity.</p>
+        <h1 className="text-2xl font-bold text-gray-900">B2B Portal Yönetimi</h1>
+        <p className="mt-1 text-sm text-gray-500">B2B müşteri portalı aktivitesi genel bakış.</p>
       </div>
 
       {/* Stats */}
@@ -57,8 +57,8 @@ export default function AdminB2BOverview() {
       {pendingClients.length > 0 && (
         <div className="rounded-xl bg-white border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-gray-900">Pending Registrations</h2>
-            <Link href="/admin/b2b/clients" className="text-xs text-blue-600 hover:underline">View All</Link>
+            <h2 className="text-sm font-semibold text-gray-900">Bekleyen Kayıtlar</h2>
+            <Link href="/admin/b2b/clients" className="text-xs text-blue-600 hover:underline">Tümünü Gör</Link>
           </div>
           <div className="space-y-3">
             {pendingClients.slice(0, 5).map((c) => (
@@ -78,7 +78,7 @@ export default function AdminB2BOverview() {
       <div className="rounded-xl bg-white border border-gray-200 p-5">
         <h2 className="text-sm font-semibold text-gray-900 mb-4">Recent B2B Activity</h2>
         {activity.length === 0 ? (
-          <p className="text-sm text-gray-400">No activity yet.</p>
+          <p className="text-sm text-gray-400">Henüz aktivite yok.</p>
         ) : (
           <div className="space-y-3">
             {activity.map((a) => (

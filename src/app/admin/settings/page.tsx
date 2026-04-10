@@ -63,17 +63,17 @@ export default function SettingsPage() {
 
   const handleChangePassword = async () => {
     setPwMsg(null);
-    if (!currentPw || !newPw) { setPwMsg({ type: 'error', text: 'All fields are required.' }); return; }
-    if (newPw.length < 6) { setPwMsg({ type: 'error', text: 'New password must be at least 6 characters.' }); return; }
-    if (newPw !== confirmPw) { setPwMsg({ type: 'error', text: 'New passwords do not match.' }); return; }
+    if (!currentPw || !newPw) { setPwMsg({ type: 'error', text: 'Tüm alanlar zorunludur.' }); return; }
+    if (newPw.length < 6) { setPwMsg({ type: 'error', text: 'Yeni şifre en az 6 karakter olmalıdır.' }); return; }
+    if (newPw !== confirmPw) { setPwMsg({ type: 'error', text: 'Yeni şifreler eşleşmiyor.' }); return; }
     setPwLoading(true);
     const ok = await changePassword(currentPw, newPw);
     setPwLoading(false);
     if (ok) {
-      setPwMsg({ type: 'success', text: 'Password changed successfully.' });
+      setPwMsg({ type: 'success', text: 'Şifre başarıyla değiştirildi.' });
       setCurrentPw(''); setNewPw(''); setConfirmPw('');
     } else {
-      setPwMsg({ type: 'error', text: 'Current password is incorrect.' });
+      setPwMsg({ type: 'error', text: 'Mevcut şifre yanlış.' });
     }
   };
 
@@ -83,8 +83,8 @@ export default function SettingsPage() {
   return (
     <>
       <AdminHeader
-        title="Settings"
-        subtitle="Website configuration"
+        title="Ayarlar"
+        subtitle="Web sitesi yapılandırması"
         onMenuToggle={toggleSidebar}
         actions={
           <button
@@ -99,7 +99,7 @@ export default function SettingsPage() {
             ) : saved ? (
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
             ) : null}
-            {saved ? 'Saved!' : 'Save Settings'}
+            {saved ? 'Kaydedildi!' : 'Ayarları Kaydet'}
           </button>
         }
       />
@@ -108,36 +108,36 @@ export default function SettingsPage() {
         <form onSubmit={handleSave} className="space-y-6">
           {/* General */}
           <section className="rounded-xl bg-white border border-gray-200 p-5 space-y-4">
-            <h3 className="text-sm font-semibold text-gray-900 pb-2 border-b border-gray-100">General</h3>
+            <h3 className="text-sm font-semibold text-gray-900 pb-2 border-b border-gray-100">Genel</h3>
             <div>
-              <label className={labelCls}>Site Name</label>
+              <label className={labelCls}>Site Adı</label>
               <input value={settings.siteName} onChange={(e) => update('siteName', e.target.value)} className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>Site Description</label>
+              <label className={labelCls}>Site Açıklaması</label>
               <textarea rows={2} value={settings.siteDescription} onChange={(e) => update('siteDescription', e.target.value)} className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>Footer Text</label>
-              <input value={settings.footerText} onChange={(e) => update('footerText', e.target.value)} className={inputCls} placeholder="e.g. © 2024 Akar Örme. All rights reserved." />
+              <label className={labelCls}>Alt Bilgi Metni</label>
+              <input value={settings.footerText} onChange={(e) => update('footerText', e.target.value)} className={inputCls} placeholder="ör. © 2024 Akar Örme. Tüm hakları saklıdır." />
             </div>
           </section>
 
           {/* Contact */}
           <section className="rounded-xl bg-white border border-gray-200 p-5 space-y-4">
-            <h3 className="text-sm font-semibold text-gray-900 pb-2 border-b border-gray-100">Contact Information</h3>
+            <h3 className="text-sm font-semibold text-gray-900 pb-2 border-b border-gray-100">İletişim Bilgileri</h3>
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className={labelCls}>Email</label>
+                <label className={labelCls}>E-posta</label>
                 <input type="email" value={settings.contactEmail} onChange={(e) => update('contactEmail', e.target.value)} className={inputCls} />
               </div>
               <div>
-                <label className={labelCls}>Phone</label>
+                <label className={labelCls}>Telefon</label>
                 <input value={settings.contactPhone} onChange={(e) => update('contactPhone', e.target.value)} className={inputCls} />
               </div>
             </div>
             <div>
-              <label className={labelCls}>Address</label>
+              <label className={labelCls}>Adres</label>
               <textarea rows={2} value={settings.address} onChange={(e) => update('address', e.target.value)} className={inputCls} />
             </div>
           </section>
@@ -145,11 +145,11 @@ export default function SettingsPage() {
           {/* Social */}
           <section className="rounded-xl bg-white border border-gray-200 p-5 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-gray-100">
-              <h3 className="text-sm font-semibold text-gray-900">Social Links</h3>
-              <button type="button" onClick={addSocial} className="text-xs text-blue-600 hover:text-blue-800 font-medium">+ Add Link</button>
+              <h3 className="text-sm font-semibold text-gray-900">Sosyal Bağlantılar</h3>
+              <button type="button" onClick={addSocial} className="text-xs text-blue-600 hover:text-blue-800 font-medium">+ Bağlantı Ekle</button>
             </div>
             {settings.socialLinks.length === 0 && (
-              <p className="text-sm text-gray-400 py-4 text-center">No social links configured</p>
+              <p className="text-sm text-gray-400 py-4 text-center">Sosyal bağlantı yapılandırılmadı</p>
             )}
             <div className="space-y-2">
               {settings.socialLinks.map((link, i) => (
@@ -206,25 +206,25 @@ export default function SettingsPage() {
               }}
               className={`shrink-0 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors ${apiKeySaved ? 'bg-emerald-500' : 'bg-blue-600 hover:bg-blue-700'}`}
             >
-              {apiKeySaved ? 'Saved!' : 'Save Key'}
+              {apiKeySaved ? 'Kaydedildi!' : 'Kaydet'}
             </button>
           </div>
         </section>
 
         {/* Change Password */}
         <section className="rounded-xl bg-white border border-gray-200 p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-gray-900 pb-2 border-b border-gray-100">Change Password</h3>
+            <h3 className="text-sm font-semibold text-gray-900 pb-2 border-b border-gray-100">Şifre Değiştir</h3>
           <div className="space-y-3 max-w-sm">
             <div>
-              <label className={labelCls}>Current Password</label>
+              <label className={labelCls}>Mevcut Şifre</label>
               <input type="password" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>New Password</label>
-              <input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} className={inputCls} placeholder="Min 6 characters" />
+              <label className={labelCls}>Yeni Şifre</label>
+              <input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} className={inputCls} placeholder="En az 6 karakter" />
             </div>
             <div>
-              <label className={labelCls}>Confirm New Password</label>
+              <label className={labelCls}>Yeni Şifreyi Onayla</label>
               <input type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} className={inputCls} />
             </div>
             {pwMsg && (
@@ -236,30 +236,30 @@ export default function SettingsPage() {
               disabled={pwLoading}
               className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
             >
-              {pwLoading ? 'Changing...' : 'Change Password'}
+              {pwLoading ? 'Değiştiriliyor...' : 'Şifre Değiştir'}
             </button>
           </div>
         </section>
 
         {/* Danger zone */}
         <section className="rounded-xl bg-white border border-red-100 p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-red-600 pb-2 border-b border-red-50">Danger Zone</h3>
+          <h3 className="text-sm font-semibold text-red-600 pb-2 border-b border-red-50">Tehlikeli Bölge</h3>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-900">Reset All Data</p>
-              <p className="text-xs text-gray-500">Clear all CMS data and start fresh with seed data.</p>
+              <p className="text-sm font-medium text-gray-900">Tüm Verileri Sıfırla</p>
+              <p className="text-xs text-gray-500">Tüm CMS verilerini temizleyin ve varsayılan verilerle yeniden başlatın.</p>
             </div>
             <button
               type="button"
               onClick={() => {
-                if (confirm('This will delete all your CMS data and reload seed data. Are you sure?')) {
+                if (confirm('Bu, tüm CMS verilerinizi silecek ve varsayılan verileri yeniden yükleyecektir. Emin misiniz?')) {
                   localStorage.clear();
                   window.location.reload();
                 }
               }}
               className="rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
             >
-              Reset Data
+              Verileri Sıfırla
             </button>
           </div>
         </section>

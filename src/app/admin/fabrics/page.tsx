@@ -45,7 +45,7 @@ export default function FabricsPage() {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Delete this fabric type?')) { deleteFabric(id); refresh(); }
+    if (confirm('Bu kumaş türünü silmek istiyor musunuz?')) { deleteFabric(id); refresh(); }
   };
 
   const inputCls = 'w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100';
@@ -53,13 +53,13 @@ export default function FabricsPage() {
   return (
     <>
       <AdminHeader
-        title="Fabric Types"
-        subtitle={`${fabrics.length} fabric structures`}
+        title="Kumaş Türleri"
+        subtitle={`${fabrics.length} kumaş yapısı`}
         onMenuToggle={toggleSidebar}
         actions={
           <button onClick={openNew} className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-            Add Fabric
+            Kumaş Ekle
           </button>
         }
       />
@@ -69,37 +69,37 @@ export default function FabricsPage() {
         {showForm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => resetForm()}>
             <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">{editing ? 'Edit Fabric Type' : 'New Fabric Type'}</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">{editing ? 'Kumaş Türünü Düzenle' : 'Yeni Kumaş Türü'}</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Fabric Name *</label>
-                  <input required value={name} onChange={(e) => setName(e.target.value)} className={inputCls} placeholder="e.g. Single Jersey" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Kumaş Adı *</label>
+                  <input required value={name} onChange={(e) => setName(e.target.value)} className={inputCls} placeholder="ör. Süprem" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Gauge</label>
-                    <input value={gauge} onChange={(e) => setGauge(e.target.value)} className={inputCls} placeholder="e.g. 28 GG" />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Numara</label>
+                    <input value={gauge} onChange={(e) => setGauge(e.target.value)} className={inputCls} placeholder="ör. 28 GG" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Weight</label>
-                    <input value={weight} onChange={(e) => setWeight(e.target.value)} className={inputCls} placeholder="e.g. 140–180 g/m²" />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Ağırlık</label>
+                    <input value={weight} onChange={(e) => setWeight(e.target.value)} className={inputCls} placeholder="ör. 140–180 g/m²" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Composition</label>
-                  <input value={composition} onChange={(e) => setComposition(e.target.value)} className={inputCls} placeholder="e.g. 100% Cotton" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Kompozisyon</label>
+                  <input value={composition} onChange={(e) => setComposition(e.target.value)} className={inputCls} placeholder="ör. %100 Pamuk" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Açıklama</label>
                   <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} className={inputCls} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Görsel URL</label>
                   <input value={image} onChange={(e) => setImage(e.target.value)} className={inputCls} placeholder="/images/fabrics/..." />
                 </div>
                 <div className="flex justify-end gap-3 pt-2">
-                  <button type="button" onClick={resetForm} className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
-                  <button type="submit" className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700">{editing ? 'Save' : 'Create'}</button>
+                  <button type="button" onClick={resetForm} className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">İptal</button>
+                  <button type="submit" className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700">{editing ? 'Kaydet' : 'Oluştur'}</button>
                 </div>
               </form>
             </div>
@@ -111,11 +111,11 @@ export default function FabricsPage() {
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-gray-100">
-                <th className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Fabric</th>
-                <th className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Gauge</th>
-                <th className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Composition</th>
-                <th className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">Weight</th>
-                <th className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Actions</th>
+                <th className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Kumaş</th>
+                <th className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Numara</th>
+                <th className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Kompozisyon</th>
+                <th className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">Ağırlık</th>
+                <th className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">İşlemler</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -143,7 +143,7 @@ export default function FabricsPage() {
             </tbody>
           </table>
           {fabrics.length === 0 && (
-            <p className="px-5 py-12 text-center text-sm text-gray-400">No fabric types yet</p>
+            <p className="px-5 py-12 text-center text-sm text-gray-400">Henüz kumaş türü yok</p>
           )}
         </div>
       </div>
