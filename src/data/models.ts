@@ -371,13 +371,17 @@ export const ADMIN_MODELS_STORAGE = ADMIN_MODELS_STORAGE_KEY;
 // ─── Server-side async functions (use Vercel Blob) ──
 
 /**
- * Fetch all models from persistent storage, merged with
- * static fallback catalogue. Use in server components.
+ * Fetch all models from persistent storage.
+ * If blob has data, use only blob models (admin is source of truth).
+ * If blob is empty, fall back to static catalogue.
  */
 export async function getServerModels(): Promise<KnitwearModel[]> {
   const adminModels = await getPersistedModels();
   const converted = adminModelsToKnitwear(adminModels);
-  return dedupeBySlug([...models, ...converted]);
+  // Once admin has models, those are the source of truth
+  if (converted.length > 0) return converted;
+  // Fallback to static models when blob is empty
+  return [...models];
 }
 
 export async function getServerFeaturedModels(): Promise<KnitwearModel[]> {

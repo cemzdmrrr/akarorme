@@ -4,7 +4,7 @@
    BLOB_READ_WRITE_TOKEN is not configured.
    =================================================== */
 
-import { put, head } from '@vercel/blob';
+import { put, get } from '@vercel/blob';
 import type { AdminModel } from '@/types/admin';
 
 const MODELS_BLOB_PATH = 'data/models.json';
@@ -19,11 +19,27 @@ export async function getPersistedModels(): Promise<AdminModel[]> {
   }
 
   try {
-    const blob = await head(MODELS_BLOB_PATH);
-    const response = await fetch(blob.url, { cache: 'no-store' });
-    if (!response.ok) return [];
+    const result = await get(MODELS_BLOB_PATH, { access: 'private' });
+    if (!result || result.statusCode !== 200 || !result.stream) return [];
 
-    const data = await response.json();
+    // Read stream to string
+    const reader = result.stream.getReader();
+    const chunks: Uint8Array[] = [];
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (value) chunks.push(value);
+    }
+    const text = new TextDecoder().decode(
+      chunks.reduce((acc, chunk) => {
+        const merged = new Uint8Array(acc.length + chunk.length);
+        merged.set(acc);
+        merged.set(chunk, acc.length);
+        return merged;
+      }, new Uint8Array(0)),
+    );
+
+    const data = JSON.parse(text);
     return Array.isArray(data) ? data : [];
   } catch {
     // Blob doesn't exist yet — return empty
@@ -43,6 +59,8 @@ export async function persistModels(models: AdminModel[]): Promise<void> {
   await put(MODELS_BLOB_PATH, JSON.stringify(models), {
     access: 'private',
     addRandomSuffix: false,
+    allowOverwrite: true,
+    contentType: 'application/json',
   });
 }
 
