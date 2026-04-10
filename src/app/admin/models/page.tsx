@@ -125,9 +125,17 @@ export default function ModelsPage() {
                   <tr key={model.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-[11px] font-bold text-gray-400 shrink-0">
-                          {model.name.slice(0, 2).toUpperCase()}
-                        </div>
+                        {model.images?.[0] ? (
+                          <img
+                            src={model.images[0]}
+                            alt={model.name}
+                            className="h-10 w-10 rounded-lg object-cover shrink-0"
+                          />
+                        ) : (
+                          <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-[11px] font-bold text-gray-400 shrink-0">
+                            {model.name.slice(0, 2).toUpperCase()}
+                          </div>
+                        )}
                         <div className="min-w-0">
                           <p className="text-sm font-medium text-gray-900 truncate">{model.name}</p>
                           <p className="text-xs text-gray-400 truncate">{model.tagline}</p>

@@ -78,7 +78,14 @@ export default function CollectionFilter({
                 href={`/${locale}/models/${model.slug}`}
                 className="group block overflow-hidden rounded-2xl border border-brand-sand/60 bg-white transition-all duration-400 hover:border-brand-accent/20 hover:shadow-card-hover"
               >
-                <div className="swatch-placeholder relative aspect-[3/4]">
+                <div className="relative aspect-[3/4] overflow-hidden bg-brand-cream">
+                  {model.image && (
+                    <img
+                      src={model.image}
+                      alt={model.name}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  )}
                   <div className="absolute left-3 top-3 z-10 flex flex-wrap gap-1.5">
                     {model.tags.slice(0, 2).map((tag) => (
                       <span

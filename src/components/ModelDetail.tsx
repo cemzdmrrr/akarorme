@@ -35,7 +35,16 @@ export default function ModelDetail({
       <div className="grid gap-12 lg:grid-cols-2">
         {/* Image area */}
         <RevealOnScroll>
-          <div className="swatch-placeholder aspect-square rounded-2xl">
+          <div className="relative aspect-square rounded-2xl overflow-hidden bg-brand-cream">
+            {model.image ? (
+              <img
+                src={model.image}
+                alt={model.name}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center text-brand-grey text-lg">{model.name}</div>
+            )}
             {/* Colour indicator ring */}
             <div className="absolute inset-0 rounded-2xl ring-2 ring-inset" style={{ '--tw-ring-color': model.colors[activeColor]?.hex } as React.CSSProperties} />
           </div>
@@ -182,12 +191,20 @@ export default function ModelDetail({
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {(model.gallery.length > 0
                   ? model.gallery
-                  : [model.image, model.image, model.image]
-                ).map((_, i) => (
+                  : [model.image]
+                ).map((src, i) => (
                   <div
                     key={i}
-                    className="swatch-placeholder aspect-[4/3] rounded-2xl"
-                  />
+                    className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-brand-cream"
+                  >
+                    {src && (
+                      <img
+                        src={src}
+                        alt={`${model.name} ${i + 1}`}
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                    )}
+                  </div>
                 ))}
               </div>
             )}
