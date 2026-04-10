@@ -4,7 +4,7 @@
    BLOB_READ_WRITE_TOKEN is not configured.
    =================================================== */
 
-import { put, list } from '@vercel/blob';
+import { put, head } from '@vercel/blob';
 import type { AdminModel } from '@/types/admin';
 
 const MODELS_BLOB_PATH = 'data/models.json';
@@ -19,15 +19,14 @@ export async function getPersistedModels(): Promise<AdminModel[]> {
   }
 
   try {
-    const { blobs } = await list({ prefix: MODELS_BLOB_PATH, limit: 1 });
-    if (blobs.length === 0) return [];
-
-    const response = await fetch(blobs[0].url, { cache: 'no-store' });
+    const blob = await head(MODELS_BLOB_PATH);
+    const response = await fetch(blob.url, { cache: 'no-store' });
     if (!response.ok) return [];
 
     const data = await response.json();
     return Array.isArray(data) ? data : [];
   } catch {
+    // Blob doesn't exist yet — return empty
     return [];
   }
 }
@@ -42,7 +41,7 @@ export async function persistModels(models: AdminModel[]): Promise<void> {
   }
 
   await put(MODELS_BLOB_PATH, JSON.stringify(models), {
-    access: 'public',
+    access: 'private',
     addRandomSuffix: false,
   });
 }
