@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import AdminHeader from '@/components/admin/AdminHeader';
 import ModelForm from '@/components/admin/ModelForm';
 import { useAdminContext } from '../../template';
-import { getModel, updateModel } from '@/lib/admin-store';
+import { fetchModel, apiUpdateModel } from '@/lib/admin-api';
 import type { AdminModel } from '@/types/admin';
 
 export default function EditModelPage() {
@@ -14,12 +14,14 @@ export default function EditModelPage() {
   const params = useParams();
   const [model, setModel] = useState<AdminModel | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const id = params.id as string;
-    const found = getModel(id);
-    if (found) setModel(found);
-    else setNotFound(true);
+    fetchModel(id).then((found) => {
+      if (found) setModel(found);
+      else setNotFound(true);
+    }).catch(() => setNotFound(true));
   }, [params.id]);
 
   if (notFound) {
@@ -46,10 +48,16 @@ export default function EditModelPage() {
       <div className="p-4 sm:p-6 max-w-4xl">
         <ModelForm
           initial={model}
-          submitLabel="Save Changes"
-          onSubmit={(data) => {
-            updateModel(model.id, data);
-            router.push('/admin/models');
+          submitLabel={saving ? 'Saving…' : 'Save Changes'}
+          onSubmit={async (data) => {
+            setSaving(true);
+            try {
+              await apiUpdateModel(model.id, data);
+              router.push('/admin/models');
+            } catch (err) {
+              alert(err instanceof Error ? err.message : 'Failed to update model');
+              setSaving(false);
+            }
           }}
         />
       </div>

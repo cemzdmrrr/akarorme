@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from '../template';
-import { getModels, deleteModel, updateModel } from '@/lib/admin-store';
+import { fetchModels, apiDeleteModel, apiUpdateModel } from '@/lib/admin-api';
 import type { AdminModel } from '@/types/admin';
 import Link from 'next/link';
 
@@ -12,32 +12,51 @@ export default function ModelsPage() {
   const [models, setModels] = useState<AdminModel[]>([]);
   const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all');
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  const loadModels = () => {
+    setLoading(true);
+    fetchModels()
+      .then(setModels)
+      .catch(() => setModels([]))
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
-    setModels(getModels());
+    loadModels();
   }, []);
-
-  const refresh = () => setModels(getModels());
 
   const filtered = models
     .filter((m) => filter === 'all' || m.status === filter)
     .filter((m) => m.name.toLowerCase().includes(search.toLowerCase()) || m.collection.toLowerCase().includes(search.toLowerCase()));
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this model?')) {
-      deleteModel(id);
-      refresh();
+      try {
+        await apiDeleteModel(id);
+        loadModels();
+      } catch {
+        alert('Failed to delete model');
+      }
     }
   };
 
-  const handleToggleStatus = (id: string, current: string) => {
-    updateModel(id, { status: current === 'published' ? 'draft' : 'published' });
-    refresh();
+  const handleToggleStatus = async (id: string, current: string) => {
+    try {
+      await apiUpdateModel(id, { status: current === 'published' ? 'draft' : 'published' });
+      loadModels();
+    } catch {
+      alert('Failed to update status');
+    }
   };
 
-  const handleToggleFeatured = (id: string, current: boolean) => {
-    updateModel(id, { featured: !current });
-    refresh();
+  const handleToggleFeatured = async (id: string, current: boolean) => {
+    try {
+      await apiUpdateModel(id, { featured: !current });
+      loadModels();
+    } catch {
+      alert('Failed to update featured status');
+    }
   };
 
   return (

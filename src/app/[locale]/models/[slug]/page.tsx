@@ -6,9 +6,13 @@ import { getDictionary } from '@/i18n/getDictionary';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ModelDetail from '@/components/ModelDetail';
-import { getModelBySlug, useSiteModelslugs } from '@/data/models';
+import { getServerModelBySlug, getServerModelSlugs, useSiteModelslugs } from '@/data/models';
+
+export const revalidate = 60;
+export const dynamicParams = true; // Allow slugs not in generateStaticParams
 
 export function generateStaticParams() {
+  // Use static slugs for build-time generation
   const slugs = useSiteModelslugs();
   return locales.flatMap((locale) =>
     slugs.map((slug) => ({ locale, slug }))
@@ -20,7 +24,7 @@ export async function generateMetadata({
 }: {
   params: { locale: Locale; slug: string };
 }): Promise<Metadata> {
-  const model = getModelBySlug(params.slug);
+  const model = await getServerModelBySlug(params.slug);
   if (!model) return {};
   return {
     title: model.name,
@@ -33,7 +37,7 @@ export default async function ModelPage({
 }: {
   params: { locale: Locale; slug: string };
 }) {
-  const model = getModelBySlug(params.slug);
+  const model = await getServerModelBySlug(params.slug);
   if (!model) notFound();
 
   const dict = await getDictionary(params.locale);

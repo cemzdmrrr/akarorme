@@ -5,6 +5,7 @@ import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from '../template';
 import { getSettings, updateSettings } from '@/lib/admin-store';
 import { changePassword } from '@/lib/auth';
+import { setApiKey } from '@/lib/admin-api';
 import type { SiteSettings } from '@/types/admin';
 
 export default function SettingsPage() {
@@ -20,7 +21,16 @@ export default function SettingsPage() {
   const [pwMsg, setPwMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [pwLoading, setPwLoading] = useState(false);
 
-  useEffect(() => { setSettings(getSettings()); }, []);
+  // API key state
+  const [apiKeyValue, setApiKeyValue] = useState('');
+  const [apiKeySaved, setApiKeySaved] = useState(false);
+
+  useEffect(() => {
+    setSettings(getSettings());
+    // Load stored API key
+    const stored = typeof window !== 'undefined' ? localStorage.getItem('admin_api_key') || '' : '';
+    setApiKeyValue(stored);
+  }, []);
 
   if (!settings) return null;
 
@@ -171,6 +181,35 @@ export default function SettingsPage() {
             </div>
           </section>
         </form>
+
+        {/* API Key */}
+        <section className="rounded-xl bg-white border border-gray-200 p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-gray-900 pb-2 border-b border-gray-100">Admin API Key</h3>
+          <p className="text-xs text-gray-500">Vercel dashboard&apos;ta tanımlanan ADMIN_API_KEY değerini buraya girin. Model ekleme/silme/güncelleme işlemleri için gereklidir.</p>
+          <div className="flex items-end gap-3 max-w-lg">
+            <div className="flex-1">
+              <label className={labelCls}>API Key</label>
+              <input
+                type="password"
+                value={apiKeyValue}
+                onChange={(e) => { setApiKeyValue(e.target.value); setApiKeySaved(false); }}
+                className={inputCls}
+                placeholder="Vercel'deki ADMIN_API_KEY değeri"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setApiKey(apiKeyValue);
+                setApiKeySaved(true);
+                setTimeout(() => setApiKeySaved(false), 2000);
+              }}
+              className={`shrink-0 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors ${apiKeySaved ? 'bg-emerald-500' : 'bg-blue-600 hover:bg-blue-700'}`}
+            >
+              {apiKeySaved ? 'Saved!' : 'Save Key'}
+            </button>
+          </div>
+        </section>
 
         {/* Change Password */}
         <section className="rounded-xl bg-white border border-gray-200 p-5 space-y-4">

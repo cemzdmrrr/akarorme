@@ -1,5 +1,6 @@
 import type { KnitwearModel } from '@/types';
 import type { AdminModel } from '@/types/admin';
+import { getPersistedModels } from '@/lib/model-store';
 
 const ADMIN_MODELS_STORAGE_KEY = 'admin_models';
 
@@ -366,3 +367,30 @@ export function getHydratedModelSlugs(): string[] {
  */
 export const ADMIN_MODELS_UPDATED_EVENT = 'admin-models-updated';
 export const ADMIN_MODELS_STORAGE = ADMIN_MODELS_STORAGE_KEY;
+
+// ─── Server-side async functions (use Vercel Blob) ──
+
+/**
+ * Fetch all models from persistent storage, merged with
+ * static fallback catalogue. Use in server components.
+ */
+export async function getServerModels(): Promise<KnitwearModel[]> {
+  const adminModels = await getPersistedModels();
+  const converted = adminModelsToKnitwear(adminModels);
+  return dedupeBySlug([...models, ...converted]);
+}
+
+export async function getServerFeaturedModels(): Promise<KnitwearModel[]> {
+  const all = await getServerModels();
+  return all.filter((m) => m.featured);
+}
+
+export async function getServerModelBySlug(slug: string): Promise<KnitwearModel | undefined> {
+  const all = await getServerModels();
+  return all.find((m) => m.slug === slug);
+}
+
+export async function getServerModelSlugs(): Promise<string[]> {
+  const all = await getServerModels();
+  return all.map((m) => m.slug);
+}

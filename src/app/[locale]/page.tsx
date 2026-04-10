@@ -7,7 +7,9 @@ import FabricCards from '@/components/FabricCards';
 import ModelGridClient from '@/components/ModelGridClient';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
-import { getFeaturedModels } from '@/data/models';
+import { getServerFeaturedModels } from '@/data/models';
+
+export const revalidate = 60; // ISR: revalidate every 60 seconds
 
 export default async function HomePage({
   params,
@@ -15,7 +17,7 @@ export default async function HomePage({
   params: { locale: Locale };
 }) {
   const dict = await getDictionary(params.locale);
-  const featured = getFeaturedModels();
+  const featured = await getServerFeaturedModels();
 
   return (
     <>
