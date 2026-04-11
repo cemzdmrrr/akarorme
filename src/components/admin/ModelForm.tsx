@@ -129,8 +129,72 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
 
   const removeImage = (i: number) => setImages(images.filter((_, idx) => idx !== i));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Convert a base64 data URL to a File object
+  const dataUrlToFile = (dataUrl: string, filename: string): File => {
+    const [header, base64] = dataUrl.split(',');
+    const mime = header.match(/:(.*?);/)?.[1] || 'image/jpeg';
+    const binary = atob(base64);
+    const array = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) array[i] = binary.charCodeAt(i);
+    return new File([array], filename, { type: mime });
+  };
+
+  // Upload any remaining base64 images to blob before saving
+  const migrateBase64Images = async (imgs: string[]): Promise<string[]> => {
+    const apiKey = getApiKey();
+    const migrated: string[] = [];
+
+    for (let i = 0; i < imgs.length; i++) {
+      const img = imgs[i];
+      if (!img.startsWith('data:')) {
+        migrated.push(img);
+        continue;
+      }
+      // Upload base64 to blob
+      try {
+        const file = dataUrlToFile(img, `migrated-${Date.now()}-${i}.jpg`);
+        const formData = new FormData();
+        formData.append('file', file);
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'x-api-key': apiKey },
+          body: formData,
+        });
+        if (res.ok) {
+          const { url } = await res.json();
+          migrated.push(url);
+        } else {
+          // Skip failed uploads
+        }
+      } catch {
+        // Skip failed
+      }
+    }
+    return migrated;
+  };
+
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+
+    // Migrate any base64 images to blob URLs
+    const finalImages = await migrateBase64Images(images);
+    setImages(finalImages);
+
+    // Also migrate color images
+    const finalColors = await Promise.all(
+      colors.filter((c) => c.name).map(async (c) => {
+        if (c.image && c.image.startsWith('data:')) {
+          const migrated = await migrateBase64Images([c.image]);
+          return { ...c, image: migrated[0] || '' };
+        }
+        return c;
+      })
+    );
+
+    setSubmitting(false);
     onSubmit({
       name,
       tagline,
@@ -142,8 +206,8 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
       gauge,
       description,
       technicalDetails: specs.filter((s) => s.label && s.value),
-      colors: colors.filter((c) => c.name),
-      images,
+      colors: finalColors,
+      images: finalImages,
       status,
       featured,
     });
@@ -388,7 +452,9 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
       {/* Submit */}
       <div className="flex items-center justify-end gap-3 pb-8">
         <button type="button" onClick={() => history.back()} className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">İptal</button>
-        <button type="submit" className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors">{submitLabel}</button>
+        <button type="submit" disabled={submitting} className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors disabled:opacity-60">
+          {submitting ? 'Görseller işleniyor…' : submitLabel}
+        </button>
       </div>
     </form>
   );
