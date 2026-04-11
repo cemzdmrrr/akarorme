@@ -8,9 +8,14 @@ import { RevealOnScroll } from '@/components/Motion';
 
 interface CollectionFilterDict {
   all: string;
+  men: string;
+  women: string;
+  winter: string;
+  summer: string;
+  fine: string;
+  heavy: string;
   viewDetails: string;
   noMatch: string;
-  [key: string]: string;
 }
 
 export default function CollectionFilter({
@@ -22,18 +27,37 @@ export default function CollectionFilter({
   dict: CollectionFilterDict;
   locale: string;
 }) {
-  // Build dynamic filter options from model tags/categories
+  // Build dynamic filter options from actual model tags
   const filterOptions = useMemo(() => {
     const tagSet = new Set<string>();
-    models.forEach((m) => m.tags.forEach((t) => { if (t) tagSet.add(t); }));
-    const dynamicFilters = Array.from(tagSet).sort().map((tag) => ({
-      label: tag,
-      value: tag,
-    }));
-    return [{ label: dict.all, value: 'all' as string }, ...dynamicFilters];
-  }, [models, dict.all]);
+    models.forEach((m) => m.tags.forEach((t) => tagSet.add(t)));
 
-  const [active, setActive] = useState('all');
+    // Known translations from dictionary
+    const knownLabels: Record<string, string> = {
+      men: dict.men,
+      women: dict.women,
+      winter: dict.winter,
+      summer: dict.summer,
+      fine: dict.fine,
+      heavy: dict.heavy,
+    };
+
+    const options: { label: string; value: string }[] = [
+      { label: dict.all, value: 'all' },
+    ];
+
+    // Add tags found in models
+    tagSet.forEach((tag) => {
+      options.push({
+        label: knownLabels[tag] || tag,
+        value: tag,
+      });
+    });
+
+    return options;
+  }, [models, dict]);
+
+  const [active, setActive] = useState<string>('all');
 
   const filtered =
     active === 'all'

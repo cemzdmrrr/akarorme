@@ -170,6 +170,12 @@
 
   "collectionFilter": {
     "all": "Tümü",
+    "men": "Erkek",
+    "women": "Kadın",
+    "winter": "Kış",
+    "summer": "Yaz",
+    "fine": "İnce Örme",
+    "heavy": "Kalın Örme",
     "viewDetails": "Detayları İncele",
     "noMatch": "Seçtiğiniz filtreye uygun model bulunamadı."
   },

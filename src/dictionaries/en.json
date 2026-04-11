@@ -170,6 +170,12 @@
 
   "collectionFilter": {
     "all": "All",
+    "men": "Men",
+    "women": "Women",
+    "winter": "Winter",
+    "summer": "Summer",
+    "fine": "Fine Knit",
+    "heavy": "Heavy Knit",
     "viewDetails": "View Details",
     "noMatch": "No models match the selected filter."
   },
