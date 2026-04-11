@@ -1,21 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import type { KnitwearModel, Tag } from '@/types';
+import type { KnitwearModel } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RevealOnScroll } from '@/components/Motion';
 
 interface CollectionFilterDict {
   all: string;
-  men: string;
-  women: string;
-  winter: string;
-  summer: string;
-  fine: string;
-  heavy: string;
   viewDetails: string;
   noMatch: string;
+  [key: string]: string;
 }
 
 export default function CollectionFilter({
@@ -27,16 +22,18 @@ export default function CollectionFilter({
   dict: CollectionFilterDict;
   locale: string;
 }) {
-  const filterOptions: { label: string; value: Tag | 'all' }[] = [
-    { label: dict.all, value: 'all' },
-    { label: dict.men, value: 'men' },
-    { label: dict.women, value: 'women' },
-    { label: dict.winter, value: 'winter' },
-    { label: dict.summer, value: 'summer' },
-    { label: dict.fine, value: 'fine' },
-    { label: dict.heavy, value: 'heavy' },
-  ];
-  const [active, setActive] = useState<Tag | 'all'>('all');
+  // Build dynamic filter options from model tags/categories
+  const filterOptions = useMemo(() => {
+    const tagSet = new Set<string>();
+    models.forEach((m) => m.tags.forEach((t) => { if (t) tagSet.add(t); }));
+    const dynamicFilters = Array.from(tagSet).sort().map((tag) => ({
+      label: tag,
+      value: tag,
+    }));
+    return [{ label: dict.all, value: 'all' as string }, ...dynamicFilters];
+  }, [models, dict.all]);
+
+  const [active, setActive] = useState('all');
 
   const filtered =
     active === 'all'

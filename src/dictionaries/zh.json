@@ -170,12 +170,6 @@
 
   "collectionFilter": {
     "all": "全部",
-    "men": "男款",
-    "women": "女款",
-    "winter": "冬季",
-    "summer": "夏季",
-    "fine": "细针",
-    "heavy": "粗针",
     "viewDetails": "查看详情",
     "noMatch": "没有找到匹配所选筛选条件的款式。"
   },
