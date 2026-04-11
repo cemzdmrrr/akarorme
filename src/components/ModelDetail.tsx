@@ -38,16 +38,16 @@ export default function ModelDetail({
       <div className="grid gap-12 lg:grid-cols-2">
         {/* Image area */}
         <RevealOnScroll>
-          <div className="relative aspect-square rounded-2xl overflow-hidden bg-brand-cream">
+          <div className="relative rounded-2xl overflow-hidden bg-brand-cream">
             {activeImage ? (
               <img
                 src={activeImage}
                 alt={model.name}
-                className="absolute inset-0 h-full w-full object-cover transition-all duration-500"
+                className="w-full h-auto rounded-2xl transition-all duration-500"
                 key={activeImage}
               />
             ) : (
-              <div className="absolute inset-0 flex items-center justify-center text-brand-grey text-lg">{model.name}</div>
+              <div className="aspect-square flex items-center justify-center text-brand-grey text-lg">{model.name}</div>
             )}
             {/* Colour indicator ring */}
             <div className="absolute inset-0 rounded-2xl ring-2 ring-inset" style={{ '--tw-ring-color': model.colors[activeColor]?.hex } as React.CSSProperties} />
