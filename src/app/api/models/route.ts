@@ -22,9 +22,12 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
-    const apiKey = request.headers.get('x-api-key');
-    if (!apiKey || apiKey !== process.env.ADMIN_API_KEY) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const serverKey = process.env.ADMIN_API_KEY;
+    if (serverKey) {
+      const apiKey = request.headers.get('x-api-key');
+      if (apiKey !== serverKey) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
     }
 
     const body = await request.json();

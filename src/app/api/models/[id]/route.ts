@@ -7,8 +7,11 @@ import {
 } from '@/lib/model-store';
 
 function authorize(request: Request): boolean {
+  const serverKey = process.env.ADMIN_API_KEY;
+  // If no server key configured, allow all requests
+  if (!serverKey) return true;
   const apiKey = request.headers.get('x-api-key');
-  return Boolean(apiKey && apiKey === process.env.ADMIN_API_KEY);
+  return apiKey === serverKey;
 }
 
 /**
