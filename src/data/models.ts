@@ -377,11 +377,7 @@ export const ADMIN_MODELS_STORAGE = ADMIN_MODELS_STORAGE_KEY;
  */
 export async function getServerModels(): Promise<KnitwearModel[]> {
   const adminModels = await getPersistedModels();
-  const converted = adminModelsToKnitwear(adminModels);
-  // Once admin has models, those are the source of truth
-  if (converted.length > 0) return converted;
-  // Fallback to static models when blob is empty
-  return [...models];
+  return adminModelsToKnitwear(adminModels);
 }
 
 export async function getServerFeaturedModels(): Promise<KnitwearModel[]> {

@@ -35,9 +35,7 @@ export function useClientModels(staticModels: KnitwearModel[], onlyFeatured = fa
         if (onlyFeatured) {
           result = result.filter((m) => m.featured);
         }
-        if (result.length > 0) {
-          setModels(result);
-        }
+        setModels(result);
       })
       .catch(() => {
         // Silent fail — use server-rendered static models
