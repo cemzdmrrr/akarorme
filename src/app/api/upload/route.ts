@@ -2,11 +2,9 @@ import { NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
 
 /**
- * POST /api/upload — Upload an image to Vercel Blob (public access).
+ * POST /api/upload — Upload an image to Vercel Blob (private store).
  * Accepts multipart/form-data with a "file" field.
- * Auth: accepts x-api-key if configured, otherwise allows upload
- * (file type/size validation still enforced).
- * Returns { url: string } on success.
+ * Returns { url: string } with a proxy URL for serving the image.
  */
 export async function POST(request: Request) {
   try {
@@ -42,13 +40,15 @@ export async function POST(request: Request) {
     const ext = file.type.split('/')[1] === 'jpeg' ? 'jpg' : file.type.split('/')[1];
     const filename = `models/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
-    const blob = await put(filename, file, {
-      access: 'public',
+    await put(filename, file, {
+      access: 'private',
       addRandomSuffix: false,
       contentType: file.type,
     });
 
-    return NextResponse.json({ url: blob.url });
+    // Return a proxy URL that serves the image through our API
+    const proxyUrl = `/api/images/${filename}`;
+    return NextResponse.json({ url: proxyUrl });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Upload failed';
     return NextResponse.json({ error: message }, { status: 500 });
