@@ -23,7 +23,7 @@ export function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
       name: m.name,
       tagline: m.tagline,
       description: m.description,
-      tags: [m.category, m.season].filter(Boolean),
+      tags: m.tags?.length ? m.tags : (m as any).category ? [(m as any).category] : [],
       image: m.images?.[0] || '',
       gallery: m.images || [],
       colors: (m.colors || []).map((c) => ({ name: c.name, hex: c.hex, image: c.image || '' })),

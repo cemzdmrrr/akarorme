@@ -11,14 +11,21 @@ interface ModelFormProps {
   submitLabel: string;
 }
 
-const CATEGORIES = ['T-Shirt', 'Polo', 'Sweatshirt', 'Hırka', 'Kazak', 'Yelek', 'Ceket', 'Pantolon', 'Diğer'];
+const TAG_OPTIONS = [
+  { label: 'Erkek', value: 'men' },
+  { label: 'Kadın', value: 'women' },
+  { label: 'Kış', value: 'winter' },
+  { label: 'Yaz', value: 'summer' },
+  { label: 'İnce Örme', value: 'fine' },
+  { label: 'Kalın Örme', value: 'heavy' },
+];
 const SEASONS = ['SS25', 'FW25', 'SS26', 'FW26'];
 const YARN_TYPES = ['Pamuk', 'Yün', 'Viskon', 'Polyester', 'Karışım', 'İpek', 'Kaşmir', 'Keten'];
 
 export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormProps) {
   const [name, setName] = useState(initial?.name ?? '');
   const [tagline, setTagline] = useState(initial?.tagline ?? '');
-  const [category, setCategory] = useState(initial?.category ?? '');
+  const [tags, setTags] = useState<string[]>(initial?.tags ?? []);
   const [collection, setCollection] = useState(initial?.collection ?? '');
   const [season, setSeason] = useState(initial?.season ?? 'SS26');
   const [customSeason, setCustomSeason] = useState('');
@@ -198,7 +205,7 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
     onSubmit({
       name,
       tagline,
-      category,
+      tags,
       collection,
       season: isCustomSeason ? customSeason : season,
       fabricType,
@@ -234,13 +241,35 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
         </div>
 
         <div className="grid sm:grid-cols-3 gap-4">
-          <div>
-            <label className={labelCls}>Kategori</label>
-            <select value={category} onChange={(e) => setCategory(e.target.value)} className={inputCls}>
-              <option value="">Kategori seçin</option>
-              {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
+          <div className="sm:col-span-3">
+            <label className={labelCls}>Etiketler (Filtre)</label>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {TAG_OPTIONS.map((opt) => {
+                const selected = tags.includes(opt.value);
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() =>
+                      setTags((prev) =>
+                        selected ? prev.filter((t) => t !== opt.value) : [...prev, opt.value]
+                      )
+                    }
+                    className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-all ${
+                      selected
+                        ? 'border-blue-500 bg-blue-50 text-blue-700'
+                        : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
+        </div>
+
+        <div className="grid sm:grid-cols-3 gap-4">
           <div>
             <label className={labelCls}>Koleksiyon</label>
             <input type="text" value={collection} onChange={(e) => setCollection(e.target.value)} className={inputCls} placeholder="ör. Yaz Koleksiyonu" />

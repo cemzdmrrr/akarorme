@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import type { KnitwearModel } from '@/types';
+import type { KnitwearModel, Tag } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RevealOnScroll } from '@/components/Motion';
 
@@ -27,42 +27,26 @@ export default function CollectionFilter({
   dict: CollectionFilterDict;
   locale: string;
 }) {
-  // Build dynamic filter options from actual model tags
-  const filterOptions = useMemo(() => {
-    const tagSet = new Set<string>();
-    models.forEach((m) => m.tags.forEach((t) => tagSet.add(t)));
+  const filterOptions: { label: string; value: Tag }[] = [
+    { label: dict.men, value: 'men' },
+    { label: dict.women, value: 'women' },
+    { label: dict.winter, value: 'winter' },
+    { label: dict.summer, value: 'summer' },
+    { label: dict.fine, value: 'fine' },
+    { label: dict.heavy, value: 'heavy' },
+  ];
+  const [activeFilters, setActiveFilters] = useState<Tag[]>([]);
 
-    // Known translations from dictionary
-    const knownLabels: Record<string, string> = {
-      men: dict.men,
-      women: dict.women,
-      winter: dict.winter,
-      summer: dict.summer,
-      fine: dict.fine,
-      heavy: dict.heavy,
-    };
-
-    const options: { label: string; value: string }[] = [
-      { label: dict.all, value: 'all' },
-    ];
-
-    // Add tags found in models
-    tagSet.forEach((tag) => {
-      options.push({
-        label: knownLabels[tag] || tag,
-        value: tag,
-      });
-    });
-
-    return options;
-  }, [models, dict]);
-
-  const [active, setActive] = useState<string>('all');
+  const toggleFilter = (value: Tag) => {
+    setActiveFilters((prev) =>
+      prev.includes(value) ? prev.filter((f) => f !== value) : [...prev, value]
+    );
+  };
 
   const filtered =
-    active === 'all'
+    activeFilters.length === 0
       ? models
-      : models.filter((m) => m.tags.includes(active));
+      : models.filter((m) => activeFilters.some((f) => m.tags.includes(f)));
 
   return (
     <>
@@ -71,9 +55,9 @@ export default function CollectionFilter({
         {filterOptions.map((opt) => (
           <button
             key={opt.value}
-            onClick={() => setActive(opt.value)}
+            onClick={() => toggleFilter(opt.value)}
             className={`rounded-full border px-5 py-2 text-xs font-medium uppercase tracking-wider transition-all ${
-              active === opt.value
+              activeFilters.includes(opt.value)
                 ? 'border-brand-accent bg-brand-accent/15 text-brand-accent-dark'
                 : 'border-brand-sand text-brand-grey hover:border-brand-sand-dark hover:text-brand-dark'
             }`}

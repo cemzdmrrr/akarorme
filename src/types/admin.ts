@@ -7,7 +7,7 @@ export interface AdminModel {
   slug: string;
   name: string;
   tagline: string;
-  category: string;
+  tags: string[];
   collection: string;
   season: string;
   fabricType: string;
