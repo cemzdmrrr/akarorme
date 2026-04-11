@@ -6,9 +6,9 @@ import { useAdminContext } from './template';
 import {
   getDashboardStats,
   getActivity,
-  getModels,
   getMessages,
 } from '@/lib/admin-store';
+import { fetchModels } from '@/lib/admin-api';
 import type { DashboardStats, ActivityEntry, AdminModel, ContactMessage } from '@/types/admin';
 import Link from 'next/link';
 
@@ -18,18 +18,30 @@ export default function DashboardPage() {
   const [activity, setActivity] = useState<ActivityEntry[]>([]);
   const [recentModels, setRecentModels] = useState<AdminModel[]>([]);
   const [recentMessages, setRecentMessages] = useState<ContactMessage[]>([]);
+  const [modelCount, setModelCount] = useState(0);
 
   useEffect(() => {
-    setStats(getDashboardStats());
+    const baseStats = getDashboardStats();
+    setStats(baseStats);
     setActivity(getActivity().slice(0, 8));
-    setRecentModels(getModels().sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 5));
     setRecentMessages(getMessages().sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 5));
+
+    // Fetch models from API (Vercel Blob — source of truth)
+    fetchModels()
+      .then((models) => {
+        setRecentModels(models.sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 5));
+        setModelCount(models.length);
+      })
+      .catch(() => {
+        setRecentModels([]);
+        setModelCount(0);
+      });
   }, []);
 
   if (!stats) return <div className="flex items-center justify-center h-full"><div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" /></div>;
 
   const statCards = [
-    { label: 'Toplam Model', value: stats.totalModels, color: 'bg-blue-500', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', href: '/admin/models' },
+    { label: 'Toplam Model', value: modelCount, color: 'bg-blue-500', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', href: '/admin/models' },
     { label: 'Koleksiyonlar', value: stats.totalCollections, color: 'bg-emerald-500', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', href: '/admin/collections' },
     { label: 'Referanslar', value: stats.totalReferences, color: 'bg-purple-500', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', href: '/admin/references' },
     { label: 'Okunmamış Mesajlar', value: stats.unreadMessages, color: 'bg-amber-500', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', href: '/admin/messages' },
@@ -68,8 +80,9 @@ export default function DashboardPage() {
               {recentModels.map((model) => (
                 <div key={model.id} className="flex items-center gap-4 px-5 py-3">
                   <div className="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-xs font-bold overflow-hidden shrink-0">
-                    {model.images[0] ? (
-                      <div className="h-full w-full bg-gradient-to-br from-gray-200 to-gray-300" />
+                    {model.images?.[0] ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={model.images[0]} alt={model.name} className="h-full w-full object-cover" />
                     ) : (
                       model.name.slice(0, 2).toUpperCase()
                     )}

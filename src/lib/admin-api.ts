@@ -6,14 +6,8 @@
 
 import type { AdminModel } from '@/types/admin';
 
-function getApiKey(): string {
-  if (typeof window === 'undefined') return '';
-  return localStorage.getItem('admin_api_key') || '';
-}
-
 const headers = () => ({
   'Content-Type': 'application/json',
-  'x-api-key': getApiKey(),
 });
 
 // ─── Models ─────────────────────────────────────────
