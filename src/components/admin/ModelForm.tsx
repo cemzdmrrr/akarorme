@@ -30,7 +30,7 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
   const [status, setStatus] = useState<'published' | 'draft'>(initial?.status ?? 'draft');
   const [featured, setFeatured] = useState(initial?.featured ?? false);
   const [specs, setSpecs] = useState<{ label: string; value: string }[]>(initial?.technicalDetails ?? [{ label: '', value: '' }]);
-  const [colors, setColors] = useState<{ name: string; hex: string }[]>(initial?.colors ?? [{ name: '', hex: '#C9A84C' }]);
+  const [colors, setColors] = useState<{ name: string; hex: string; image?: string }[]>(initial?.colors ?? [{ name: '', hex: '#C9A84C' }]);
   const [images, setImages] = useState<string[]>(initial?.images ?? []);
   const [dragOver, setDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -54,9 +54,9 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
     setSpecs(next);
   };
 
-  const addColor = () => setColors([...colors, { name: '', hex: '#000000' }]);
+  const addColor = () => setColors([...colors, { name: '', hex: '#000000', image: '' }]);
   const removeColor = (i: number) => setColors(colors.filter((_, idx) => idx !== i));
-  const updateColor = (i: number, key: 'name' | 'hex', val: string) => {
+  const updateColor = (i: number, key: 'name' | 'hex' | 'image', val: string) => {
     const next = [...colors];
     next[i] = { ...next[i], [key]: val };
     setColors(next);
@@ -256,15 +256,41 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
           <h3 className="text-sm font-semibold text-gray-900">Renk Seçenekleri</h3>
           <button type="button" onClick={addColor} className="text-xs text-blue-600 hover:text-blue-800 font-medium">+ Renk Ekle</button>
         </div>
-        <div className="grid sm:grid-cols-2 gap-3">
+        <div className="space-y-3">
           {colors.map((color, i) => (
-            <div key={i} className="flex items-center gap-2 rounded-lg border border-gray-100 p-2.5">
-              <input type="color" value={color.hex} onChange={(e) => updateColor(i, 'hex', e.target.value)} className="h-8 w-8 cursor-pointer rounded border-0" />
-              <input type="text" value={color.name} onChange={(e) => updateColor(i, 'name', e.target.value)} className="flex-1 border-0 bg-transparent text-sm text-gray-900 placeholder-gray-400 focus:outline-none" placeholder="Renk adı" />
-              <span className="text-xs text-gray-400 font-mono">{color.hex}</span>
-              <button type="button" onClick={() => removeColor(i)} className="text-gray-400 hover:text-red-500">
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
+            <div key={i} className="rounded-lg border border-gray-100 p-3 space-y-2">
+              <div className="flex items-center gap-2">
+                <input type="color" value={color.hex} onChange={(e) => updateColor(i, 'hex', e.target.value)} className="h-8 w-8 cursor-pointer rounded border-0" />
+                <input type="text" value={color.name} onChange={(e) => updateColor(i, 'name', e.target.value)} className="flex-1 border-0 bg-transparent text-sm text-gray-900 placeholder-gray-400 focus:outline-none" placeholder="Renk adı" />
+                <span className="text-xs text-gray-400 font-mono">{color.hex}</span>
+                <button type="button" onClick={() => removeColor(i)} className="text-gray-400 hover:text-red-500">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              {/* Color-image linking */}
+              <div className="flex items-center gap-2 pl-10">
+                <label className="text-xs text-gray-500 shrink-0">Görsel:</label>
+                {images.length > 0 ? (
+                  <div className="flex items-center gap-2 flex-1">
+                    <select
+                      value={color.image || ''}
+                      onChange={(e) => updateColor(i, 'image', e.target.value)}
+                      className="flex-1 rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-700 focus:border-blue-400 focus:outline-none"
+                    >
+                      <option value="">Görsel seçin</option>
+                      {images.map((img, idx) => (
+                        <option key={idx} value={img}>Görsel {idx + 1}{idx === 0 ? ' (Kapak)' : ''}</option>
+                      ))}
+                    </select>
+                    {color.image && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={color.image} alt="" className="h-8 w-8 rounded object-cover border border-gray-200" />
+                    )}
+                  </div>
+                ) : (
+                  <span className="text-xs text-gray-400">Önce görsel ekleyin</span>
+                )}
+              </div>
             </div>
           ))}
         </div>

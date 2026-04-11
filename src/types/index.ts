@@ -23,6 +23,7 @@ export type Tag = string;
 export interface ColorSwatch {
   name: string;
   hex: string;
+  image?: string;
 }
 
 export interface TechnicalSpec {

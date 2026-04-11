@@ -27,6 +27,9 @@ export default function ModelDetail({
   const [activeColor, setActiveColor] = useState(0);
   const [activeTab, setActiveTab] = useState<'overview' | 'technical' | 'gallery'>('overview');
 
+  // Determine which image to show based on selected color
+  const activeImage = model.colors[activeColor]?.image || model.image;
+
   const tabs = ['overview', 'technical', 'gallery'] as const;
 
   return (
@@ -36,11 +39,12 @@ export default function ModelDetail({
         {/* Image area */}
         <RevealOnScroll>
           <div className="relative aspect-square rounded-2xl overflow-hidden bg-brand-cream">
-            {model.image ? (
+            {activeImage ? (
               <img
-                src={model.image}
+                src={activeImage}
                 alt={model.name}
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 h-full w-full object-cover transition-all duration-500"
+                key={activeImage}
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center text-brand-grey text-lg">{model.name}</div>

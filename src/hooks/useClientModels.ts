@@ -14,7 +14,7 @@ function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
       tags: m.category ? [m.category] : [],
       image: m.images?.[0] || '',
       gallery: m.images || [],
-      colors: m.colors || [],
+      colors: (m.colors || []).map((c) => ({ name: c.name, hex: c.hex, image: c.image || '' })),
       specs: m.technicalDetails || [],
       featured: m.featured,
     }));
