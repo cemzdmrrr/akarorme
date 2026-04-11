@@ -6,14 +6,6 @@ import {
   deletePersistedModel,
 } from '@/lib/model-store';
 
-function authorize(request: Request): boolean {
-  const serverKey = process.env.ADMIN_API_KEY;
-  // If no server key configured, allow all requests
-  if (!serverKey) return true;
-  const apiKey = request.headers.get('x-api-key');
-  return apiKey === serverKey;
-}
-
 /**
  * GET /api/models/[id] — Return a single model by ID.
  */
@@ -41,10 +33,6 @@ export async function PUT(
   { params }: { params: { id: string } },
 ) {
   try {
-    if (!authorize(request)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     const body = await request.json();
     const updated = await updatePersistedModel(params.id, body);
 
@@ -66,14 +54,10 @@ export async function PUT(
  * DELETE /api/models/[id] — Delete a model.
  */
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: { id: string } },
 ) {
   try {
-    if (!authorize(request)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     const deleted = await deletePersistedModel(params.id);
     if (!deleted) {
       return NextResponse.json({ error: 'Model not found' }, { status: 404 });

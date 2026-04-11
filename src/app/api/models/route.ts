@@ -22,14 +22,6 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
-    const serverKey = process.env.ADMIN_API_KEY;
-    if (serverKey) {
-      const apiKey = request.headers.get('x-api-key');
-      if (apiKey !== serverKey) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-    }
-
     const body = await request.json();
     if (!body.name) {
       return NextResponse.json({ error: 'Model name is required' }, { status: 400 });
