@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from '../template';
-import { getReferences, createReference, updateReference, deleteReference } from '@/lib/admin-store';
+import { fetchReferences, apiCreateReference, apiUpdateReference, apiDeleteReference } from '@/lib/admin-api';
 import type { AdminReference } from '@/types/admin';
 
 export default function ReferencesPage() {
@@ -19,8 +19,12 @@ export default function ReferencesPage() {
   const [website, setWebsite] = useState('');
   const [description, setDescription] = useState('');
 
-  useEffect(() => { setRefs(getReferences()); }, []);
-  const refresh = () => setRefs(getReferences());
+  const [loading, setLoading] = useState(true);
+
+  const refresh = async () => {
+    try { setRefs(await fetchReferences()); } catch (e) { console.error(e); }
+  };
+  useEffect(() => { refresh().finally(() => setLoading(false)); }, []);
 
   const resetForm = () => { setName(''); setInitials(''); setCountry(''); setLogo(''); setWebsite(''); setDescription(''); setEditing(null); setShowForm(false); };
   const openNew = () => { resetForm(); setShowForm(true); };
@@ -30,17 +34,23 @@ export default function ReferencesPage() {
     setShowForm(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editing) {
-      updateReference(editing.id, { name, initials, country, logo, website, description });
-    } else {
-      createReference({ name, initials, country, logo, website, description });
-    }
-    resetForm(); refresh();
+    try {
+      if (editing) {
+        await apiUpdateReference(editing.id, { name, initials, country, logo, website, description });
+      } else {
+        await apiCreateReference({ name, initials, country, logo, website, description });
+      }
+      resetForm(); await refresh();
+    } catch (err) { console.error(err); }
   };
 
-  const handleDelete = (id: string) => { if (confirm('Bu referansı silmek istiyor musunuz?')) { deleteReference(id); refresh(); } };
+  const handleDelete = async (id: string) => {
+    if (confirm('Bu referansı silmek istiyor musunuz?')) {
+      try { await apiDeleteReference(id); await refresh(); } catch (err) { console.error(err); }
+    }
+  };
 
   const handleLogoUpload = (file: File) => {
     const reader = new FileReader();

@@ -19,9 +19,9 @@ export async function POST(request: Request) {
     // Sanitize inputs - strip HTML tags
     const sanitize = (str: string) => str.replace(/<[^>]*>/g, '').trim().slice(0, 2000);
 
-    // Save to admin CMS messages (localStorage-based)
-    const { createMessage } = await import('@/lib/admin-store');
-    createMessage({
+    // Save to admin CMS messages (Vercel Blob-backed)
+    const { createPersistedMessage } = await import('@/lib/admin-blob-store');
+    await createPersistedMessage({
       name: sanitize(name),
       email: sanitize(email),
       company: sanitize(company || ''),

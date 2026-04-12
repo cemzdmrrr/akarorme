@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from '../template';
-import { getPages, updatePage } from '@/lib/admin-store';
+import { fetchPages, apiUpdatePage } from '@/lib/admin-api';
 import type { PageContent, PageSection } from '@/types/admin';
 
 function genId() {
@@ -25,12 +25,13 @@ export default function PagesPage() {
   const sortSec = (s: PageSection[]) => [...s].sort((a, b) => a.order - b.order);
 
   useEffect(() => {
-    const p = getPages();
-    setPages(p);
-    if (p.length > 0) {
-      setActivePage(p[0]);
-      setSections(sortSec(p[0].sections));
-    }
+    fetchPages().then((p) => {
+      setPages(p);
+      if (p.length > 0) {
+        setActivePage(p[0]);
+        setSections(sortSec(p[0].sections));
+      }
+    }).catch(console.error);
   }, []);
 
   const selectPage = (page: PageContent) => {
@@ -87,15 +88,20 @@ export default function PagesPage() {
     setSaved(false);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!activePage) return;
     setSaving(true);
-    updatePage(activePage.id, sections);
-    const fresh = getPages();
-    setPages(fresh);
-    const up = fresh.find((p) => p.id === activePage.id);
-    if (up) setActivePage(up);
-    setTimeout(() => { setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000); }, 300);
+    try {
+      await apiUpdatePage(activePage.id, sections);
+      const fresh = await fetchPages();
+      setPages(fresh);
+      const up = fresh.find((p) => p.id === activePage.id);
+      if (up) setActivePage(up);
+      setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      console.error(err);
+      setSaving(false);
+    }
   };
 
   const handleImageUpload = (sectionId: string, file: File) => {

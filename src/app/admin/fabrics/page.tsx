@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from '../template';
-import { getFabrics, createFabric, updateFabric, deleteFabric } from '@/lib/admin-store';
+import { fetchFabrics, apiCreateFabric, apiUpdateFabric, apiDeleteFabric } from '@/lib/admin-api';
 import type { AdminFabricType } from '@/types/admin';
 
 export default function FabricsPage() {
@@ -19,8 +19,12 @@ export default function FabricsPage() {
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
 
-  useEffect(() => { setFabrics(getFabrics()); }, []);
-  const refresh = () => setFabrics(getFabrics());
+  const [loading, setLoading] = useState(true);
+
+  const refresh = async () => {
+    try { setFabrics(await fetchFabrics()); } catch (e) { console.error(e); }
+  };
+  useEffect(() => { refresh().finally(() => setLoading(false)); }, []);
 
   const resetForm = () => {
     setName(''); setGauge(''); setComposition(''); setWeight(''); setDescription(''); setImage('');
@@ -34,18 +38,22 @@ export default function FabricsPage() {
     setWeight(f.weight); setDescription(f.description); setImage(f.image); setShowForm(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editing) {
-      updateFabric(editing.id, { name, gauge, composition, weight, description, image });
-    } else {
-      createFabric({ name, gauge, composition, weight, description, image });
-    }
-    resetForm(); refresh();
+    try {
+      if (editing) {
+        await apiUpdateFabric(editing.id, { name, gauge, composition, weight, description, image });
+      } else {
+        await apiCreateFabric({ name, gauge, composition, weight, description, image });
+      }
+      resetForm(); await refresh();
+    } catch (err) { console.error(err); }
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Bu kumaş türünü silmek istiyor musunuz?')) { deleteFabric(id); refresh(); }
+  const handleDelete = async (id: string) => {
+    if (confirm('Bu kumaş türünü silmek istiyor musunuz?')) {
+      try { await apiDeleteFabric(id); await refresh(); } catch (err) { console.error(err); }
+    }
   };
 
   const inputCls = 'w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100';

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from '../template';
-import { getSettings, updateSettings } from '@/lib/admin-store';
+import { fetchSettings, apiUpdateSettings } from '@/lib/admin-api';
 import { changePassword } from '@/lib/auth';
 import { setApiKey } from '@/lib/admin-api';
 import type { SiteSettings } from '@/types/admin';
@@ -26,7 +26,7 @@ export default function SettingsPage() {
   const [apiKeySaved, setApiKeySaved] = useState(false);
 
   useEffect(() => {
-    setSettings(getSettings());
+    fetchSettings().then(setSettings).catch(console.error);
     // Load stored API key
     const stored = typeof window !== 'undefined' ? localStorage.getItem('admin_api_key') || '' : '';
     setApiKeyValue(stored);
@@ -54,11 +54,17 @@ export default function SettingsPage() {
     setSettings({ ...settings, socialLinks: settings.socialLinks.filter((_, idx) => idx !== i) });
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    updateSettings(settings);
-    setTimeout(() => { setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000); }, 300);
+    try {
+      const updated = await apiUpdateSettings(settings);
+      setSettings(updated);
+      setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      console.error(err);
+      setSaving(false);
+    }
   };
 
   const handleChangePassword = async () => {

@@ -4,11 +4,9 @@ import { useEffect, useState } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from './template';
 import {
-  getDashboardStats,
   getActivity,
-  getMessages,
 } from '@/lib/admin-store';
-import { fetchModels } from '@/lib/admin-api';
+import { fetchModels, fetchReferences, fetchCollections, fetchFabrics, fetchMessages, fetchMedia } from '@/lib/admin-api';
 import type { DashboardStats, ActivityEntry, AdminModel, ContactMessage } from '@/types/admin';
 import Link from 'next/link';
 
@@ -21,16 +19,29 @@ export default function DashboardPage() {
   const [modelCount, setModelCount] = useState(0);
 
   useEffect(() => {
-    const baseStats = getDashboardStats();
-    setStats(baseStats);
     setActivity(getActivity().slice(0, 8));
-    setRecentMessages(getMessages().sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 5));
 
-    // Fetch models from API (Vercel Blob — source of truth)
-    fetchModels()
-      .then((models) => {
+    // Fetch all data from API (Vercel Blob — source of truth)
+    Promise.all([
+      fetchModels(),
+      fetchReferences(),
+      fetchCollections(),
+      fetchFabrics(),
+      fetchMessages(),
+      fetchMedia(),
+    ])
+      .then(([models, refs, cols, fabs, msgs, media]) => {
         setRecentModels(models.sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 5));
         setModelCount(models.length);
+        setRecentMessages(msgs.sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 5));
+        setStats({
+          totalModels: models.length,
+          totalCollections: cols.length,
+          totalReferences: refs.length,
+          unreadMessages: msgs.filter((m) => !m.read).length,
+          totalMedia: media.length,
+          totalFabrics: fabs.length,
+        });
       })
       .catch(() => {
         setRecentModels([]);

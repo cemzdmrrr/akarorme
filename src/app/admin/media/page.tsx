@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from '../template';
-import { getMediaItems, getMediaFolders, addMediaItem, updateMediaItem, deleteMediaItem } from '@/lib/admin-store';
+import { fetchMedia, apiAddMedia, apiUpdateMedia, apiDeleteMedia } from '@/lib/admin-api';
 import type { MediaItem } from '@/types/admin';
 
 export default function MediaPage() {
@@ -20,9 +20,13 @@ export default function MediaPage() {
 
   useEffect(() => { refresh(); }, []);
 
-  const refresh = () => {
-    setItems(getMediaItems());
-    setFolders(getMediaFolders());
+  const refresh = async () => {
+    try {
+      const all = await fetchMedia();
+      setItems(all);
+      const folderSet = new Set(all.map((i) => i.folder));
+      setFolders(Array.from(folderSet).sort());
+    } catch (e) { console.error(e); }
   };
 
   const filtered = items
@@ -38,12 +42,12 @@ export default function MediaPage() {
         const url = e.target?.result as string;
         const img = new Image();
         img.onload = () => {
-          addMediaItem({ name: file.name, url, type: file.type, size: file.size, width: img.width, height: img.height, folder: folder || activeFolder === 'all' ? 'general' : activeFolder });
-          refresh();
+          apiAddMedia({ name: file.name, url, type: file.type, size: file.size, width: img.width, height: img.height, folder: folder || activeFolder === 'all' ? 'general' : activeFolder })
+            .then(() => refresh()).catch(console.error);
         };
         img.onerror = () => {
-          addMediaItem({ name: file.name, url, type: file.type, size: file.size, folder: folder || activeFolder === 'all' ? 'general' : activeFolder });
-          refresh();
+          apiAddMedia({ name: file.name, url, type: file.type, size: file.size, folder: folder || activeFolder === 'all' ? 'general' : activeFolder })
+            .then(() => refresh()).catch(console.error);
         };
         img.src = url;
       };
@@ -51,14 +55,15 @@ export default function MediaPage() {
     });
   }, [activeFolder]);
 
-  const handleDelete = (id: string) => {
-    if (confirm('Bu dosyayı silmek istiyor musunuz?')) { deleteMediaItem(id); setSelected(null); refresh(); }
+  const handleDelete = async (id: string) => {
+    if (confirm('Bu dosyayı silmek istiyor musunuz?')) {
+      try { await apiDeleteMedia(id); setSelected(null); await refresh(); } catch (e) { console.error(e); }
+    }
   };
 
-  const handleSaveDetail = () => {
+  const handleSaveDetail = async () => {
     if (!selected) return;
-    updateMediaItem(selected, { alt: editAlt, folder: editFolder });
-    refresh();
+    try { await apiUpdateMedia(selected, { alt: editAlt, folder: editFolder }); await refresh(); } catch (e) { console.error(e); }
   };
 
   const formatSize = (bytes: number) => {

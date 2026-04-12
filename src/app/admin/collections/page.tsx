@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from '../template';
-import { getCollections, getModels, createCollection, updateCollection, deleteCollection } from '@/lib/admin-store';
+import { fetchCollections, fetchModels, apiCreateCollection, apiUpdateCollection, apiDeleteCollection } from '@/lib/admin-api';
 import type { AdminCollection, AdminModel } from '@/types/admin';
 
 export default function CollectionsPage() {
@@ -19,12 +19,15 @@ export default function CollectionsPage() {
   const [description, setDescription] = useState('');
   const [coverImage, setCoverImage] = useState('');
 
-  useEffect(() => {
-    setCollections(getCollections());
-    setModels(getModels());
-  }, []);
+  const [loading, setLoading] = useState(true);
 
-  const refresh = () => { setCollections(getCollections()); setModels(getModels()); };
+  const refresh = async () => {
+    try {
+      const [c, m] = await Promise.all([fetchCollections(), fetchModels()]);
+      setCollections(c); setModels(m);
+    } catch (e) { console.error(e); }
+  };
+  useEffect(() => { refresh().finally(() => setLoading(false)); }, []);
 
   const resetForm = () => {
     setName(''); setSeason('SS26'); setDescription(''); setCoverImage('');
@@ -45,21 +48,22 @@ export default function CollectionsPage() {
     setShowForm(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editing) {
-      updateCollection(editing.id, { name, season, description, coverImage });
-    } else {
-      createCollection({ name, season, description, coverImage });
-    }
-    resetForm();
-    refresh();
+    try {
+      if (editing) {
+        await apiUpdateCollection(editing.id, { name, season, description, coverImage });
+      } else {
+        await apiCreateCollection({ name, season, description, coverImage });
+      }
+      resetForm();
+      await refresh();
+    } catch (err) { console.error(err); }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Bu koleksiyonu silmek istiyor musunuz? Modeller silinmeyecektir.')) {
-      deleteCollection(id);
-      refresh();
+      try { await apiDeleteCollection(id); await refresh(); } catch (err) { console.error(err); }
     }
   };
 

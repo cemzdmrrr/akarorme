@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from '../template';
-import { getMessages, markMessageRead, markMessageResponded, deleteMessage } from '@/lib/admin-store';
+import { fetchMessages, apiMarkMessageRead, apiMarkMessageResponded, apiDeleteMessage } from '@/lib/admin-api';
 import type { ContactMessage } from '@/types/admin';
 
 export default function MessagesPage() {
@@ -12,11 +12,13 @@ export default function MessagesPage() {
   const [selected, setSelected] = useState<ContactMessage | null>(null);
   const [filter, setFilter] = useState<'all' | 'unread' | 'read' | 'responded'>('all');
 
-  useEffect(() => { setMessages(getMessages()); }, []);
-  const refresh = () => {
-    const m = getMessages();
-    setMessages(m);
-    if (selected) { const up = m.find((x) => x.id === selected.id); setSelected(up || null); }
+  useEffect(() => { fetchMessages().then(setMessages).catch(console.error); }, []);
+  const refresh = async () => {
+    try {
+      const m = await fetchMessages();
+      setMessages(m);
+      if (selected) { const up = m.find((x) => x.id === selected.id); setSelected(up || null); }
+    } catch (e) { console.error(e); }
   };
 
   const filtered = messages
@@ -32,21 +34,18 @@ export default function MessagesPage() {
   const unreadCount = messages.filter((m) => !m.read).length;
   const respondedCount = messages.filter((m) => m.responded).length;
 
-  const selectMessage = (msg: ContactMessage) => {
+  const selectMessage = async (msg: ContactMessage) => {
     setSelected(msg);
-    if (!msg.read) { markMessageRead(msg.id); refresh(); }
+    if (!msg.read) { try { await apiMarkMessageRead(msg.id); await refresh(); } catch (e) { console.error(e); } }
   };
 
-  const handleResponded = (id: string) => {
-    markMessageResponded(id);
-    refresh();
+  const handleResponded = async (id: string) => {
+    try { await apiMarkMessageResponded(id); await refresh(); } catch (e) { console.error(e); }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Bu mesajı silmek istiyor musunuz?')) {
-      deleteMessage(id);
-      if (selected?.id === id) setSelected(null);
-      refresh();
+      try { await apiDeleteMessage(id); if (selected?.id === id) setSelected(null); await refresh(); } catch (e) { console.error(e); }
     }
   };
 
