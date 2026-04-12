@@ -5,6 +5,8 @@ import {
   createPersistedMedia,
 } from '@/lib/admin-blob-store';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const items = await getPersistedMedia();

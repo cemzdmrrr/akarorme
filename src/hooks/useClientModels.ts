@@ -27,7 +27,7 @@ export function useClientModels(staticModels: KnitwearModel[], onlyFeatured = fa
     // Fetch latest models from API (source of truth: Vercel Blob)
     // This ensures admin changes are reflected without waiting for ISR
     let cancelled = false;
-    fetch('/api/models')
+    fetch('/api/models', { cache: 'no-store' })
       .then((res) => (res.ok ? res.json() : null))
       .then((data: AdminModel[] | null) => {
         if (cancelled || !data || !Array.isArray(data)) return;

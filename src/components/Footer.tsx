@@ -31,7 +31,7 @@ export default function Footer({ locale, dict }: { locale: string; dict: FooterD
   ];
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings', { cache: 'no-store' })
       .then((res) => res.ok ? res.json() : null)
       .then((s) => { if (s?.footerText) setFooterText(s.footerText); })
       .catch(() => {});

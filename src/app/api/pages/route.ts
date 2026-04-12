@@ -4,6 +4,8 @@ import {
   getPersistedPages,
 } from '@/lib/admin-blob-store';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const pages = await getPersistedPages();

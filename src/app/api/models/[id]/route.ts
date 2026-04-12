@@ -6,6 +6,8 @@ import {
   deletePersistedModel,
 } from '@/lib/model-store';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/models/[id] — Return a single model by ID.
  */

@@ -23,13 +23,13 @@ const headers = () => ({
 // ─── Models ─────────────────────────────────────────
 
 export async function fetchModels(): Promise<AdminModel[]> {
-  const res = await fetch('/api/models');
+  const res = await fetch('/api/models', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch models');
   return res.json();
 }
 
 export async function fetchModel(id: string): Promise<AdminModel | null> {
-  const res = await fetch(`/api/models/${encodeURIComponent(id)}`);
+  const res = await fetch(`/api/models/${encodeURIComponent(id)}`, { cache: 'no-store' });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error('Failed to fetch model');
   return res.json();
@@ -95,7 +95,7 @@ async function syncModelsToLocalStorage(): Promise<void> {
 // ─── References ─────────────────────────────────────
 
 export async function fetchReferences(): Promise<AdminReference[]> {
-  const res = await fetch('/api/references');
+  const res = await fetch('/api/references', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch references');
   return res.json();
 }
@@ -145,7 +145,7 @@ export async function apiDeleteReference(id: string): Promise<void> {
 // ─── Collections ────────────────────────────────────
 
 export async function fetchCollections(): Promise<AdminCollection[]> {
-  const res = await fetch('/api/collections');
+  const res = await fetch('/api/collections', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch collections');
   return res.json();
 }
@@ -195,7 +195,7 @@ export async function apiDeleteCollection(id: string): Promise<void> {
 // ─── Fabrics ────────────────────────────────────────
 
 export async function fetchFabrics(): Promise<AdminFabricType[]> {
-  const res = await fetch('/api/fabrics');
+  const res = await fetch('/api/fabrics', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch fabrics');
   return res.json();
 }
@@ -245,7 +245,7 @@ export async function apiDeleteFabric(id: string): Promise<void> {
 // ─── Messages ───────────────────────────────────────
 
 export async function fetchMessages(): Promise<ContactMessage[]> {
-  const res = await fetch('/api/messages');
+  const res = await fetch('/api/messages', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch messages');
   return res.json();
 }
@@ -281,7 +281,7 @@ export async function apiDeleteMessage(id: string): Promise<void> {
 // ─── Media ──────────────────────────────────────────
 
 export async function fetchMedia(): Promise<MediaItem[]> {
-  const res = await fetch('/api/media');
+  const res = await fetch('/api/media', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch media');
   return res.json();
 }
@@ -325,7 +325,7 @@ export async function apiDeleteMedia(id: string): Promise<void> {
 // ─── Pages ──────────────────────────────────────────
 
 export async function fetchPages(): Promise<PageContent[]> {
-  const res = await fetch('/api/pages');
+  const res = await fetch('/api/pages', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch pages');
   return res.json();
 }
@@ -346,7 +346,7 @@ export async function apiUpdatePage(
 // ─── Settings ───────────────────────────────────────
 
 export async function fetchSettings(): Promise<SiteSettings> {
-  const res = await fetch('/api/settings');
+  const res = await fetch('/api/settings', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch settings');
   return res.json();
 }

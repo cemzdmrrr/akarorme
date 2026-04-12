@@ -10,6 +10,8 @@ import {
   writeBlob,
 } from '@/lib/admin-blob-store';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/seed — Same as POST, so it can be triggered from browser URL bar.
  */

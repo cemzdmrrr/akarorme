@@ -26,7 +26,7 @@ export default function ReferenceLogos({
   const [refs, setRefs] = useState(staticRefs);
 
   useEffect(() => {
-    fetch('/api/references')
+    fetch('/api/references', { cache: 'no-store' })
       .then((res) => res.ok ? res.json() : [])
       .then((cmsRefs) => {
         if (Array.isArray(cmsRefs) && cmsRefs.length > 0) {

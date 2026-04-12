@@ -5,6 +5,8 @@ import {
   updatePersistedSettings,
 } from '@/lib/admin-blob-store';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const settings = await getPersistedSettings();

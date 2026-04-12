@@ -5,6 +5,8 @@ import {
   createPersistedModel,
 } from '@/lib/model-store';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/models — Return all persisted admin models.
  */
