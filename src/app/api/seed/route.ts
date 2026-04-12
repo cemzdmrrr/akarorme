@@ -11,10 +11,21 @@ import {
 } from '@/lib/admin-blob-store';
 
 /**
+ * GET /api/seed — Same as POST, so it can be triggered from browser URL bar.
+ */
+export async function GET() {
+  return seedData();
+}
+
+/**
  * POST /api/seed — Initialize Vercel Blob with default data
  * if the blob storage is empty. Safe to call multiple times.
  */
 export async function POST() {
+  return seedData();
+}
+
+async function seedData() {
   try {
     const results: Record<string, string> = {};
 

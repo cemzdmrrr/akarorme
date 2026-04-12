@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getSettings } from '@/lib/admin-store';
 
 interface FooterDict {
   nav: {
@@ -32,8 +31,10 @@ export default function Footer({ locale, dict }: { locale: string; dict: FooterD
   ];
 
   useEffect(() => {
-    const s = getSettings();
-    if (s.footerText) setFooterText(s.footerText);
+    fetch('/api/settings')
+      .then((res) => res.ok ? res.json() : null)
+      .then((s) => { if (s?.footerText) setFooterText(s.footerText); })
+      .catch(() => {});
   }, []);
 
   return (

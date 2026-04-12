@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { references as staticRefs } from '@/data/references';
 import { AnimatedCounter, RevealOnScroll, StaggerContainer, StaggerItem } from '@/components/Motion';
-import { getReferences } from '@/lib/admin-store';
 
 interface ReferenceLogosDict {
   heading: string;
@@ -27,10 +26,14 @@ export default function ReferenceLogos({
   const [refs, setRefs] = useState(staticRefs);
 
   useEffect(() => {
-    const cmsRefs = getReferences();
-    if (cmsRefs.length > 0) {
-      setRefs(cmsRefs.map((r) => ({ initials: r.initials, name: r.name, country: r.country })));
-    }
+    fetch('/api/references')
+      .then((res) => res.ok ? res.json() : [])
+      .then((cmsRefs) => {
+        if (Array.isArray(cmsRefs) && cmsRefs.length > 0) {
+          setRefs(cmsRefs.map((r: { initials: string; name: string; country: string }) => ({ initials: r.initials, name: r.name, country: r.country })));
+        }
+      })
+      .catch(() => { /* keep static refs */ });
   }, []);
   return (
     <section className="section-padding bg-brand-cream">
