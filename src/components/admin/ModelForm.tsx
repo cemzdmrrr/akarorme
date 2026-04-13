@@ -37,13 +37,18 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
   const [status, setStatus] = useState<'published' | 'draft'>(initial?.status ?? 'draft');
   const [featured, setFeatured] = useState(initial?.featured ?? false);
   const [specs, setSpecs] = useState<{ label: string; value: string }[]>(initial?.technicalDetails ?? [{ label: '', value: '' }]);
-  const [colors, setColors] = useState<{ name: string; hex: string; image?: string }[]>(initial?.colors ?? [{ name: '', hex: '#C9A84C' }]);
+  const [coverImage, setCoverImage] = useState<string>(initial?.coverImage ?? '');
+  const [colors, setColors] = useState<{ name: string; hex: string; image?: string; images?: string[] }[]>(
+    (initial?.colors ?? [{ name: '', hex: '#C9A84C' }]).map(c => ({
+      ...c,
+      images: c.images ?? (c.image ? [c.image] : []),
+    }))
+  );
   const [images, setImages] = useState<string[]>(initial?.images ?? []);
   const [dragOver, setDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
-
-  const MAX_IMAGES = 5;
+  const [colorUploading, setColorUploading] = useState<number | null>(null);
 
   // Initialize custom season if initial value is not in SEASONS
   useState(() => {
@@ -61,11 +66,26 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
     setSpecs(next);
   };
 
-  const addColor = () => setColors([...colors, { name: '', hex: '#000000', image: '' }]);
+  const addColor = () => setColors([...colors, { name: '', hex: '#000000', image: '', images: [] }]);
   const removeColor = (i: number) => setColors(colors.filter((_, idx) => idx !== i));
   const updateColor = (i: number, key: 'name' | 'hex' | 'image', val: string) => {
     const next = [...colors];
     next[i] = { ...next[i], [key]: val };
+    setColors(next);
+  };
+  const addColorImage = (colorIdx: number, url: string) => {
+    const next = [...colors];
+    const imgs = next[colorIdx].images ?? [];
+    if (!imgs.includes(url)) {
+      next[colorIdx] = { ...next[colorIdx], images: [...imgs, url] };
+      setColors(next);
+    }
+  };
+  const removeColorImage = (colorIdx: number, imgIdx: number) => {
+    const next = [...colors];
+    const imgs = [...(next[colorIdx].images ?? [])];
+    imgs.splice(imgIdx, 1);
+    next[colorIdx] = { ...next[colorIdx], images: imgs, image: imgs[0] || '' };
     setColors(next);
   };
 
@@ -81,29 +101,10 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
     const validFiles = Array.from(files).filter((f) => f.type.startsWith('image/'));
     if (validFiles.length === 0) return;
 
-    // Check max images limit
-    setImages((prev) => {
-      const remaining = MAX_IMAGES - prev.length;
-      if (remaining <= 0) {
-        setUploadError(`En fazla ${MAX_IMAGES} görsel ekleyebilirsiniz.`);
-        return prev;
-      }
-      if (validFiles.length > remaining) {
-        setUploadError(`En fazla ${remaining} görsel daha ekleyebilirsiniz.`);
-      }
-      return prev;
-    });
-
     setUploading(true);
     const apiKey = getApiKey();
 
     for (const file of validFiles) {
-      // Re-check limit before each upload
-      const currentCount = await new Promise<number>((resolve) => {
-        setImages((prev) => { resolve(prev.length); return prev; });
-      });
-      if (currentCount >= MAX_IMAGES) break;
-
       if (file.size > 10 * 1024 * 1024) {
         setUploadError(`"${file.name}" çok büyük (maks. 10MB).`);
         continue;
@@ -126,7 +127,7 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
         }
 
         const { url } = await res.json();
-        setImages((prev) => (prev.length < MAX_IMAGES ? [...prev, url] : prev));
+        setImages((prev) => [...prev, url]);
       } catch {
         setUploadError('Görsel yüklenirken bir hata oluştu.');
       }
@@ -134,7 +135,46 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
     setUploading(false);
   }, []);
 
-  const removeImage = (i: number) => setImages(images.filter((_, idx) => idx !== i));
+  const removeImage = (i: number) => {
+    const removed = images[i];
+    setImages(images.filter((_, idx) => idx !== i));
+    // If removing the cover image, reset coverImage
+    if (removed === coverImage) setCoverImage('');
+  };
+
+  // Upload images directly to a color
+  const handleColorFiles = useCallback(async (colorIdx: number, files: FileList | null) => {
+    if (!files) return;
+    const validFiles = Array.from(files).filter((f) => f.type.startsWith('image/'));
+    if (validFiles.length === 0) return;
+
+    setColorUploading(colorIdx);
+    const apiKey = getApiKey();
+
+    for (const file of validFiles) {
+      if (file.size > 10 * 1024 * 1024) continue;
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'x-api-key': apiKey },
+          body: formData,
+        });
+        if (!res.ok) continue;
+        const { url } = await res.json();
+        // Add to both global images and color images
+        setImages((prev) => prev.includes(url) ? prev : [...prev, url]);
+        setColors((prev) => {
+          const next = [...prev];
+          const imgs = next[colorIdx].images ?? [];
+          next[colorIdx] = { ...next[colorIdx], images: [...imgs, url] };
+          return next;
+        });
+      } catch { /* skip */ }
+    }
+    setColorUploading(null);
+  }, []);
 
   // Convert a base64 data URL to a File object
   const dataUrlToFile = (dataUrl: string, filename: string): File => {
@@ -190,14 +230,19 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
     const finalImages = await migrateBase64Images(images);
     setImages(finalImages);
 
+    // Migrate cover image if base64
+    let finalCoverImage = coverImage;
+    if (coverImage && coverImage.startsWith('data:')) {
+      const migrated = await migrateBase64Images([coverImage]);
+      finalCoverImage = migrated[0] || '';
+    }
+
     // Also migrate color images
     const finalColors = await Promise.all(
       colors.filter((c) => c.name).map(async (c) => {
-        if (c.image && c.image.startsWith('data:')) {
-          const migrated = await migrateBase64Images([c.image]);
-          return { ...c, image: migrated[0] || '' };
-        }
-        return c;
+        const colorImgs = c.images ?? (c.image ? [c.image] : []);
+        const migratedImgs = await migrateBase64Images(colorImgs);
+        return { ...c, image: migratedImgs[0] || '', images: migratedImgs };
       })
     );
 
@@ -214,6 +259,7 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
       description,
       technicalDetails: specs.filter((s) => s.label && s.value),
       colors: finalColors,
+      coverImage: finalCoverImage,
       images: finalImages,
       status,
       featured,
@@ -360,28 +406,61 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
-              {/* Color-image linking */}
-              <div className="flex items-center gap-2 pl-10">
-                <label className="text-xs text-gray-500 shrink-0">Görsel:</label>
-                {images.length > 0 ? (
-                  <div className="flex items-center gap-2 flex-1">
+              {/* Color images */}
+              <div className="pl-10 space-y-2">
+                <div className="flex items-center gap-2">
+                  <label className="text-xs text-gray-500 shrink-0">Görseller:</label>
+                  <button
+                    type="button"
+                    onClick={() => document.getElementById(`color-images-${i}`)?.click()}
+                    disabled={colorUploading === i}
+                    className="text-xs text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50"
+                  >
+                    {colorUploading === i ? 'Yükleniyor...' : '+ Görsel Yükle'}
+                  </button>
+                  <input
+                    id={`color-images-${i}`}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => { handleColorFiles(i, e.target.files); e.target.value = ''; }}
+                  />
+                  {images.length > 0 && (
                     <select
-                      value={color.image || ''}
-                      onChange={(e) => updateColor(i, 'image', e.target.value)}
-                      className="flex-1 rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-700 focus:border-blue-400 focus:outline-none"
+                      value=""
+                      onChange={(e) => { if (e.target.value) addColorImage(i, e.target.value); e.target.value = ''; }}
+                      className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-gray-700 focus:border-blue-400 focus:outline-none"
                     >
-                      <option value="">Görsel seçin</option>
-                      {images.map((img, idx) => (
-                        <option key={idx} value={img}>Görsel {idx + 1}{idx === 0 ? ' (Kapak)' : ''}</option>
+                      <option value="">Galeriden ekle...</option>
+                      {images.filter(img => !(color.images ?? []).includes(img)).map((img, idx) => (
+                        <option key={idx} value={img}>Görsel {images.indexOf(img) + 1}</option>
                       ))}
                     </select>
-                    {color.image && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={color.image} alt="" className="h-8 w-8 rounded object-cover border border-gray-200" />
-                    )}
+                  )}
+                </div>
+                {(color.images ?? []).length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {(color.images ?? []).map((img, imgIdx) => (
+                      <div key={imgIdx} className="group relative h-14 w-14 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={img} alt="" className="h-full w-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeColorImage(i, imgIdx)}
+                          className="absolute top-0.5 right-0.5 rounded-full bg-black/60 p-0.5 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                        {imgIdx === 0 && (
+                          <span className="absolute bottom-0 left-0 right-0 bg-blue-600/80 text-center text-[8px] font-medium text-white">Ana</span>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ) : (
-                  <span className="text-xs text-gray-400">Önce görsel ekleyin</span>
+                )}
+                {(color.images ?? []).length === 0 && (
+                  <span className="text-xs text-gray-400">Bu renge henüz görsel eklenmedi</span>
                 )}
               </div>
             </div>
@@ -393,7 +472,7 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
       <section className="rounded-xl bg-white border border-gray-200 p-5 space-y-4">
         <div className="flex items-center justify-between pb-2 border-b border-gray-100">
           <h3 className="text-sm font-semibold text-gray-900">Görsel Galerisi</h3>
-          <span className="text-xs text-gray-400">{images.length} / {MAX_IMAGES}</span>
+          <span className="text-xs text-gray-400">{images.length} görsel</span>
         </div>
 
         {uploadError && (
@@ -402,56 +481,83 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
           </div>
         )}
 
-        {images.length < MAX_IMAGES && (
-          <div
-            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-            onDragLeave={() => setDragOver(false)}
-            onDrop={(e) => { e.preventDefault(); setDragOver(false); handleFiles(e.dataTransfer.files); }}
-            className={`flex flex-col items-center rounded-xl border-2 border-dashed p-8 transition-colors ${
-              uploading ? 'pointer-events-none opacity-60' : 'cursor-pointer'
-            } ${dragOver ? 'border-blue-400 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}
-            onClick={() => !uploading && document.getElementById('model-images')?.click()}
-          >
-            {uploading ? (
-              <>
-                <svg className="h-8 w-8 animate-spin text-blue-500 mb-3" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-                <p className="text-sm text-gray-500">Yükleniyor...</p>
-              </>
-            ) : (
-              <>
-                <svg className="h-10 w-10 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <p className="text-sm text-gray-500">Görselleri sürükleyip bırakın veya <span className="text-blue-600 font-medium">gözatın</span></p>
-                <p className="text-xs text-gray-400 mt-1">PNG, JPG, WebP — maks. 10MB — en fazla {MAX_IMAGES} görsel</p>
-              </>
-            )}
-            <input id="model-images" type="file" accept="image/*" multiple className="hidden" onChange={(e) => { handleFiles(e.target.files); e.target.value = ''; }} />
-          </div>
-        )}
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={(e) => { e.preventDefault(); setDragOver(false); handleFiles(e.dataTransfer.files); }}
+          className={`flex flex-col items-center rounded-xl border-2 border-dashed p-8 transition-colors ${
+            uploading ? 'pointer-events-none opacity-60' : 'cursor-pointer'
+          } ${dragOver ? 'border-blue-400 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}
+          onClick={() => !uploading && document.getElementById('model-images')?.click()}
+        >
+          {uploading ? (
+            <>
+              <svg className="h-8 w-8 animate-spin text-blue-500 mb-3" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              <p className="text-sm text-gray-500">Yükleniyor...</p>
+            </>
+          ) : (
+            <>
+              <svg className="h-10 w-10 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <p className="text-sm text-gray-500">Görselleri sürükleyip bırakın veya <span className="text-blue-600 font-medium">gözatın</span></p>
+              <p className="text-xs text-gray-400 mt-1">PNG, JPG, WebP — maks. 10MB — sınırsız görsel</p>
+            </>
+          )}
+          <input id="model-images" type="file" accept="image/*" multiple className="hidden" onChange={(e) => { handleFiles(e.target.files); e.target.value = ''; }} />
+        </div>
 
         {images.length > 0 && (
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-            {images.map((img, i) => (
-              <div key={i} className="group relative aspect-square rounded-lg overflow-hidden bg-gray-100">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img} alt={`Görsel ${i + 1}`} className="h-full w-full object-cover" />
-                <button
-                  type="button"
-                  onClick={() => removeImage(i)}
-                  className="absolute top-1 right-1 rounded-full bg-black/60 p-1 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-                {i === 0 && (
-                  <span className="absolute bottom-1 left-1 rounded bg-blue-600 px-1.5 py-0.5 text-[10px] font-medium text-white">Kapak</span>
-                )}
+          <>
+            {/* Cover image selection */}
+            <div className="rounded-lg bg-blue-50 border border-blue-200 p-3">
+              <p className="text-xs font-medium text-blue-800 mb-2">Kapak Görseli Seçin</p>
+              <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+                {images.map((img, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setCoverImage(img)}
+                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                      coverImage === img ? 'border-blue-600 ring-2 ring-blue-300' : 'border-transparent hover:border-gray-300'
+                    }`}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={img} alt="" className="h-full w-full object-cover" />
+                    {coverImage === img && (
+                      <span className="absolute inset-0 flex items-center justify-center bg-blue-600/30">
+                        <svg className="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                      </span>
+                    )}
+                  </button>
+                ))}
               </div>
-            ))}
-          </div>
+              {!coverImage && <p className="text-xs text-blue-600 mt-1">Seçilmezse ilk görsel kapak olarak kullanılır</p>}
+            </div>
+
+            {/* Gallery grid */}
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+              {images.map((img, i) => (
+                <div key={i} className="group relative aspect-square rounded-lg overflow-hidden bg-gray-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={img} alt={`Görsel ${i + 1}`} className="h-full w-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(i)}
+                    className="absolute top-1 right-1 rounded-full bg-black/60 p-1 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                  {coverImage === img && (
+                    <span className="absolute bottom-1 left-1 rounded bg-blue-600 px-1.5 py-0.5 text-[10px] font-medium text-white">Kapak</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </section>
 

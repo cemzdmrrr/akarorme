@@ -24,6 +24,7 @@ export interface ColorSwatch {
   name: string;
   hex: string;
   image?: string;
+  images?: string[];
 }
 
 export interface TechnicalSpec {

@@ -26,9 +26,19 @@ export default function ModelDetail({
 }) {
   const [activeColor, setActiveColor] = useState(0);
   const [activeTab, setActiveTab] = useState<'overview' | 'technical' | 'gallery'>('overview');
+  const [colorImageIdx, setColorImageIdx] = useState(0);
 
-  // Determine which image to show based on selected color
-  const activeImage = model.colors[activeColor]?.image || model.image;
+  // Get all images for the active color
+  const colorImages = model.colors[activeColor]?.images ?? 
+    (model.colors[activeColor]?.image ? [model.colors[activeColor].image!] : []);
+  
+  // Determine which image to show based on selected color and image index
+  const activeImage = colorImages[colorImageIdx] || model.colors[activeColor]?.image || model.image;
+
+  const handleColorChange = (idx: number) => {
+    setActiveColor(idx);
+    setColorImageIdx(0);
+  };
 
   const tabs = ['overview', 'technical', 'gallery'] as const;
 
@@ -38,19 +48,77 @@ export default function ModelDetail({
       <div className="grid gap-12 lg:grid-cols-2">
         {/* Image area */}
         <RevealOnScroll>
-          <div className="relative rounded-2xl overflow-hidden bg-brand-cream">
-            {activeImage ? (
-              <img
-                src={activeImage}
-                alt={model.name}
-                className="w-full h-auto rounded-2xl transition-all duration-500"
-                key={activeImage}
-              />
-            ) : (
-              <div className="aspect-square flex items-center justify-center text-brand-grey text-lg">{model.name}</div>
+          <div className="space-y-3">
+            <div className="relative rounded-2xl overflow-hidden bg-brand-cream">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeImage}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {activeImage ? (
+                    <img
+                      src={activeImage}
+                      alt={model.name}
+                      className="w-full h-auto rounded-2xl"
+                    />
+                  ) : (
+                    <div className="aspect-square flex items-center justify-center text-brand-grey text-lg">{model.name}</div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+              {/* Colour indicator ring */}
+              <div className="absolute inset-0 rounded-2xl ring-2 ring-inset" style={{ '--tw-ring-color': model.colors[activeColor]?.hex } as React.CSSProperties} />
+
+              {/* Prev / Next arrows */}
+              {colorImages.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setColorImageIdx((prev) => (prev - 1 + colorImages.length) % colorImages.length)}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 backdrop-blur-sm p-3 shadow-md text-brand-dark hover:bg-white transition-colors"
+                    aria-label="Önceki görsel"
+                  >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => setColorImageIdx((prev) => (prev + 1) % colorImages.length)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 backdrop-blur-sm p-3 shadow-md text-brand-dark hover:bg-white transition-colors"
+                    aria-label="Sonraki görsel"
+                  >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                  {/* Image counter */}
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/50 backdrop-blur-sm px-3 py-1 text-xs text-white font-medium">
+                    {colorImageIdx + 1} / {colorImages.length}
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Thumbnail strip for color images */}
+            {colorImages.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {colorImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setColorImageIdx(idx)}
+                    className={`shrink-0 h-16 w-16 rounded-lg overflow-hidden border-2 transition-all ${
+                      colorImageIdx === idx
+                        ? 'border-brand-accent-dark ring-1 ring-brand-accent'
+                        : 'border-transparent hover:border-brand-sand-dark opacity-70 hover:opacity-100'
+                    }`}
+                  >
+                    <img src={img} alt="" className="h-full w-full object-cover" />
+                  </button>
+                ))}
+              </div>
             )}
-            {/* Colour indicator ring */}
-            <div className="absolute inset-0 rounded-2xl ring-2 ring-inset" style={{ '--tw-ring-color': model.colors[activeColor]?.hex } as React.CSSProperties} />
           </div>
         </RevealOnScroll>
 
@@ -94,8 +162,8 @@ export default function ModelDetail({
               {model.colors.map((c, i) => (
                 <button
                   key={c.hex}
-                  onClick={() => setActiveColor(i)}
-                  className={`group relative h-10 w-10 rounded-full border-2 transition-all ${
+                  onClick={() => handleColorChange(i)}
+                  className={`group relative h-11 w-11 rounded-full border-2 transition-all ${
                     activeColor === i
                       ? 'border-brand-accent-dark scale-110'
                       : 'border-transparent hover:border-brand-sand-dark'
@@ -141,7 +209,7 @@ export default function ModelDetail({
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`relative pb-3 text-sm font-medium capitalize transition-colors ${
+              className={`relative pb-3 pt-3 text-sm font-medium capitalize transition-colors ${
                 activeTab === tab ? 'text-brand-dark' : 'text-brand-grey hover:text-brand-dark'
               }`}
             >
@@ -176,7 +244,7 @@ export default function ModelDetail({
             )}
 
             {activeTab === 'technical' && (
-              <div className="grid max-w-lg gap-4">
+              <div className="grid max-w-3xl gap-4 sm:grid-cols-2">
                 {model.specs.map((spec) => (
                   <div
                     key={spec.label}
@@ -188,6 +256,9 @@ export default function ModelDetail({
                     </span>
                   </div>
                 ))}
+                {model.specs.length === 0 && (
+                  <p className="text-sm text-brand-grey col-span-2">Teknik bilgi henüz eklenmemiş.</p>
+                )}
               </div>
             )}
 

@@ -56,7 +56,7 @@ export default function CollectionFilter({
           <button
             key={opt.value}
             onClick={() => toggleFilter(opt.value)}
-            className={`rounded-full border px-5 py-2 text-xs font-medium uppercase tracking-wider transition-all ${
+            className={`rounded-full border px-5 py-2.5 text-xs font-medium uppercase tracking-wider transition-all ${
               activeFilters.includes(opt.value)
                 ? 'border-brand-accent bg-brand-accent/15 text-brand-accent-dark'
                 : 'border-brand-sand text-brand-grey hover:border-brand-sand-dark hover:text-brand-dark'

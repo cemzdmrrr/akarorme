@@ -36,7 +36,7 @@ export default function LanguageSwitcher({ locale }: { locale: string }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((p) => !p)}
-        className="flex items-center gap-1.5 rounded-full border border-brand-sand px-3 py-1.5 text-xs font-medium text-brand-dark transition-all hover:border-brand-sand-dark hover:bg-brand-cream"
+        className="flex items-center gap-1.5 rounded-full border border-brand-sand px-4 py-2 text-xs font-medium text-brand-dark transition-all hover:border-brand-sand-dark hover:bg-brand-cream"
         aria-label="Dil se\u00e7"
       >
         <span className="text-sm">{currentFlag}</span>

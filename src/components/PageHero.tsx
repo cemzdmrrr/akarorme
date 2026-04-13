@@ -36,7 +36,7 @@ export default function PageHero({
         <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-transparent via-brand-accent/40 to-transparent" />
 
         <div className="container-xl relative z-10">
-          <h1 className="font-display text-5xl font-bold leading-tight tracking-tight text-brand-dark md:text-6xl lg:text-7xl">
+          <h1 className="font-display text-3xl font-bold leading-tight tracking-tight text-brand-dark sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
             {title} <span className="accent">{highlight}</span>
           </h1>
           <p className="mt-4 max-w-xl text-lg text-brand-grey">{subtitle}</p>

@@ -15,7 +15,8 @@ export interface AdminModel {
   gauge: string;
   description: string;
   technicalDetails: { label: string; value: string }[];
-  colors: { name: string; hex: string; image?: string }[];
+  coverImage?: string;
+  colors: { name: string; hex: string; image?: string; images?: string[] }[];
   images: string[];
   status: 'published' | 'draft';
   featured: boolean;

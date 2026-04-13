@@ -24,9 +24,14 @@ export function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
       tagline: m.tagline,
       description: m.description,
       tags: m.tags?.length ? m.tags : (m as any).category ? [(m as any).category] : [],
-      image: m.images?.[0] || '',
+      image: m.coverImage || m.images?.[0] || '',
       gallery: m.images || [],
-      colors: (m.colors || []).map((c) => ({ name: c.name, hex: c.hex, image: c.image || '' })),
+      colors: (m.colors || []).map((c) => ({
+        name: c.name,
+        hex: c.hex,
+        image: c.images?.[0] || c.image || '',
+        images: c.images ?? (c.image ? [c.image] : []),
+      })),
       specs: m.technicalDetails || [],
       featured: Boolean(m.featured),
     }));

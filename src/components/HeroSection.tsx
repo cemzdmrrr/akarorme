@@ -53,7 +53,7 @@ export default function HeroSection({ dict, locale }: { dict: HeroDict; locale: 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.15 }}
-          className="font-display text-6xl font-bold leading-[1.05] tracking-tight text-brand-dark md:text-7xl lg:text-8xl xl:text-9xl"
+          className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-brand-dark sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
         >
           {dict.heading1}
           <br />
@@ -108,7 +108,7 @@ export default function HeroSection({ dict, locale }: { dict: HeroDict; locale: 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="hidden lg:block"
+          className="hidden md:block"
         >
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl">
             <Image

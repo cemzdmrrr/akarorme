@@ -99,7 +99,7 @@ export default function Navbar({ locale, dict }: { locale: string; dict: { nav: 
 
           {/* Mobile toggle */}
           <button
-            className="relative z-50 flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
+            className="relative z-50 flex h-11 w-11 flex-col items-center justify-center gap-1.5 md:hidden"
             onClick={() => setMobileOpen((p) => !p)}
             aria-label={dict.nav.toggleMenu}
           >
@@ -144,7 +144,7 @@ export default function Navbar({ locale, dict }: { locale: string; dict: { nav: 
                 <Link
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="font-display text-2xl font-semibold tracking-wide text-brand-dark transition-colors hover:text-brand-green"
+                  className="font-display text-2xl font-semibold tracking-wide text-brand-dark transition-colors hover:text-brand-green py-3"
                 >
                   {link.label}
                 </Link>
