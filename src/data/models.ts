@@ -51,8 +51,8 @@ export const models: KnitwearModel[] = [
     description:
       'A timeless polo silhouette crafted from premium long-staple cotton piqué. Fine-gauge knitting ensures a smooth hand-feel while maintaining excellent shape retention through repeated washes.',
     tags: ['men', 'summer', 'fine'],
-    image: '/images/models/polo.jpg',
-    gallery: ['/images/models/polo-1.jpg', '/images/models/polo-2.jpg'],
+    image: '/images/models/placeholder.svg',
+    gallery: ['/images/models/placeholder.svg', '/images/models/placeholder.svg'],
     colors: [
       { name: 'Navy', hex: '#1e3a5f' },
       { name: 'White', hex: '#f5f5f0' },
@@ -73,7 +73,7 @@ export const models: KnitwearModel[] = [
     description:
       'A heritage cable-knit sweater knitted from premium merino-blend yarn. The intricate cable pattern is engineered on Stoll CMS machines for consistent depth and definition.',
     tags: ['men', 'winter', 'heavy'],
-    image: '/images/models/cable-knit.jpg',
+    image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
       { name: 'Cream', hex: '#c5baa8' },
@@ -94,7 +94,7 @@ export const models: KnitwearModel[] = [
     description:
       'An elevated basic T-shirt in compact-spun jersey. Ultra-fine 30/1 yarn delivers a dense, opaque fabric with a luxurious drape.',
     tags: ['men', 'women', 'summer', 'fine'],
-    image: '/images/models/tshirt.jpg',
+    image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
       { name: 'Black', hex: '#2a2a2a' },
@@ -116,7 +116,7 @@ export const models: KnitwearModel[] = [
     description:
       'A versatile crew-neck silhouette in fine-gauge knit. Fully fashioned construction ensures clean seams and a tailored fit.',
     tags: ['men', 'women', 'winter', 'fine'],
-    image: '/images/models/crew-neck.jpg',
+    image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
       { name: 'Gold', hex: '#C9A84C' },
@@ -137,7 +137,7 @@ export const models: KnitwearModel[] = [
     description:
       'A contemporary zip-through hoodie in heavyweight fleece knit. Double-face construction with a smooth exterior and brushed interior for warmth.',
     tags: ['men', 'winter', 'heavy'],
-    image: '/images/models/hoodie.jpg',
+    image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
       { name: 'Anthracite', hex: '#3a3a42' },
@@ -158,7 +158,7 @@ export const models: KnitwearModel[] = [
     description:
       'A relaxed henley with a three-button placket in textured slub jersey. Irregular yarn creates a natural, lived-in character.',
     tags: ['men', 'summer', 'fine'],
-    image: '/images/models/henley.jpg',
+    image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
       { name: 'Sage', hex: '#7a9a7e' },
@@ -179,7 +179,7 @@ export const models: KnitwearModel[] = [
     description:
       'An elevated V-neck pullover knitted from a luxurious silk-cashmere blend. The deep V-neckline adds modern sophistication.',
     tags: ['men', 'women', 'winter', 'fine'],
-    image: '/images/models/v-neck.jpg',
+    image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
       { name: 'Wine', hex: '#6b2d3e' },
@@ -200,7 +200,7 @@ export const models: KnitwearModel[] = [
     description:
       'A statement cardigan in chunky mouliné yarn with a relaxed silhouette. Horn-effect buttons and ribbed trims complete the artisan look.',
     tags: ['women', 'winter', 'heavy'],
-    image: '/images/models/cardigan.jpg',
+    image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
       { name: 'Coral', hex: '#c47a6a' },
@@ -221,7 +221,7 @@ export const models: KnitwearModel[] = [
     description:
       'An elegant wrap-front dress in fluid viscose rib knit. The self-tie waist creates a flattering silhouette with effortless movement.',
     tags: ['women', 'summer', 'fine'],
-    image: '/images/models/dress.jpg',
+    image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
       { name: 'Sage', hex: '#7a9a7e' },
@@ -242,7 +242,7 @@ export const models: KnitwearModel[] = [
     description:
       'A sleek turtleneck in extra-fine 19.5 micron merino wool. Whole-garment knitting eliminates side seams for ultimate comfort.',
     tags: ['women', 'winter', 'heavy'],
-    image: '/images/models/turtleneck.jpg',
+    image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
       { name: 'Cream', hex: '#c5baa8' },
@@ -263,7 +263,7 @@ export const models: KnitwearModel[] = [
     description:
       'A sporty cropped silhouette in compact rib knit with a wide elastic hem. Perfect for layering or as a stand-alone summer piece.',
     tags: ['women', 'summer', 'fine'],
-    image: '/images/models/crop-top.jpg',
+    image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
       { name: 'Coral', hex: '#c47a6a' },
@@ -284,7 +284,7 @@ export const models: KnitwearModel[] = [
     description:
       'A cosy oversized sweater in textured bouclé yarn with dropped shoulders and extended cuffs. Relaxed luxury for the modern wardrobe.',
     tags: ['women', 'winter', 'heavy'],
-    image: '/images/models/oversized.jpg',
+    image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
       { name: 'Wine', hex: '#6b2d3e' },
@@ -378,11 +378,12 @@ export const ADMIN_MODELS_STORAGE = ADMIN_MODELS_STORAGE_KEY;
 /**
  * Fetch all models from persistent storage.
  * If blob has data, use only blob models (admin is source of truth).
- * If blob is empty, fall back to static catalogue.
+ * If blob is empty, fall back to static catalogue so the site is never empty.
  */
 export async function getServerModels(): Promise<KnitwearModel[]> {
   const adminModels = await getPersistedModels();
-  return adminModelsToKnitwear(adminModels);
+  const converted = adminModelsToKnitwear(adminModels);
+  return converted.length > 0 ? converted : getStaticModels();
 }
 
 export async function getServerFeaturedModels(): Promise<KnitwearModel[]> {

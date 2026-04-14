@@ -26,9 +26,42 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const model = await getServerModelBySlug(params.slug);
   if (!model) return {};
+
+  const title = `${model.name} — AKAR ÖRME`;
+  const description = `${model.name} — ${model.tagline}. ${model.description.slice(0, 150)}`;
+  const url = `https://akarorme.com/${params.locale}/models/${params.slug}`;
+  const image = model.image || undefined;
+
   return {
-    title: model.name,
-    description: `${model.name} — ${model.tagline}. ${model.description.slice(0, 120)}…`,
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: Object.fromEntries(
+        locales.map((l) => [l, `https://akarorme.com/${l}/models/${params.slug}`]),
+      ),
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: 'AKAR ÖRME',
+      type: 'website',
+      locale: params.locale,
+      ...(image ? { images: [{ url: image, width: 800, height: 600, alt: model.name }] } : {}),
+    },
+    twitter: {
+      card: image ? 'summary_large_image' : 'summary',
+      title,
+      description,
+      ...(image ? { images: [image] } : {}),
+    },
+    other: {
+      'product:brand': 'AKAR ÖRME',
+      ...(model.specs?.find((s) => s.label === 'Composition')
+        ? { 'product:material': model.specs.find((s) => s.label === 'Composition')!.value }
+        : {}),
+    },
   };
 }
 
@@ -42,8 +75,36 @@ export default async function ModelPage({
 
   const dict = await getDictionary(params.locale);
 
+  // JSON-LD structured data for product
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: model.name,
+    description: model.description,
+    brand: { '@type': 'Brand', name: 'AKAR ÖRME' },
+    ...(model.image ? { image: model.image } : {}),
+    ...(model.specs?.length
+      ? {
+          additionalProperty: model.specs.map((s) => ({
+            '@type': 'PropertyValue',
+            name: s.label,
+            value: s.value,
+          })),
+        }
+      : {}),
+    manufacturer: {
+      '@type': 'Organization',
+      name: 'AKAR ÖRME',
+      url: 'https://akarorme.com',
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar locale={params.locale} dict={{ nav: dict.nav }} />
       <main>
         <ModelDetail model={model} dict={dict.modelDetail} locale={params.locale} />

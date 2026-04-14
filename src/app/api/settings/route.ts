@@ -4,6 +4,7 @@ import {
   getPersistedSettings,
   updatePersistedSettings,
 } from '@/lib/admin-blob-store';
+import { requireAdmin } from '@/lib/server-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +18,9 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
+
   try {
     const body = await request.json();
     const updated = await updatePersistedSettings(body);

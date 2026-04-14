@@ -3,13 +3,13 @@ import { Space_Grotesk, Inter } from 'next/font/google';
 import './globals.css';
 
 const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   variable: '--font-space-grotesk',
   display: 'swap',
 });
 
 const inter = Inter({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   variable: '--font-inter',
   display: 'swap',
 });

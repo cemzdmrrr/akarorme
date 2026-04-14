@@ -1,11 +1,15 @@
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { updatePersistedPage } from '@/lib/admin-blob-store';
+import { requireAdmin } from '@/lib/server-auth';
 
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } },
 ) {
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
+
   try {
     const body = await request.json();
     const updated = await updatePersistedPage(params.id, body.sections);

@@ -4,11 +4,15 @@ import {
   updatePersistedCollection,
   deletePersistedCollection,
 } from '@/lib/admin-blob-store';
+import { requireAdmin } from '@/lib/server-auth';
 
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } },
 ) {
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
+
   try {
     const body = await request.json();
     const updated = await updatePersistedCollection(params.id, body);
@@ -25,9 +29,12 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _request: Request,
+  request: Request,
   { params }: { params: { id: string } },
 ) {
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
+
   try {
     const deleted = await deletePersistedCollection(params.id);
     if (!deleted) {

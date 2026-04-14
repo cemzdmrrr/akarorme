@@ -5,6 +5,7 @@ import {
   updatePersistedModel,
   deletePersistedModel,
 } from '@/lib/model-store';
+import { requireAdmin } from '@/lib/server-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,6 +35,9 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } },
 ) {
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
+
   try {
     const body = await request.json();
     const updated = await updatePersistedModel(params.id, body);
@@ -56,9 +60,12 @@ export async function PUT(
  * DELETE /api/models/[id] — Delete a model.
  */
 export async function DELETE(
-  _request: Request,
+  request: Request,
   { params }: { params: { id: string } },
 ) {
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
+
   try {
     const deleted = await deletePersistedModel(params.id);
     if (!deleted) {

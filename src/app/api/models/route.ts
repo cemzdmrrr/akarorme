@@ -4,6 +4,7 @@ import {
   getPersistedModels,
   createPersistedModel,
 } from '@/lib/model-store';
+import { requireAdmin } from '@/lib/server-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,6 +24,9 @@ export async function GET() {
  * POST /api/models — Create a new model and persist it.
  */
 export async function POST(request: Request) {
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
+
   try {
     const body = await request.json();
     if (!body.name) {

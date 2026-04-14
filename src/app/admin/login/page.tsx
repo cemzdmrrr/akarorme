@@ -2,8 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { login, initializeAuth } from '@/lib/auth';
-import { useEffect } from 'react';
+import { login } from '@/lib/auth';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,8 +10,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => { initializeAuth(); }, []);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();

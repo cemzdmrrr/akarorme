@@ -4,10 +4,14 @@ import {
   getPersistedMessages,
   createPersistedMessage,
 } from '@/lib/admin-blob-store';
+import { requireAdmin } from '@/lib/server-auth';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: Request) {
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
+
   try {
     const messages = await getPersistedMessages();
     return NextResponse.json(messages);

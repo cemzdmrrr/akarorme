@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
+import { requireAdmin } from '@/lib/server-auth';
 
 /**
  * POST /api/upload — Upload an image to Vercel Blob (private store).
@@ -7,16 +8,10 @@ import { put } from '@vercel/blob';
  * Returns { url: string } with a proxy URL for serving the image.
  */
 export async function POST(request: Request) {
-  try {
-    // If ADMIN_API_KEY is configured, validate it
-    const serverKey = process.env.ADMIN_API_KEY;
-    if (serverKey) {
-      const apiKey = request.headers.get('x-api-key');
-      if (apiKey && apiKey !== serverKey) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-    }
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
 
+  try {
     const formData = await request.formData();
     const file = formData.get('file');
 

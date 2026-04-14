@@ -9,13 +9,16 @@ import {
   getPersistedSettings,
   writeBlob,
 } from '@/lib/admin-blob-store';
+import { requireAdmin } from '@/lib/server-auth';
 
 export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/seed — Same as POST, so it can be triggered from browser URL bar.
  */
-export async function GET() {
+export async function GET(request: Request) {
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
   return seedData();
 }
 
@@ -23,7 +26,9 @@ export async function GET() {
  * POST /api/seed — Initialize Vercel Blob with default data
  * if the blob storage is empty. Safe to call multiple times.
  */
-export async function POST() {
+export async function POST(request: Request) {
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
   return seedData();
 }
 

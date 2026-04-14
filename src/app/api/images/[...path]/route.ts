@@ -3,7 +3,7 @@ import { get } from '@vercel/blob';
 
 /**
  * GET /api/images/[...path] — Proxy for serving private Vercel Blob images.
- * Reads the blob from private store and streams it to the client.
+ * Streams directly from blob to client without buffering the entire file in RAM.
  * Caches responses for 1 hour with stale-while-revalidate.
  */
 export async function GET(
@@ -24,21 +24,6 @@ export async function GET(
       return NextResponse.json({ error: 'Image not found' }, { status: 404 });
     }
 
-    // Read the stream
-    const reader = result.stream.getReader();
-    const chunks: Uint8Array[] = [];
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      if (value) chunks.push(value);
-    }
-    const buffer = chunks.reduce((acc, chunk) => {
-      const merged = new Uint8Array(acc.length + chunk.length);
-      merged.set(acc);
-      merged.set(chunk, acc.length);
-      return merged;
-    }, new Uint8Array(0));
-
     // Determine content type from extension
     const ext = blobPath.split('.').pop()?.toLowerCase() || '';
     const contentTypes: Record<string, string> = {
@@ -50,12 +35,12 @@ export async function GET(
     };
     const contentType = contentTypes[ext] || 'application/octet-stream';
 
-    return new NextResponse(buffer, {
+    // Stream directly — no full-file buffering
+    return new Response(result.stream as ReadableStream, {
       status: 200,
       headers: {
         'Content-Type': contentType,
         'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
-        'Content-Length': buffer.length.toString(),
       },
     });
   } catch {

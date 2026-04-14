@@ -89,11 +89,6 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
     setColors(next);
   };
 
-  const getApiKey = () => {
-    if (typeof window === 'undefined') return '';
-    return localStorage.getItem('admin_api_key') || '';
-  };
-
   const handleFiles = useCallback(async (files: FileList | null) => {
     if (!files) return;
     setUploadError('');
@@ -102,7 +97,6 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
     if (validFiles.length === 0) return;
 
     setUploading(true);
-    const apiKey = getApiKey();
 
     for (const file of validFiles) {
       if (file.size > 10 * 1024 * 1024) {
@@ -116,7 +110,6 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
 
         const res = await fetch('/api/upload', {
           method: 'POST',
-          headers: { 'x-api-key': apiKey },
           body: formData,
         });
 
@@ -149,7 +142,6 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
     if (validFiles.length === 0) return;
 
     setColorUploading(colorIdx);
-    const apiKey = getApiKey();
 
     for (const file of validFiles) {
       if (file.size > 10 * 1024 * 1024) continue;
@@ -158,7 +150,6 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
         formData.append('file', file);
         const res = await fetch('/api/upload', {
           method: 'POST',
-          headers: { 'x-api-key': apiKey },
           body: formData,
         });
         if (!res.ok) continue;
@@ -188,7 +179,6 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
 
   // Upload any remaining base64 images to blob before saving
   const migrateBase64Images = async (imgs: string[]): Promise<string[]> => {
-    const apiKey = getApiKey();
     const migrated: string[] = [];
 
     for (let i = 0; i < imgs.length; i++) {
@@ -204,7 +194,6 @@ export default function ModelForm({ initial, onSubmit, submitLabel }: ModelFormP
         formData.append('file', file);
         const res = await fetch('/api/upload', {
           method: 'POST',
-          headers: { 'x-api-key': apiKey },
           body: formData,
         });
         if (res.ok) {

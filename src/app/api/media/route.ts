@@ -4,6 +4,7 @@ import {
   getPersistedMedia,
   createPersistedMedia,
 } from '@/lib/admin-blob-store';
+import { requireAdmin } from '@/lib/server-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +18,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const auth = await requireAdmin(request);
+  if (!auth.authenticated) return auth.response;
+
   try {
     const body = await request.json();
     if (!body.name || !body.url) {

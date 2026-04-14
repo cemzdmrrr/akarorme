@@ -23,17 +23,21 @@ export default function AdminTemplate({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     initializeStore();
-    const ok = isAuthenticated();
-    setAuthed(ok);
-    if (!ok && !isLoginPage) {
-      router.replace('/admin/login');
-    }
+    let cancelled = false;
+    isAuthenticated().then((ok) => {
+      if (cancelled) return;
+      setAuthed(ok);
+      if (!ok && !isLoginPage) {
+        router.replace('/admin/login');
+      }
+    });
+    return () => { cancelled = true; };
   }, [pathname, isLoginPage, router]);
 
   const toggle = useCallback(() => setSidebarOpen((o) => !o), []);
   const close = useCallback(() => setSidebarOpen(false), []);
-  const handleLogout = useCallback(() => {
-    logout();
+  const handleLogout = useCallback(async () => {
+    await logout();
     router.replace('/admin/login');
   }, [router]);
 

@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from '../template';
 import { fetchSettings, apiUpdateSettings } from '@/lib/admin-api';
-import { changePassword } from '@/lib/auth';
-import { setApiKey } from '@/lib/admin-api';
 import type { SiteSettings } from '@/types/admin';
 
 export default function SettingsPage() {
@@ -14,22 +12,8 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  // Password change states
-  const [currentPw, setCurrentPw] = useState('');
-  const [newPw, setNewPw] = useState('');
-  const [confirmPw, setConfirmPw] = useState('');
-  const [pwMsg, setPwMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [pwLoading, setPwLoading] = useState(false);
-
-  // API key state
-  const [apiKeyValue, setApiKeyValue] = useState('');
-  const [apiKeySaved, setApiKeySaved] = useState(false);
-
   useEffect(() => {
     fetchSettings().then(setSettings).catch(console.error);
-    // Load stored API key
-    const stored = typeof window !== 'undefined' ? localStorage.getItem('admin_api_key') || '' : '';
-    setApiKeyValue(stored);
   }, []);
 
   if (!settings) return null;
@@ -64,22 +48,6 @@ export default function SettingsPage() {
     } catch (err) {
       console.error(err);
       setSaving(false);
-    }
-  };
-
-  const handleChangePassword = async () => {
-    setPwMsg(null);
-    if (!currentPw || !newPw) { setPwMsg({ type: 'error', text: 'Tüm alanlar zorunludur.' }); return; }
-    if (newPw.length < 6) { setPwMsg({ type: 'error', text: 'Yeni şifre en az 6 karakter olmalıdır.' }); return; }
-    if (newPw !== confirmPw) { setPwMsg({ type: 'error', text: 'Yeni şifreler eşleşmiyor.' }); return; }
-    setPwLoading(true);
-    const ok = await changePassword(currentPw, newPw);
-    setPwLoading(false);
-    if (ok) {
-      setPwMsg({ type: 'success', text: 'Şifre başarıyla değiştirildi.' });
-      setCurrentPw(''); setNewPw(''); setConfirmPw('');
-    } else {
-      setPwMsg({ type: 'error', text: 'Mevcut şifre yanlış.' });
     }
   };
 
@@ -188,63 +156,15 @@ export default function SettingsPage() {
           </section>
         </form>
 
-        {/* API Key */}
+        {/* Auth Info */}
         <section className="rounded-xl bg-white border border-gray-200 p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-gray-900 pb-2 border-b border-gray-100">Admin API Key</h3>
-          <p className="text-xs text-gray-500">Vercel dashboard&apos;ta tanımlanan ADMIN_API_KEY değerini buraya girin. Model ekleme/silme/güncelleme işlemleri için gereklidir.</p>
-          <div className="flex items-end gap-3 max-w-lg">
-            <div className="flex-1">
-              <label className={labelCls}>API Key</label>
-              <input
-                type="password"
-                value={apiKeyValue}
-                onChange={(e) => { setApiKeyValue(e.target.value); setApiKeySaved(false); }}
-                className={inputCls}
-                placeholder="Vercel'deki ADMIN_API_KEY değeri"
-              />
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                setApiKey(apiKeyValue);
-                setApiKeySaved(true);
-                setTimeout(() => setApiKeySaved(false), 2000);
-              }}
-              className={`shrink-0 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors ${apiKeySaved ? 'bg-emerald-500' : 'bg-blue-600 hover:bg-blue-700'}`}
-            >
-              {apiKeySaved ? 'Kaydedildi!' : 'Kaydet'}
-            </button>
-          </div>
-        </section>
-
-        {/* Change Password */}
-        <section className="rounded-xl bg-white border border-gray-200 p-5 space-y-4">
-            <h3 className="text-sm font-semibold text-gray-900 pb-2 border-b border-gray-100">Şifre Değiştir</h3>
-          <div className="space-y-3 max-w-sm">
-            <div>
-              <label className={labelCls}>Mevcut Şifre</label>
-              <input type="password" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} className={inputCls} />
-            </div>
-            <div>
-              <label className={labelCls}>Yeni Şifre</label>
-              <input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} className={inputCls} placeholder="En az 6 karakter" />
-            </div>
-            <div>
-              <label className={labelCls}>Yeni Şifreyi Onayla</label>
-              <input type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} className={inputCls} />
-            </div>
-            {pwMsg && (
-              <p className={`text-xs ${pwMsg.type === 'success' ? 'text-emerald-600' : 'text-red-600'}`}>{pwMsg.text}</p>
-            )}
-            <button
-              type="button"
-              onClick={handleChangePassword}
-              disabled={pwLoading}
-              className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
-            >
-              {pwLoading ? 'Değiştiriliyor...' : 'Şifre Değiştir'}
-            </button>
-          </div>
+          <h3 className="text-sm font-semibold text-gray-900 pb-2 border-b border-gray-100">Kimlik Doğrulama</h3>
+          <p className="text-sm text-gray-500">
+            Admin giriş bilgileri sunucu tarafında yönetilmektedir. Şifre veya kullanıcı adını değiştirmek için
+            Vercel Dashboard &rarr; Settings &rarr; Environment Variables bölümünden{' '}
+            <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded font-mono">ADMIN_USERNAME</code> ve{' '}
+            <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded font-mono">ADMIN_PASSWORD_HASH</code> değerlerini güncelleyin.
+          </p>
         </section>
 
         {/* Danger zone */}
