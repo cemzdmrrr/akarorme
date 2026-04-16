@@ -27,7 +27,7 @@ export default function PortalLoginPage() {
     if (result.success) {
       router.push('/portal');
     } else {
-      setError(result.error || 'Login failed');
+      setError(result.error || 'Giriş yapılamadı.');
       setLoading(false);
     }
   }
@@ -35,20 +35,20 @@ export default function PortalLoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-brand-black px-4 font-body">
       <div className="w-full max-w-md">
-        {/* Brand */}
         <div className="mb-8 text-center">
           <h1 className="font-display text-2xl font-bold tracking-wider text-brand-white">AKAR ÖRME</h1>
-          <p className="mt-1 text-sm text-brand-grey">B2B Customer Portal</p>
+          <p className="mt-1 text-sm text-brand-grey">B2B Müşteri Portalı</p>
         </div>
 
-        {/* Card */}
-        <div className="rounded-2xl bg-brand-dark border border-brand-dark-3 p-8">
-          <h2 className="text-lg font-semibold text-brand-white mb-1">Sign In</h2>
-          <p className="text-sm text-brand-grey mb-6">Use the login details shared with you by AKAR ORME to access your company portal.</p>
+        <div className="rounded-2xl border border-brand-dark-3 bg-brand-dark p-8">
+          <h2 className="mb-1 text-lg font-semibold text-brand-white">Giriş Yap</h2>
+          <p className="mb-6 text-sm text-brand-grey">
+            Firmanız için paylaşılan giriş bilgileriyle portal hesabınıza erişebilirsiniz.
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-brand-grey-light mb-1.5">Email</label>
+              <label className="mb-1.5 block text-sm font-medium text-brand-grey-light">E-posta</label>
               <input
                 type="email"
                 required
@@ -56,11 +56,11 @@ export default function PortalLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full rounded-lg border border-brand-dark-3 bg-brand-dark-2 px-3.5 py-2.5 text-sm text-brand-white placeholder-brand-grey focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/20"
-                placeholder="you@company.com"
+                placeholder="ornek@firma.com"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-brand-grey-light mb-1.5">Password</label>
+              <label className="mb-1.5 block text-sm font-medium text-brand-grey-light">Şifre</label>
               <input
                 type="password"
                 required
@@ -73,7 +73,7 @@ export default function PortalLoginPage() {
             </div>
 
             {error && (
-              <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
+              <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
                 {error}
               </div>
             )}
@@ -81,33 +81,33 @@ export default function PortalLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-brand-accent px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-accent-light transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-accent-light disabled:opacity-50"
             >
               {loading && <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />}
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
             </button>
           </form>
 
           <div className="mt-4 flex items-center justify-between text-xs">
             <Link href="/portal/reset-password" className="text-brand-accent-light hover:underline">
-              Forgot password?
+              Şifremi unuttum
             </Link>
             <Link href="/contact" className="text-brand-accent-light hover:underline">
-              Need access?
+              Erişim talep et
             </Link>
           </div>
         </div>
 
-        <div className="mt-6 rounded-xl bg-brand-dark-2 border border-brand-dark-3 px-4 py-3">
-          <p className="text-xs font-medium uppercase tracking-wider text-brand-grey">Account access</p>
+        <div className="mt-6 rounded-xl border border-brand-dark-3 bg-brand-dark-2 px-4 py-3">
+          <p className="text-xs font-medium uppercase tracking-wider text-brand-grey">Hesap erişimi</p>
           <p className="mt-1 text-xs text-brand-grey-light">
-            Portal accounts are created by AKAR ORME. If your company needs access, contact your account manager or use the contact page.
+            Portal hesapları AKAR ÖRME tarafından açılır. Firmanızın erişime ihtiyacı varsa müşteri temsilcinizle iletişime geçebilir veya iletişim sayfasını kullanabilirsiniz.
           </p>
         </div>
 
         <div className="mt-4 text-center">
-          <Link href="/" className="text-xs text-brand-grey hover:text-brand-white transition-colors">
-            ← Back to main website
+          <Link href="/" className="text-xs text-brand-grey transition-colors hover:text-brand-white">
+            Ana siteye dön
           </Link>
         </div>
       </div>

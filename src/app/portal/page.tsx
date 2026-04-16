@@ -16,6 +16,41 @@ import {
 import { getModels } from '@/lib/admin-store';
 import type { B2BActivityEntry, B2BOrder, ClientFavorite, ProductionRequest, SampleRequest } from '@/types/b2b';
 
+const statusLabels: Record<string, string> = {
+  requested: 'Talep edildi',
+  approved: 'Onaylandı',
+  in_production: 'Üretimde',
+  submitted: 'Gönderildi',
+  under_review: 'İnceleniyor',
+  quoted: 'Teklif verildi',
+  confirmed: 'Kesinleşti',
+  quality_control: 'Kalite kontrolde',
+  ready_to_ship: 'Sevke hazır',
+  shipped: 'Sevk edildi',
+  completed: 'Tamamlandı',
+};
+
+const actionLabels: Record<string, string> = {
+  created: 'oluşturuldu',
+  updated: 'güncellendi',
+  status_changed: 'durumu değişti',
+  approved: 'onaylandı',
+  rejected: 'reddedildi',
+  quoted: 'teklif verildi',
+  converted: 'siparişe dönüştürüldü',
+  sent: 'gönderildi',
+};
+
+const entityLabels: Record<string, string> = {
+  sample_request: 'numune talebi',
+  production_request: 'üretim talebi',
+  order: 'sipariş',
+  message: 'mesaj',
+  document: 'doküman',
+  favorite: 'favori',
+  client: 'müşteri',
+};
+
 export default function PortalDashboard() {
   const { client } = usePortalContext();
   const [samples, setSamples] = useState<SampleRequest[]>([]);
@@ -67,21 +102,21 @@ export default function PortalDashboard() {
   };
 
   const stats = [
-    { label: 'Saved Models', value: favorites.length, href: '/portal/favorites', icon: '♥', color: 'text-pink-400' },
-    { label: 'Sample Requests', value: samples.length, href: '/portal/samples', icon: '◈', color: 'text-blue-400' },
-    { label: 'Production Requests', value: requests.length, href: '/portal/production', icon: '◌', color: 'text-cyan-400' },
-    { label: 'Orders', value: orders.length, href: '/portal/orders', icon: '⬚', color: 'text-purple-400' },
-    { label: 'Unread Messages', value: unread, href: '/portal/messages', icon: '✉', color: 'text-green-400' },
+    { label: 'Kaydedilen Modeller', value: favorites.length, href: '/portal/favorites', icon: '♥', color: 'text-pink-400' },
+    { label: 'Numune Talepleri', value: samples.length, href: '/portal/samples', icon: '◇', color: 'text-blue-400' },
+    { label: 'Üretim Talepleri', value: requests.length, href: '/portal/production', icon: '◎', color: 'text-cyan-400' },
+    { label: 'Siparişler', value: orders.length, href: '/portal/orders', icon: '⬚', color: 'text-purple-400' },
+    { label: 'Okunmamış Mesajlar', value: unread, href: '/portal/messages', icon: '✉', color: 'text-green-400' },
   ];
 
   return (
     <div className="space-y-8 p-6 lg:p-8">
       <div className="rounded-2xl border border-brand-dark-3 bg-gradient-to-br from-brand-accent/20 to-brand-dark-2 p-6 lg:p-8">
         <h1 className="text-2xl font-display font-bold text-brand-white">
-          Welcome back, {client?.contactPerson?.split(' ')[0] || 'Partner'}
+          Hoş geldiniz, {client?.contactPerson?.split(' ')[0] || 'İş Ortağımız'}
         </h1>
         <p className="mt-2 max-w-xl text-sm text-brand-grey-light">
-          {client?.companyName} - browse the collection catalog, ask product questions, track request approvals, and follow live orders from one place.
+          {client?.companyName} için koleksiyon kataloğunu inceleyebilir, ürün soruları sorabilir, taleplerinizi takip edebilir ve canlı sipariş durumlarını tek yerden görebilirsiniz.
         </p>
       </div>
 
@@ -107,9 +142,9 @@ export default function PortalDashboard() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="rounded-xl border border-brand-dark-3 bg-brand-dark p-6 lg:col-span-2">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-brand-white">Featured Models</h2>
+            <h2 className="text-lg font-semibold text-brand-white">Öne Çıkan Modeller</h2>
             <Link href="/portal/collections" className="text-xs text-brand-accent-light hover:underline">
-              View all →
+              Tümünü Gör
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -119,7 +154,7 @@ export default function PortalDashboard() {
                 href={`/portal/models/${model.id}`}
                 className="group overflow-hidden rounded-lg border border-brand-dark-3 bg-brand-dark-2 transition-colors hover:border-brand-accent/30"
               >
-                <div className="aspect-[4/3] swatch-placeholder bg-brand-dark-3" />
+                <div className="aspect-[4/3] bg-brand-dark-3 swatch-placeholder" />
                 <div className="p-3">
                   <p className="text-sm font-medium text-brand-white transition-colors group-hover:text-brand-accent-light">{model.name}</p>
                   <p className="mt-0.5 text-xs text-brand-grey">{model.collection}</p>
@@ -131,32 +166,32 @@ export default function PortalDashboard() {
 
         <div className="space-y-6">
           <div className="rounded-xl border border-brand-dark-3 bg-brand-dark p-6">
-            <h2 className="mb-4 text-lg font-semibold text-brand-white">Quick Actions</h2>
+            <h2 className="mb-4 text-lg font-semibold text-brand-white">Hızlı İşlemler</h2>
             <div className="space-y-2">
               <Link href="/portal/collections" className="flex items-center gap-3 rounded-lg bg-brand-dark-2 px-4 py-3 text-sm text-brand-grey-light transition-colors hover:bg-brand-dark-3 hover:text-brand-white">
-                <span className="text-lg text-brand-accent-light">⊞</span> Browse Collections
+                <span className="text-lg text-brand-accent-light">⊞</span> Koleksiyonları İncele
               </Link>
               <Link href="/portal/messages" className="flex items-center gap-3 rounded-lg bg-brand-dark-2 px-4 py-3 text-sm text-brand-grey-light transition-colors hover:bg-brand-dark-3 hover:text-brand-white">
-                <span className="text-lg text-brand-accent-light">✉</span> Ask a Question
+                <span className="text-lg text-brand-accent-light">✉</span> Soru Sor
               </Link>
               <Link href="/portal/production" className="flex items-center gap-3 rounded-lg bg-brand-dark-2 px-4 py-3 text-sm text-brand-grey-light transition-colors hover:bg-brand-dark-3 hover:text-brand-white">
-                <span className="text-lg text-brand-accent-light">◌</span> Track Requests
+                <span className="text-lg text-brand-accent-light">◎</span> Talepleri Takip Et
               </Link>
               <Link href="/portal/orders" className="flex items-center gap-3 rounded-lg bg-brand-dark-2 px-4 py-3 text-sm text-brand-grey-light transition-colors hover:bg-brand-dark-3 hover:text-brand-white">
-                <span className="text-lg text-brand-accent-light">⬚</span> Track Orders
+                <span className="text-lg text-brand-accent-light">⬚</span> Siparişleri Takip Et
               </Link>
             </div>
           </div>
 
           <div className="rounded-xl border border-brand-dark-3 bg-brand-dark p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-brand-white">Recent Orders</h2>
+              <h2 className="text-sm font-semibold text-brand-white">Son Siparişler</h2>
               <Link href="/portal/orders" className="text-xs text-brand-accent-light hover:underline">
-                View all
+                Tümünü Gör
               </Link>
             </div>
             {orders.length === 0 ? (
-              <p className="text-xs text-brand-grey">No orders yet.</p>
+              <p className="text-xs text-brand-grey">Henüz sipariş bulunmuyor.</p>
             ) : (
               <div className="space-y-2">
                 {orders.slice(0, 3).map((order) => (
@@ -166,7 +201,7 @@ export default function PortalDashboard() {
                       <p className="text-[10px] text-brand-grey">{order.orderNumber}</p>
                     </div>
                     <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${statusColor[order.status] || 'bg-brand-dark-3 text-brand-grey'}`}>
-                      {order.status.replace('_', ' ')}
+                      {statusLabels[order.status] || order.status}
                     </span>
                   </div>
                 ))}
@@ -178,13 +213,13 @@ export default function PortalDashboard() {
 
       {activity.length > 0 && (
         <div className="rounded-xl border border-brand-dark-3 bg-brand-dark p-6">
-          <h2 className="mb-4 text-lg font-semibold text-brand-white">Recent Activity</h2>
+          <h2 className="mb-4 text-lg font-semibold text-brand-white">Son Hareketler</h2>
           <div className="space-y-3">
             {activity.map((entry) => (
               <div key={entry.id} className="flex items-center gap-3 text-sm">
                 <div className="h-2 w-2 flex-shrink-0 rounded-full bg-brand-accent" />
                 <span className="text-brand-grey-light">
-                  <span className="capitalize">{entry.action}</span> {entry.entity.replace('_', ' ')} - <span className="text-brand-white">{entry.entityName}</span>
+                  {actionLabels[entry.action] || entry.action} {entityLabels[entry.entity] || entry.entity} - <span className="text-brand-white">{entry.entityName}</span>
                 </span>
                 <span className="ml-auto text-xs text-brand-grey">{new Date(entry.timestamp).toLocaleDateString()}</span>
               </div>

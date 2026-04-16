@@ -23,7 +23,7 @@ export function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
       name: m.name,
       tagline: m.tagline,
       description: m.description,
-      tags: m.tags?.length ? m.tags : (m as any).category ? [(m as any).category] : [],
+      tags: m.tags?.length ? m.tags : [],
       image: m.coverImage || m.images?.[0] || '',
       gallery: m.images || [],
       colors: (m.colors || []).map((c) => ({
@@ -38,263 +38,264 @@ export function adminModelsToKnitwear(models: AdminModel[]): KnitwearModel[] {
 }
 
 /**
- * Static fallback catalogue.
+ * Statik yedek katalog.
  *
- * This stays as a safe SSR/SSG fallback, but site components should prefer
- * `getHydratedModels()` / `useSiteModels()` so admin-created models are also shown.
+ * SSR/SSG güvenliği için tutulur; site bileşenleri mümkün olduğunda
+ * admin tarafından eklenen modelleri de gösterebilmek için
+ * `getHydratedModels()` / `useSiteModels()` üzerinden beslenmelidir.
  */
 export const models: KnitwearModel[] = [
   {
     slug: 'classic-polo',
-    name: 'Classic Polo',
-    tagline: '100% Cotton Piqué',
+    name: 'Klasik Polo',
+    tagline: '%100 Pamuk Pike',
     description:
-      'A timeless polo silhouette crafted from premium long-staple cotton piqué. Fine-gauge knitting ensures a smooth hand-feel while maintaining excellent shape retention through repeated washes.',
-    tags: ['men', 'summer', 'fine'],
+      'Premium uzun elyaflı pamuk pike ile üretilen zamansız polo silueti. İnce numara örgü yapısı, tekrarlı yıkamalarda formunu korurken yumuşak ve düzgün bir tuşe sunar.',
+    tags: ['erkek', 'yaz', 'ince'],
     image: '/images/models/placeholder.svg',
     gallery: ['/images/models/placeholder.svg', '/images/models/placeholder.svg'],
     colors: [
-      { name: 'Navy', hex: '#1e3a5f' },
-      { name: 'White', hex: '#f5f5f0' },
-      { name: 'Sage', hex: '#7a9a7e' },
+      { name: 'Lacivert', hex: '#1e3a5f' },
+      { name: 'Beyaz', hex: '#f5f5f0' },
+      { name: 'Adaçayı', hex: '#7a9a7e' },
     ],
     specs: [
-      { label: 'Gauge', value: '14 GG' },
-      { label: 'Weight', value: '220 g/m²' },
-      { label: 'Composition', value: '100% Supima Cotton' },
-      { label: 'Finish', value: 'Bio-polished, enzyme wash' },
+      { label: 'Numara', value: '14 GG' },
+      { label: 'Ağırlık', value: '220 g/m²' },
+      { label: 'Kompozisyon', value: '%100 Supima Pamuk' },
+      { label: 'Apre', value: 'Biyo parlatma, enzim yıkama' },
     ],
     featured: true,
   },
   {
     slug: 'cable-knit-sweater',
-    name: 'Cable Knit Sweater',
-    tagline: 'Merino Wool Blend',
+    name: 'Saç Örgü Kazak',
+    tagline: 'Merinos Yün Karışımı',
     description:
-      'A heritage cable-knit sweater knitted from premium merino-blend yarn. The intricate cable pattern is engineered on Stoll CMS machines for consistent depth and definition.',
-    tags: ['men', 'winter', 'heavy'],
+      'Premium merinos karışımlı iplikle örülen klasik saç örgü kazak. Karmaşık örgü deseni, Stoll CMS makinelerinde derinlik ve netlik korunarak mühendislik hassasiyetiyle üretilir.',
+    tags: ['erkek', 'kış', 'kalın'],
     image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
-      { name: 'Cream', hex: '#c5baa8' },
-      { name: 'Charcoal', hex: '#3a3a42' },
+      { name: 'Krem', hex: '#c5baa8' },
+      { name: 'Antrasit', hex: '#3a3a42' },
     ],
     specs: [
-      { label: 'Gauge', value: '7 GG' },
-      { label: 'Weight', value: '380 g/m²' },
-      { label: 'Composition', value: '80% Merino Wool / 20% Nylon' },
-      { label: 'Finish', value: 'Felted, brushed' },
+      { label: 'Numara', value: '7 GG' },
+      { label: 'Ağırlık', value: '380 g/m²' },
+      { label: 'Kompozisyon', value: '%80 Merinos Yün / %20 Naylon' },
+      { label: 'Apre', value: 'Fırçalı, keçeleştirilmiş' },
     ],
     featured: true,
   },
   {
     slug: 'premium-tee',
-    name: 'Premium Tee',
-    tagline: 'Compact Jersey Knit',
+    name: 'Premium Tişört',
+    tagline: 'Kompakt Jarse Örgü',
     description:
-      'An elevated basic T-shirt in compact-spun jersey. Ultra-fine 30/1 yarn delivers a dense, opaque fabric with a luxurious drape.',
-    tags: ['men', 'women', 'summer', 'fine'],
+      'Kompakt eğrilmiş jarse kumaştan üretilen yüksek segment basic tişört. Ultra ince 30/1 iplik, tok ve opak bir yüzeyle birlikte dökümlü bir görünüm sağlar.',
+    tags: ['erkek', 'kadın', 'yaz', 'ince'],
     image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
-      { name: 'Black', hex: '#2a2a2a' },
-      { name: 'Grey Marl', hex: '#8e8e96' },
-      { name: 'White', hex: '#f0f0f2' },
+      { name: 'Siyah', hex: '#2a2a2a' },
+      { name: 'Kırçıllı Gri', hex: '#8e8e96' },
+      { name: 'Beyaz', hex: '#f0f0f2' },
     ],
     specs: [
-      { label: 'Gauge', value: '18 GG' },
-      { label: 'Weight', value: '180 g/m²' },
-      { label: 'Composition', value: '100% Compact Cotton' },
-      { label: 'Finish', value: 'Silicone softener' },
+      { label: 'Numara', value: '18 GG' },
+      { label: 'Ağırlık', value: '180 g/m²' },
+      { label: 'Kompozisyon', value: '%100 Kompakt Pamuk' },
+      { label: 'Apre', value: 'Silikon yumuşatma' },
     ],
     featured: true,
   },
   {
     slug: 'crew-neck-sweater',
-    name: 'Crew Neck Sweater',
-    tagline: 'Fine Gauge Knit',
+    name: 'Bisiklet Yaka Kazak',
+    tagline: 'İnce Numara Triko',
     description:
-      'A versatile crew-neck silhouette in fine-gauge knit. Fully fashioned construction ensures clean seams and a tailored fit.',
-    tags: ['men', 'women', 'winter', 'fine'],
+      'İnce numara örme ile hazırlanan çok yönlü bisiklet yaka siluet. Fully fashioned yapısı sayesinde temiz dikiş hatları ve dengeli bir kalıp sunar.',
+    tags: ['erkek', 'kadın', 'kış', 'ince'],
     image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
-      { name: 'Gold', hex: '#C9A84C' },
-      { name: 'Burgundy', hex: '#6b2d3e' },
+      { name: 'Altın', hex: '#C9A84C' },
+      { name: 'Bordo', hex: '#6b2d3e' },
     ],
     specs: [
-      { label: 'Gauge', value: '12 GG' },
-      { label: 'Weight', value: '280 g/m²' },
-      { label: 'Composition', value: '50% Merino / 50% Acrylic' },
-      { label: 'Finish', value: 'Anti-pilling treatment' },
+      { label: 'Numara', value: '12 GG' },
+      { label: 'Ağırlık', value: '280 g/m²' },
+      { label: 'Kompozisyon', value: '%50 Merinos / %50 Akrilik' },
+      { label: 'Apre', value: 'Anti-pilling işlem' },
     ],
     featured: true,
   },
   {
     slug: 'zip-hoodie',
-    name: 'Zip Hoodie',
-    tagline: 'Heavy Fleece Knit',
+    name: 'Fermuarlı Hoodie',
+    tagline: 'Kalın Fleeceli Triko',
     description:
-      'A contemporary zip-through hoodie in heavyweight fleece knit. Double-face construction with a smooth exterior and brushed interior for warmth.',
-    tags: ['men', 'winter', 'heavy'],
+      'Kalın gramajlı fleece triko ile üretilen çağdaş fermuarlı hoodie. Çift yüzlü yapısı sayesinde dış yüzey temiz görünürken iç taraf fırçalı sıcaklık sağlar.',
+    tags: ['erkek', 'kış', 'kalın'],
     image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
-      { name: 'Anthracite', hex: '#3a3a42' },
-      { name: 'Navy', hex: '#1e3a5f' },
+      { name: 'Antrasit', hex: '#3a3a42' },
+      { name: 'Lacivert', hex: '#1e3a5f' },
     ],
     specs: [
-      { label: 'Gauge', value: '7 GG' },
-      { label: 'Weight', value: '420 g/m²' },
-      { label: 'Composition', value: '80% Cotton / 20% Polyester' },
-      { label: 'Finish', value: 'Brushed back, garment-dyed' },
+      { label: 'Numara', value: '7 GG' },
+      { label: 'Ağırlık', value: '420 g/m²' },
+      { label: 'Kompozisyon', value: '%80 Pamuk / %20 Polyester' },
+      { label: 'Apre', value: 'İçi fırçalı, parça boyalı' },
     ],
     featured: true,
   },
   {
     slug: 'henley-shirt',
     name: 'Henley',
-    tagline: 'Slub Jersey',
+    tagline: 'Slub Jarse',
     description:
-      'A relaxed henley with a three-button placket in textured slub jersey. Irregular yarn creates a natural, lived-in character.',
-    tags: ['men', 'summer', 'fine'],
+      'Dokulu slub jarse ile hazırlanan üç düğmeli rahat henley modeli. Düzensiz iplik yapısı, ürüne doğal ve kullanılmış hissi veren karakterli bir görünüm kazandırır.',
+    tags: ['erkek', 'yaz', 'ince'],
     image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
-      { name: 'Sage', hex: '#7a9a7e' },
-      { name: 'Sand', hex: '#c5baa8' },
+      { name: 'Adaçayı', hex: '#7a9a7e' },
+      { name: 'Kum', hex: '#c5baa8' },
     ],
     specs: [
-      { label: 'Gauge', value: '14 GG' },
-      { label: 'Weight', value: '200 g/m²' },
-      { label: 'Composition', value: '100% Slub Cotton' },
-      { label: 'Finish', value: 'Enzyme wash, air-dry' },
+      { label: 'Numara', value: '14 GG' },
+      { label: 'Ağırlık', value: '200 g/m²' },
+      { label: 'Kompozisyon', value: '%100 Slub Pamuk' },
+      { label: 'Apre', value: 'Enzim yıkama, doğal kurutma' },
     ],
     featured: true,
   },
   {
     slug: 'v-neck-pullover',
-    name: 'V-Neck Pullover',
-    tagline: 'Silk-Cashmere Blend',
+    name: 'V Yaka Kazak',
+    tagline: 'İpek-Kaşmir Karışımı',
     description:
-      'An elevated V-neck pullover knitted from a luxurious silk-cashmere blend. The deep V-neckline adds modern sophistication.',
-    tags: ['men', 'women', 'winter', 'fine'],
+      'Lüks ipek-kaşmir karışımlı iplikle örülen seçkin V yaka triko. Derin V yaka detayı, modele modern ve rafine bir çizgi kazandırır.',
+    tags: ['erkek', 'kadın', 'kış', 'ince'],
     image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
-      { name: 'Wine', hex: '#6b2d3e' },
-      { name: 'Midnight', hex: '#1e3a5f' },
+      { name: 'Şarap', hex: '#6b2d3e' },
+      { name: 'Gece Mavisi', hex: '#1e3a5f' },
     ],
     specs: [
-      { label: 'Gauge', value: '14 GG' },
-      { label: 'Weight', value: '240 g/m²' },
-      { label: 'Composition', value: '70% Silk / 30% Cashmere' },
-      { label: 'Finish', value: 'Hand-finished hems' },
+      { label: 'Numara', value: '14 GG' },
+      { label: 'Ağırlık', value: '240 g/m²' },
+      { label: 'Kompozisyon', value: '%70 İpek / %30 Kaşmir' },
+      { label: 'Apre', value: 'El işi etek ucu bitimi' },
     ],
     featured: true,
   },
   {
     slug: 'knit-cardigan',
-    name: 'Knit Cardigan',
-    tagline: 'Chunky Mouliné',
+    name: 'Triko Hırka',
+    tagline: 'Kalın Mouliné İplik',
     description:
-      'A statement cardigan in chunky mouliné yarn with a relaxed silhouette. Horn-effect buttons and ribbed trims complete the artisan look.',
-    tags: ['women', 'winter', 'heavy'],
+      'Kalın mouliné iplikle örülen, rahat kalıplı iddialı hırka modeli. Boynuz efektli düğmeler ve ribana bitişler ürüne zanaat hissi katar.',
+    tags: ['kadın', 'kış', 'kalın'],
     image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
-      { name: 'Coral', hex: '#c47a6a' },
-      { name: 'Oatmeal', hex: '#c5baa8' },
+      { name: 'Mercan', hex: '#c47a6a' },
+      { name: 'Yulaf', hex: '#c5baa8' },
     ],
     specs: [
-      { label: 'Gauge', value: '5 GG' },
-      { label: 'Weight', value: '450 g/m²' },
-      { label: 'Composition', value: '60% Wool / 40% Acrylic' },
-      { label: 'Finish', value: 'Brushed, relaxed tumble' },
+      { label: 'Numara', value: '5 GG' },
+      { label: 'Ağırlık', value: '450 g/m²' },
+      { label: 'Kompozisyon', value: '%60 Yün / %40 Akrilik' },
+      { label: 'Apre', value: 'Fırçalı, rahat tamburlama' },
     ],
     featured: true,
   },
   {
     slug: 'knit-wrap-dress',
-    name: 'Knit Wrap Dress',
-    tagline: 'Viscose Rib Knit',
+    name: 'Kruvaze Triko Elbise',
+    tagline: 'Viskon Ribana Örgü',
     description:
-      'An elegant wrap-front dress in fluid viscose rib knit. The self-tie waist creates a flattering silhouette with effortless movement.',
-    tags: ['women', 'summer', 'fine'],
+      'Akışkan viskon ribana ile hazırlanan zarif kruvaze elbise. Kendi kumaşından kemer detayı, bedene oturan ama rahat bir siluet oluşturur.',
+    tags: ['kadın', 'yaz', 'ince'],
     image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
-      { name: 'Sage', hex: '#7a9a7e' },
-      { name: 'Black', hex: '#2a2a2a' },
+      { name: 'Adaçayı', hex: '#7a9a7e' },
+      { name: 'Siyah', hex: '#2a2a2a' },
     ],
     specs: [
-      { label: 'Gauge', value: '14 GG' },
-      { label: 'Weight', value: '260 g/m²' },
-      { label: 'Composition', value: '95% Viscose / 5% Elastane' },
-      { label: 'Finish', value: 'Calendered, anti-static' },
+      { label: 'Numara', value: '14 GG' },
+      { label: 'Ağırlık', value: '260 g/m²' },
+      { label: 'Kompozisyon', value: '%95 Viskon / %5 Elastan' },
+      { label: 'Apre', value: 'Kalender, antistatik' },
     ],
     featured: false,
   },
   {
     slug: 'turtleneck',
-    name: 'Turtleneck',
-    tagline: 'Extra-Fine Merino',
+    name: 'Balıkçı Yaka',
+    tagline: 'Ekstra İnce Merinos',
     description:
-      'A sleek turtleneck in extra-fine 19.5 micron merino wool. Whole-garment knitting eliminates side seams for ultimate comfort.',
-    tags: ['women', 'winter', 'heavy'],
+      '19.5 mikron ekstra ince merinos yün ile örülen modern balıkçı yaka model. Whole-garment üretim sayesinde yan dikiş olmadan yüksek konfor sunar.',
+    tags: ['kadın', 'kış', 'kalın'],
     image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
-      { name: 'Cream', hex: '#c5baa8' },
-      { name: 'Black', hex: '#2a2a2a' },
+      { name: 'Krem', hex: '#c5baa8' },
+      { name: 'Siyah', hex: '#2a2a2a' },
     ],
     specs: [
-      { label: 'Gauge', value: '12 GG' },
-      { label: 'Weight', value: '300 g/m²' },
-      { label: 'Composition', value: '100% Extra-Fine Merino' },
-      { label: 'Finish', value: 'EXP treatment, cashmere-feel' },
+      { label: 'Numara', value: '12 GG' },
+      { label: 'Ağırlık', value: '300 g/m²' },
+      { label: 'Kompozisyon', value: '%100 Ekstra İnce Merinos' },
+      { label: 'Apre', value: 'EXP işlem, kaşmir hissi' },
     ],
     featured: false,
   },
   {
     slug: 'knit-crop-top',
-    name: 'Knit Crop Top',
-    tagline: 'Compact Rib',
+    name: 'Triko Crop Top',
+    tagline: 'Kompakt Rib',
     description:
-      'A sporty cropped silhouette in compact rib knit with a wide elastic hem. Perfect for layering or as a stand-alone summer piece.',
-    tags: ['women', 'summer', 'fine'],
+      'Geniş elastik etek bandına sahip sportif crop siluet. Katmanlı kullanım için olduğu kadar yaz koleksiyonlarında tek başına kullanılabilecek güçlü bir parça sunar.',
+    tags: ['kadın', 'yaz', 'ince'],
     image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
-      { name: 'Coral', hex: '#c47a6a' },
-      { name: 'White', hex: '#f0f0f2' },
+      { name: 'Mercan', hex: '#c47a6a' },
+      { name: 'Beyaz', hex: '#f0f0f2' },
     ],
     specs: [
-      { label: 'Gauge', value: '14 GG' },
-      { label: 'Weight', value: '190 g/m²' },
-      { label: 'Composition', value: '92% Cotton / 8% Elastane' },
-      { label: 'Finish', value: 'Garment-dyed, silicone wash' },
+      { label: 'Numara', value: '14 GG' },
+      { label: 'Ağırlık', value: '190 g/m²' },
+      { label: 'Kompozisyon', value: '%92 Pamuk / %8 Elastan' },
+      { label: 'Apre', value: 'Parça boyama, silikon yıkama' },
     ],
     featured: false,
   },
   {
     slug: 'oversized-sweater',
-    name: 'Oversized Sweater',
-    tagline: 'Bouclé Yarn',
+    name: 'Oversize Kazak',
+    tagline: 'Buklet İplik',
     description:
-      'A cosy oversized sweater in textured bouclé yarn with dropped shoulders and extended cuffs. Relaxed luxury for the modern wardrobe.',
-    tags: ['women', 'winter', 'heavy'],
+      'Dokulu buklet iplikle örülen sıcak ve rahat oversize kazak modeli. Düşük omuz ve uzun manşet detayları ile modern gardıroba lüks bir rahatlık katar.',
+    tags: ['kadın', 'kış', 'kalın'],
     image: '/images/models/placeholder.svg',
     gallery: [],
     colors: [
-      { name: 'Wine', hex: '#6b2d3e' },
-      { name: 'Stone', hex: '#c5baa8' },
+      { name: 'Şarap', hex: '#6b2d3e' },
+      { name: 'Taş', hex: '#c5baa8' },
     ],
     specs: [
-      { label: 'Gauge', value: '5 GG' },
-      { label: 'Weight', value: '480 g/m²' },
-      { label: 'Composition', value: '45% Wool / 35% Mohair / 20% Nylon' },
-      { label: 'Finish', value: 'Steam-blocked, brushed' },
+      { label: 'Numara', value: '5 GG' },
+      { label: 'Ağırlık', value: '480 g/m²' },
+      { label: 'Kompozisyon', value: '%45 Yün / %35 Mohair / %20 Naylon' },
+      { label: 'Apre', value: 'Buhar bloklama, fırçalama' },
     ],
     featured: false,
   },
@@ -342,7 +343,7 @@ export function getHydratedModels(): KnitwearModel[] {
 }
 
 export function getFeaturedModels(): KnitwearModel[] {
-  return useSiteModels().filter((m) => m.featured);
+  return getStaticModels().filter((m) => m.featured);
 }
 
 export function getHydratedFeaturedModels(): KnitwearModel[] {
@@ -350,7 +351,7 @@ export function getHydratedFeaturedModels(): KnitwearModel[] {
 }
 
 export function getModelBySlug(slug: string): KnitwearModel | undefined {
-  return useSiteModels().find((m) => m.slug === slug);
+  return getStaticModels().find((m) => m.slug === slug);
 }
 
 export function getHydratedModelBySlug(slug: string): KnitwearModel | undefined {
@@ -373,7 +374,7 @@ export function getHydratedModelSlugs(): string[] {
 export const ADMIN_MODELS_UPDATED_EVENT = 'admin-models-updated';
 export const ADMIN_MODELS_STORAGE = ADMIN_MODELS_STORAGE_KEY;
 
-// ─── Server-side async functions (use Vercel Blob) ──
+// Server-side async functions (use Vercel Blob)
 
 /**
  * Fetch all models from persistent storage.

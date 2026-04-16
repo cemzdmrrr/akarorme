@@ -14,22 +14,22 @@ import { usePortalContext } from '@/app/portal/template';
 import type { B2BOrder, ProductionRequest, ProductionStatus } from '@/types/b2b';
 
 const requestTabs: { label: string; value: ProductionStatus | 'all' }[] = [
-  { label: 'All', value: 'all' },
-  { label: 'Submitted', value: 'submitted' },
-  { label: 'Under Review', value: 'under_review' },
-  { label: 'Quoted', value: 'quoted' },
-  { label: 'Revision Requested', value: 'revision_requested' },
-  { label: 'Approved', value: 'approved' },
-  { label: 'Cancelled', value: 'cancelled' },
+  { label: 'Tümü', value: 'all' },
+  { label: 'Gönderildi', value: 'submitted' },
+  { label: 'İnceleniyor', value: 'under_review' },
+  { label: 'Teklif Verildi', value: 'quoted' },
+  { label: 'Revizyon İstendi', value: 'revision_requested' },
+  { label: 'Onaylandı', value: 'approved' },
+  { label: 'İptal Edildi', value: 'cancelled' },
 ];
 
-const statusConfig: Record<ProductionStatus, { color: string; bg: string }> = {
-  submitted: { color: 'text-yellow-400', bg: 'bg-yellow-500/15' },
-  under_review: { color: 'text-orange-400', bg: 'bg-orange-500/15' },
-  quoted: { color: 'text-cyan-400', bg: 'bg-cyan-500/15' },
-  revision_requested: { color: 'text-amber-300', bg: 'bg-amber-500/15' },
-  approved: { color: 'text-green-400', bg: 'bg-green-500/15' },
-  cancelled: { color: 'text-brand-grey-light', bg: 'bg-brand-dark-3' },
+const statusConfig: Record<ProductionStatus, { color: string; bg: string; label: string }> = {
+  submitted: { color: 'text-yellow-400', bg: 'bg-yellow-500/15', label: 'Gönderildi' },
+  under_review: { color: 'text-orange-400', bg: 'bg-orange-500/15', label: 'İnceleniyor' },
+  quoted: { color: 'text-cyan-400', bg: 'bg-cyan-500/15', label: 'Teklif verildi' },
+  revision_requested: { color: 'text-amber-300', bg: 'bg-amber-500/15', label: 'Revizyon istendi' },
+  approved: { color: 'text-green-400', bg: 'bg-green-500/15', label: 'Onaylandı' },
+  cancelled: { color: 'text-brand-grey-light', bg: 'bg-brand-dark-3', label: 'İptal edildi' },
 };
 
 const stepOrder: ProductionStatus[] = ['submitted', 'under_review', 'quoted', 'approved'];
@@ -105,12 +105,12 @@ export default function PortalProduction() {
         client.companyName,
         revisionNote.trim() || undefined,
       );
-      setFeedback({ type: 'success', text: 'Quotation approved. AKAR ORME has been notified.' });
+      setFeedback({ type: 'success', text: 'Teklif onaylandı. AKAR ÖRME bilgilendirildi.' });
       await load();
     } catch (error) {
       setFeedback({
         type: 'error',
-        text: error instanceof Error ? error.message : 'Quotation could not be approved.',
+        text: error instanceof Error ? error.message : 'Teklif onaylanamadı.',
       });
     }
   };
@@ -120,7 +120,7 @@ export default function PortalProduction() {
 
     const message = revisionNote.trim();
     if (!message) {
-      setFeedback({ type: 'error', text: 'Please add a short note about the revision you need.' });
+      setFeedback({ type: 'error', text: 'Lütfen istediğiniz revizyonu kısaca yazın.' });
       return;
     }
 
@@ -133,13 +133,13 @@ export default function PortalProduction() {
         client.companyName,
         message,
       );
-      setFeedback({ type: 'success', text: 'Revision request sent to AKAR ORME.' });
+      setFeedback({ type: 'success', text: 'Revizyon talebiniz AKAR ÖRME’ye iletildi.' });
       await load();
       router.push(`/portal/messages?conversation=${result.conversation.id}`);
     } catch (error) {
       setFeedback({
         type: 'error',
-        text: error instanceof Error ? error.message : 'Revision request could not be sent.',
+        text: error instanceof Error ? error.message : 'Revizyon talebi gönderilemedi.',
       });
     }
   };
@@ -147,9 +147,9 @@ export default function PortalProduction() {
   return (
     <div className="space-y-6 p-6 lg:p-8">
       <div>
-        <h1 className="text-2xl font-display font-bold text-brand-white">Production Requests</h1>
+        <h1 className="text-2xl font-display font-bold text-brand-white">Üretim Talepleri</h1>
         <p className="mt-1 text-sm text-brand-grey">
-          Follow quotation and approval progress before an order moves into production.
+          Teklif ve onay sürecini takip edin; sipariş üretime geçmeden önce tüm aşamaları buradan görün.
         </p>
       </div>
 
@@ -188,9 +188,9 @@ export default function PortalProduction() {
         <div className="space-y-3 lg:col-span-2">
           {filtered.length === 0 ? (
             <div className="rounded-xl border border-brand-dark-3 bg-brand-dark p-8 text-center">
-              <p className="text-sm text-brand-grey">No production requests found.</p>
+              <p className="text-sm text-brand-grey">Henüz üretim talebi bulunmuyor.</p>
               <Link href="/portal/collections" className="mt-3 inline-block text-xs text-brand-accent-light hover:underline">
-                Browse collections →
+                Koleksiyonları incele
               </Link>
             </div>
           ) : (
@@ -210,22 +210,22 @@ export default function PortalProduction() {
                     <div>
                       <p className="text-sm font-medium text-brand-white">{request.modelName}</p>
                       <p className="mt-0.5 text-xs text-brand-grey">
-                        {request.estimatedQuantity.toLocaleString()} pcs · {request.preferredColor}
+                        {request.estimatedQuantity.toLocaleString()} adet · {request.preferredColor}
                       </p>
                       <p className="mt-2 text-[10px] text-brand-grey">
-                        Target: {new Date(request.targetDeliveryDate).toLocaleDateString()}
+                        Hedef tarih: {new Date(request.targetDeliveryDate).toLocaleDateString()}
                       </p>
                       {request.clientResponse && request.status === 'revision_requested' && (
-                        <p className="mt-1 text-[10px] font-medium text-amber-200">Revision note sent</p>
+                        <p className="mt-1 text-[10px] font-medium text-amber-200">Revizyon notu gönderildi</p>
                       )}
                       {order && (
                         <p className="mt-1 text-[10px] font-medium text-brand-accent-light">
-                          Converted to order {order.orderNumber}
+                          Siparişe dönüştü: {order.orderNumber}
                         </p>
                       )}
                     </div>
                     <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-medium ${config.bg} ${config.color}`}>
-                      {request.status.replace(/_/g, ' ')}
+                      {config.label}
                     </span>
                   </div>
                 </button>
@@ -240,27 +240,26 @@ export default function PortalProduction() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h2 className="text-lg font-semibold text-brand-white">{selected.modelName}</h2>
-                  <p className="text-xs text-brand-grey">Request ID: {selected.id}</p>
+                  <p className="text-xs text-brand-grey">Talep No: {selected.id}</p>
                 </div>
                 <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusConfig[selected.status].bg} ${statusConfig[selected.status].color}`}>
-                  {selected.status.replace(/_/g, ' ')}
+                  {statusConfig[selected.status].label}
                 </span>
               </div>
 
               <div>
-                <p className="mb-3 text-xs font-medium text-brand-grey">Request progress</p>
+                <p className="mb-3 text-xs font-medium text-brand-grey">Talep ilerlemesi</p>
                 <div className="flex items-center gap-1">
                   {stepOrder.map((step, index) => {
                     const currentIndex = getProgressIndex(selected.status);
                     const done = currentIndex >= 0 && index <= currentIndex;
-
                     return <div key={step} className={`h-1.5 flex-1 rounded-full ${done ? 'bg-brand-accent' : 'bg-brand-dark-3'}`} />;
                   })}
                 </div>
                 <div className="mt-1 flex justify-between">
                   {stepOrder.map((step) => (
-                    <span key={step} className="text-[8px] capitalize text-brand-grey">
-                      {step.replace(/_/g, ' ')}
+                    <span key={step} className="text-[8px] text-brand-grey">
+                      {statusConfig[step].label}
                     </span>
                   ))}
                 </div>
@@ -268,67 +267,67 @@ export default function PortalProduction() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-lg bg-brand-dark-2 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Quantity</p>
-                  <p className="mt-0.5 text-sm text-brand-white">{selected.estimatedQuantity.toLocaleString()} pcs</p>
+                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Adet</p>
+                  <p className="mt-0.5 text-sm text-brand-white">{selected.estimatedQuantity.toLocaleString()} adet</p>
                 </div>
                 <div className="rounded-lg bg-brand-dark-2 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Preferred yarn</p>
+                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Tercih Edilen İplik</p>
                   <p className="mt-0.5 text-sm text-brand-white">{selected.preferredYarn}</p>
                 </div>
                 <div className="rounded-lg bg-brand-dark-2 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Preferred color</p>
+                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Tercih Edilen Renk</p>
                   <p className="mt-0.5 text-sm text-brand-white">{selected.preferredColor}</p>
                 </div>
                 <div className="rounded-lg bg-brand-dark-2 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Target delivery</p>
+                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Hedef Teslim</p>
                   <p className="mt-0.5 text-sm text-brand-white">{new Date(selected.targetDeliveryDate).toLocaleDateString()}</p>
                 </div>
               </div>
 
               {selected.notes && (
                 <div className="rounded-lg bg-brand-dark-2 p-3">
-                  <p className="mb-1 text-[10px] uppercase tracking-wider text-brand-grey">Your request notes</p>
+                  <p className="mb-1 text-[10px] uppercase tracking-wider text-brand-grey">Talep Notlarınız</p>
                   <p className="text-sm text-brand-grey-light">{selected.notes}</p>
                 </div>
               )}
 
               {selected.quotedPrice && (
                 <div className="rounded-lg border border-cyan-500/20 bg-cyan-500/10 p-4">
-                  <p className="mb-1 text-[10px] uppercase tracking-wider text-cyan-400">Quotation</p>
+                  <p className="mb-1 text-[10px] uppercase tracking-wider text-cyan-400">Teklif</p>
                   <p className="text-lg font-semibold text-cyan-300">{selected.quotedPrice}</p>
                 </div>
               )}
 
               {selected.adminResponse && (
                 <div className="rounded-lg border border-brand-accent/20 bg-brand-accent/10 p-3">
-                  <p className="mb-1 text-[10px] uppercase tracking-wider text-brand-accent-light">Akar Orme response</p>
+                  <p className="mb-1 text-[10px] uppercase tracking-wider text-brand-accent-light">AKAR ÖRME Yanıtı</p>
                   <p className="text-sm text-brand-grey-light">{selected.adminResponse}</p>
                 </div>
               )}
 
               {selected.clientResponse && (
                 <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-3">
-                  <p className="mb-1 text-[10px] uppercase tracking-wider text-amber-300">Your latest reply</p>
+                  <p className="mb-1 text-[10px] uppercase tracking-wider text-amber-300">Son Yanıtınız</p>
                   <p className="text-sm text-amber-100">{selected.clientResponse}</p>
                 </div>
               )}
 
               {selected.status === 'quoted' && (
                 <div className="rounded-xl border border-brand-dark-3 bg-brand-dark-2 p-4">
-                  <p className="text-sm font-medium text-brand-white">Quotation ready for your decision</p>
+                  <p className="text-sm font-medium text-brand-white">Teklif kararınızı bekliyor</p>
                   <p className="mt-1 text-xs text-brand-grey">
-                    Approve the quotation to move forward or request a revision with a short note.
+                    Devam etmek için teklifi onaylayabilir veya kısa bir notla revizyon isteyebilirsiniz.
                   </p>
 
                   {showRevisionForm && (
                     <div className="mt-4">
-                      <label className="mb-1 block text-xs text-brand-grey">Revision note</label>
+                      <label className="mb-1 block text-xs text-brand-grey">Revizyon Notu</label>
                       <textarea
                         value={revisionNote}
                         onChange={(event) => setRevisionNote(event.target.value)}
                         rows={4}
                         className="w-full rounded-lg border border-brand-dark-3 bg-brand-black px-3 py-2 text-sm text-brand-white focus:border-brand-accent focus:outline-none"
-                        placeholder="Tell AKAR ORME what should change in the quotation or timing."
+                        placeholder="Teklifte ya da termin planında neyin değişmesini istediğinizi yazın."
                       />
                     </div>
                   )}
@@ -338,20 +337,20 @@ export default function PortalProduction() {
                       onClick={handleApproveQuote}
                       className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
                     >
-                      Approve quotation
+                      Teklifi Onayla
                     </button>
                     <button
                       onClick={() => setShowRevisionForm((current) => !current)}
                       className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-medium text-amber-200 hover:bg-amber-500/20"
                     >
-                      {showRevisionForm ? 'Hide revision form' : 'Request revision'}
+                      {showRevisionForm ? 'Revizyon Alanını Gizle' : 'Revizyon İste'}
                     </button>
                     {showRevisionForm && (
                       <button
                         onClick={handleRequestRevision}
                         className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600"
                       >
-                        Send revision request
+                        Revizyon Talebini Gönder
                       </button>
                     )}
                   </div>
@@ -361,14 +360,14 @@ export default function PortalProduction() {
               {selected.status === 'revision_requested' && (
                 <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-4">
                   <p className="text-sm text-amber-200">
-                    Your revision request has been sent. AKAR ORME will update the quotation and reply in messages.
+                    Revizyon talebiniz iletildi. AKAR ÖRME teklifi güncelledikten sonra mesajlar üzerinden dönüş yapacaktır.
                   </p>
                   {selected.discussionConversationId && (
                     <Link
                       href={`/portal/messages?conversation=${selected.discussionConversationId}`}
                       className="mt-2 inline-flex text-xs font-medium text-amber-100 hover:underline"
                     >
-                      Open message thread
+                      Mesaj konuşmasını aç
                     </Link>
                   )}
                 </div>
@@ -376,16 +375,16 @@ export default function PortalProduction() {
 
               {getRequestOrder(selected.id) && (
                 <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 p-4">
-                  <p className="text-sm text-emerald-300">Your request has been approved and converted into a live order.</p>
+                  <p className="text-sm text-emerald-300">Talebiniz onaylandı ve canlı siparişe dönüştürüldü.</p>
                   <Link href="/portal/orders" className="mt-2 inline-flex text-xs font-medium text-emerald-200 hover:underline">
-                    Open orders page
+                    Siparişler sayfasını aç
                   </Link>
                 </div>
               )}
             </div>
           ) : (
             <div className="rounded-xl border border-brand-dark-3 bg-brand-dark p-12 text-center">
-              <p className="text-sm text-brand-grey">Select a request to view details.</p>
+              <p className="text-sm text-brand-grey">Detayları görmek için bir talep seçin.</p>
             </div>
           )}
         </div>

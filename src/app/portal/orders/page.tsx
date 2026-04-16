@@ -6,22 +6,22 @@ import { getOrders, initializeB2BStore } from '@/lib/b2b-store';
 import type { B2BOrder, OrderStatus } from '@/types/b2b';
 
 const orderTabs: { label: string; value: OrderStatus | 'all' }[] = [
-  { label: 'All', value: 'all' },
-  { label: 'Confirmed', value: 'confirmed' },
-  { label: 'In Production', value: 'in_production' },
-  { label: 'Quality Control', value: 'quality_control' },
-  { label: 'Ready to Ship', value: 'ready_to_ship' },
-  { label: 'Shipped', value: 'shipped' },
-  { label: 'Completed', value: 'completed' },
+  { label: 'Tümü', value: 'all' },
+  { label: 'Kesinleşti', value: 'confirmed' },
+  { label: 'Üretimde', value: 'in_production' },
+  { label: 'Kalite Kontrol', value: 'quality_control' },
+  { label: 'Sevke Hazır', value: 'ready_to_ship' },
+  { label: 'Sevk Edildi', value: 'shipped' },
+  { label: 'Tamamlandı', value: 'completed' },
 ];
 
-const orderConfig: Record<OrderStatus, { color: string; bg: string }> = {
-  confirmed: { color: 'text-blue-400', bg: 'bg-blue-500/15' },
-  in_production: { color: 'text-purple-400', bg: 'bg-purple-500/15' },
-  quality_control: { color: 'text-orange-400', bg: 'bg-orange-500/15' },
-  ready_to_ship: { color: 'text-cyan-400', bg: 'bg-cyan-500/15' },
-  shipped: { color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
-  completed: { color: 'text-green-400', bg: 'bg-green-500/15' },
+const orderConfig: Record<OrderStatus, { color: string; bg: string; label: string }> = {
+  confirmed: { color: 'text-blue-400', bg: 'bg-blue-500/15', label: 'Kesinleşti' },
+  in_production: { color: 'text-purple-400', bg: 'bg-purple-500/15', label: 'Üretimde' },
+  quality_control: { color: 'text-orange-400', bg: 'bg-orange-500/15', label: 'Kalite kontrolde' },
+  ready_to_ship: { color: 'text-cyan-400', bg: 'bg-cyan-500/15', label: 'Sevke hazır' },
+  shipped: { color: 'text-emerald-400', bg: 'bg-emerald-500/15', label: 'Sevk edildi' },
+  completed: { color: 'text-green-400', bg: 'bg-green-500/15', label: 'Tamamlandı' },
 };
 
 const stepOrder: OrderStatus[] = ['confirmed', 'in_production', 'quality_control', 'ready_to_ship', 'shipped', 'completed'];
@@ -59,9 +59,9 @@ export default function PortalOrders() {
   return (
     <div className="space-y-6 p-6 lg:p-8">
       <div>
-        <h1 className="text-2xl font-display font-bold text-brand-white">Orders</h1>
+        <h1 className="text-2xl font-display font-bold text-brand-white">Siparişler</h1>
         <p className="mt-1 text-sm text-brand-grey">
-          Track confirmed production jobs after approval, including shipping and completion updates.
+          Onaylanan siparişlerin üretim, sevkiyat ve tamamlanma durumlarını buradan takip edin.
         </p>
       </div>
 
@@ -88,7 +88,7 @@ export default function PortalOrders() {
         <div className="space-y-3 lg:col-span-2">
           {filtered.length === 0 ? (
             <div className="rounded-xl border border-brand-dark-3 bg-brand-dark p-8 text-center">
-              <p className="text-sm text-brand-grey">No orders available yet.</p>
+              <p className="text-sm text-brand-grey">Henüz sipariş bulunmuyor.</p>
             </div>
           ) : (
             filtered.map((order) => (
@@ -104,17 +104,17 @@ export default function PortalOrders() {
                     <p className="text-sm font-medium text-brand-white">{order.modelName}</p>
                     <p className="mt-0.5 text-xs text-brand-grey">{order.orderNumber}</p>
                     <p className="mt-2 text-[10px] text-brand-grey">
-                      {order.quantity.toLocaleString()} pcs · target {new Date(order.targetDeliveryDate).toLocaleDateString()}
+                      {order.quantity.toLocaleString()} adet · hedef {new Date(order.targetDeliveryDate).toLocaleDateString()}
                     </p>
                     <div className="mt-3">
                       <div className="h-2 rounded-full bg-brand-dark-3">
                         <div className="h-2 rounded-full bg-brand-accent transition-all" style={{ width: `${order.progressPercent}%` }} />
                       </div>
-                      <p className="mt-1 text-[10px] text-brand-grey">{order.progressPercent}% complete</p>
+                      <p className="mt-1 text-[10px] text-brand-grey">Tamamlanma: %{order.progressPercent}</p>
                     </div>
                   </div>
                   <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-medium ${orderConfig[order.status].bg} ${orderConfig[order.status].color}`}>
-                    {order.status.replace(/_/g, ' ')}
+                    {orderConfig[order.status].label}
                   </span>
                 </div>
               </button>
@@ -131,14 +131,14 @@ export default function PortalOrders() {
                   <p className="text-xs text-brand-grey">{selected.modelName}</p>
                 </div>
                 <span className={`rounded-full px-3 py-1 text-xs font-medium ${orderConfig[selected.status].bg} ${orderConfig[selected.status].color}`}>
-                  {selected.status.replace(/_/g, ' ')}
+                  {orderConfig[selected.status].label}
                 </span>
               </div>
 
               <div className="rounded-xl border border-brand-dark-3 bg-brand-dark-2 p-4">
                 <div className="mb-2 flex items-center justify-between">
-                  <p className="text-xs font-medium text-brand-grey">Production progress</p>
-                  <span className="text-sm font-semibold text-brand-white">{selected.progressPercent}%</span>
+                  <p className="text-xs font-medium text-brand-grey">Üretim ilerlemesi</p>
+                  <span className="text-sm font-semibold text-brand-white">%{selected.progressPercent}</span>
                 </div>
                 <div className="h-2 rounded-full bg-brand-dark-3">
                   <div className="h-2 rounded-full bg-brand-accent transition-all" style={{ width: `${selected.progressPercent}%` }} />
@@ -146,7 +146,7 @@ export default function PortalOrders() {
               </div>
 
               <div>
-                <p className="mb-3 text-xs font-medium text-brand-grey">Order milestones</p>
+                <p className="mb-3 text-xs font-medium text-brand-grey">Sipariş aşamaları</p>
                 <div className="space-y-3">
                   {stepOrder.map((step, index) => {
                     const currentIndex = stepOrder.indexOf(selected.status);
@@ -157,19 +157,17 @@ export default function PortalOrders() {
                       <div key={step} className="flex items-center gap-3">
                         <div
                           className={`flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-semibold ${
-                            done
-                              ? 'bg-brand-accent text-white'
-                              : 'bg-brand-dark-3 text-brand-grey'
+                            done ? 'bg-brand-accent text-white' : 'bg-brand-dark-3 text-brand-grey'
                           }`}
                         >
                           {index + 1}
                         </div>
                         <div className="min-w-0">
                           <p className={`text-sm ${current ? 'text-brand-white' : 'text-brand-grey-light'}`}>
-                            {step.replace(/_/g, ' ')}
+                            {orderConfig[step].label}
                           </p>
                           <p className="text-[10px] text-brand-grey">
-                            {done ? 'Reached or completed' : 'Upcoming stage'}
+                            {done ? 'Tamamlandı veya ulaşıldı' : 'Sıradaki aşama'}
                           </p>
                         </div>
                       </div>
@@ -180,57 +178,57 @@ export default function PortalOrders() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-lg bg-brand-dark-2 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Quantity</p>
-                  <p className="mt-0.5 text-sm text-brand-white">{selected.quantity.toLocaleString()} pcs</p>
+                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Adet</p>
+                  <p className="mt-0.5 text-sm text-brand-white">{selected.quantity.toLocaleString()} adet</p>
                 </div>
                 <div className="rounded-lg bg-brand-dark-2 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Quoted price</p>
-                  <p className="mt-0.5 text-sm text-brand-white">{selected.quotedPrice || 'Shared separately'}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Teklif Tutarı</p>
+                  <p className="mt-0.5 text-sm text-brand-white">{selected.quotedPrice || 'Ayrı paylaşıldı'}</p>
                 </div>
                 <div className="rounded-lg bg-brand-dark-2 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Preferred yarn</p>
+                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">İplik Detayı</p>
                   <p className="mt-0.5 text-sm text-brand-white">{selected.yarnDetails}</p>
                 </div>
                 <div className="rounded-lg bg-brand-dark-2 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Preferred color</p>
+                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Renk Detayı</p>
                   <p className="mt-0.5 text-sm text-brand-white">{selected.colorDetails}</p>
                 </div>
                 <div className="rounded-lg bg-brand-dark-2 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Target delivery</p>
+                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Hedef Teslim</p>
                   <p className="mt-0.5 text-sm text-brand-white">{new Date(selected.targetDeliveryDate).toLocaleDateString()}</p>
                 </div>
                 <div className="rounded-lg bg-brand-dark-2 p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Estimated ship</p>
+                  <p className="text-[10px] uppercase tracking-wider text-brand-grey">Tahmini Sevk</p>
                   <p className="mt-0.5 text-sm text-brand-white">
-                    {selected.estimatedShipDate ? new Date(selected.estimatedShipDate).toLocaleDateString() : 'Pending'}
+                    {selected.estimatedShipDate ? new Date(selected.estimatedShipDate).toLocaleDateString() : 'Bekleniyor'}
                   </p>
                 </div>
               </div>
 
               {selected.latestUpdate && (
                 <div className="rounded-lg border border-brand-accent/20 bg-brand-accent/10 p-3">
-                  <p className="mb-1 text-[10px] uppercase tracking-wider text-brand-accent-light">Latest update</p>
+                  <p className="mb-1 text-[10px] uppercase tracking-wider text-brand-accent-light">Son Güncelleme</p>
                   <p className="text-sm text-brand-grey-light">{selected.latestUpdate}</p>
                 </div>
               )}
 
               {selected.adminNotes && (
                 <div className="rounded-lg border border-brand-dark-3 bg-brand-dark-2 p-3">
-                  <p className="mb-1 text-[10px] uppercase tracking-wider text-brand-grey">Additional production note</p>
+                  <p className="mb-1 text-[10px] uppercase tracking-wider text-brand-grey">Ek Üretim Notu</p>
                   <p className="text-sm text-brand-grey-light">{selected.adminNotes}</p>
                 </div>
               )}
 
               {selected.trackingNumber && (
                 <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 p-3">
-                  <p className="mb-1 text-[10px] uppercase tracking-wider text-emerald-300">Tracking number</p>
+                  <p className="mb-1 text-[10px] uppercase tracking-wider text-emerald-300">Takip Numarası</p>
                   <p className="text-sm font-medium text-emerald-200">{selected.trackingNumber}</p>
                 </div>
               )}
             </div>
           ) : (
             <div className="rounded-xl border border-brand-dark-3 bg-brand-dark p-12 text-center">
-              <p className="text-sm text-brand-grey">Select an order to view details.</p>
+              <p className="text-sm text-brand-grey">Detayları görmek için bir sipariş seçin.</p>
             </div>
           )}
         </div>
