@@ -7,6 +7,7 @@ import type {
   B2BClient,
   SampleRequest,
   ProductionRequest,
+  B2BOrder,
   ClientFavorite,
   B2BMessage,
   B2BConversation,
@@ -16,6 +17,7 @@ import type {
   RegistrationStatus,
   SampleStatus,
   ProductionStatus,
+  OrderStatus,
 } from '@/types/b2b';
 
 // ─── Keys ────────────────────────────────────────────
@@ -23,6 +25,7 @@ const KEYS = {
   clients: 'b2b_clients',
   samples: 'b2b_samples',
   production: 'b2b_production',
+  orders: 'b2b_orders',
   favorites: 'b2b_favorites',
   messages: 'b2b_messages',
   conversations: 'b2b_conversations',
@@ -34,6 +37,28 @@ const KEYS = {
 // ─── Helpers ────────────────────────────────────────
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+function generateTemporaryPassword(): string {
+  return `Akar${Math.random().toString(36).slice(2, 6).toUpperCase()}${Math.floor(100 + Math.random() * 900)}`;
+}
+
+function generateOrderNumber(): string {
+  const stamp = new Date().toISOString().slice(2, 10).replace(/-/g, '');
+  return `AKR-${stamp}-${Math.floor(100 + Math.random() * 900)}`;
+}
+
+function getDefaultOrderProgress(status: OrderStatus): number {
+  const progressMap: Record<OrderStatus, number> = {
+    confirmed: 10,
+    in_production: 45,
+    quality_control: 70,
+    ready_to_ship: 85,
+    shipped: 95,
+    completed: 100,
+  };
+
+  return progressMap[status];
 }
 
 function getStore<T>(key: string): T[] {
@@ -99,6 +124,46 @@ export function createClient(data: Omit<B2BClient, 'id' | 'role' | 'status' | 'c
   setStore(KEYS.clients, list);
   logB2BActivity('registered', 'client', client.companyName, client.id);
   return client;
+}
+
+export async function createApprovedClientAccount(
+  data: Omit<B2BClient, 'id' | 'role' | 'status' | 'createdAt' | 'updatedAt' | 'passwordHash'> & {
+    temporaryPassword?: string;
+  },
+): Promise<{ client: B2BClient; temporaryPassword: string }> {
+  const existing = getClientByEmail(data.email);
+  if (existing) {
+    throw new Error('Bu e-posta ile kayitli bir musteri zaten var.');
+  }
+
+  const { sha256 } = await import('@/lib/b2b-auth');
+  const now = new Date().toISOString();
+  const temporaryPassword = data.temporaryPassword?.trim() || generateTemporaryPassword();
+
+  const client: B2BClient = {
+    id: generateId(),
+    email: data.email.trim().toLowerCase(),
+    passwordHash: await sha256(temporaryPassword),
+    role: 'client',
+    status: 'approved',
+    companyName: data.companyName.trim(),
+    country: data.country.trim(),
+    contactPerson: data.contactPerson.trim(),
+    phone: data.phone.trim(),
+    businessType: data.businessType,
+    avatar: data.avatar,
+    createdAt: now,
+    updatedAt: now,
+    lastLoginAt: undefined,
+    rejectionReason: undefined,
+  };
+
+  const list = getClients();
+  list.push(client);
+  setStore(KEYS.clients, list);
+  logB2BActivity('created', 'client', client.companyName, client.id);
+
+  return { client, temporaryPassword };
 }
 
 export function updateClient(id: string, data: Partial<B2BClient>): B2BClient | undefined {
@@ -214,6 +279,188 @@ export function updateProductionStatus(id: string, status: ProductionStatus, adm
 }
 
 // ─── FAVORITES ──────────────────────────────────────
+export function getOrCreateProductionConversation(
+  productionRequestId: string,
+  clientName: string,
+  companyName: string,
+): B2BConversation {
+  const request = getProductionRequest(productionRequestId);
+  if (!request) {
+    throw new Error('Uretim talebi bulunamadi.');
+  }
+
+  if (request.discussionConversationId) {
+    const existingConversation = getConversation(request.discussionConversationId);
+    if (existingConversation) {
+      return existingConversation;
+    }
+  }
+
+  const conversation = createConversation(
+    request.clientId,
+    clientName,
+    companyName,
+    `Production Request: ${request.modelName}`,
+  );
+
+  updateProductionRequest(request.id, {
+    discussionConversationId: conversation.id,
+  });
+
+  return conversation;
+}
+
+export function respondToProductionQuote(
+  productionRequestId: string,
+  decision: 'approved' | 'revision_requested',
+  clientName: string,
+  companyName: string,
+  response?: string,
+): { request: ProductionRequest; conversation: B2BConversation } {
+  const request = getProductionRequest(productionRequestId);
+  if (!request) {
+    throw new Error('Uretim talebi bulunamadi.');
+  }
+
+  if (request.status !== 'quoted') {
+    throw new Error('Bu talep su anda musteri yaniti beklemiyor.');
+  }
+
+  const fallbackMessage =
+    decision === 'approved'
+      ? `We approve the quotation for ${request.modelName} and would like to proceed.`
+      : `We would like to request a revision for ${request.modelName}.`;
+  const messageBody = response?.trim() || fallbackMessage;
+
+  const updatedRequest = updateProductionRequest(request.id, {
+    status: decision,
+    clientResponse: messageBody,
+  });
+
+  if (!updatedRequest) {
+    throw new Error('Teklif yaniti kaydedilemedi.');
+  }
+
+  const conversation = getOrCreateProductionConversation(request.id, clientName, companyName);
+  sendMessage(
+    conversation.id,
+    request.clientId,
+    'client',
+    clientName,
+    conversation.subject,
+    messageBody,
+  );
+
+  return {
+    request: updatedRequest,
+    conversation,
+  };
+}
+
+export function getOrders(clientId?: string): B2BOrder[] {
+  const all = getStore<B2BOrder>(KEYS.orders);
+  const filtered = clientId ? all.filter((order) => order.clientId === clientId) : all;
+
+  return filtered.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+}
+
+export function getOrder(id: string): B2BOrder | undefined {
+  return getStore<B2BOrder>(KEYS.orders).find((order) => order.id === id);
+}
+
+export function getOrderByProductionRequestId(productionRequestId: string): B2BOrder | undefined {
+  return getStore<B2BOrder>(KEYS.orders).find((order) => order.productionRequestId === productionRequestId);
+}
+
+export function createOrderFromProductionRequest(
+  productionRequestId: string,
+  overrides?: Partial<Pick<B2BOrder, 'estimatedShipDate' | 'adminNotes'>>,
+): B2BOrder {
+  const request = getProductionRequest(productionRequestId);
+  if (!request) {
+    throw new Error('Uretim talebi bulunamadi.');
+  }
+
+  if (request.convertedToOrderId) {
+    const existingOrder = getOrder(request.convertedToOrderId);
+    if (existingOrder) {
+      return existingOrder;
+    }
+  }
+
+  const existingFromRequest = getOrderByProductionRequestId(request.id);
+  if (existingFromRequest) {
+    updateProductionRequest(request.id, {
+      convertedToOrderId: existingFromRequest.id,
+      convertedToOrderAt: existingFromRequest.createdAt,
+    });
+    return existingFromRequest;
+  }
+
+  if (request.status !== 'approved') {
+    throw new Error('Sadece onaylanan talepler siparise donusturulebilir.');
+  }
+
+  const now = new Date().toISOString();
+  const order: B2BOrder = {
+    id: generateId(),
+    orderNumber: generateOrderNumber(),
+    productionRequestId: request.id,
+    clientId: request.clientId,
+    modelId: request.modelId,
+    modelName: request.modelName,
+    quantity: request.estimatedQuantity,
+    yarnDetails: request.preferredYarn,
+    colorDetails: request.preferredColor,
+    quotedPrice: request.quotedPrice,
+    targetDeliveryDate: request.targetDeliveryDate,
+    estimatedShipDate: overrides?.estimatedShipDate,
+    status: 'confirmed',
+    progressPercent: getDefaultOrderProgress('confirmed'),
+    adminNotes: overrides?.adminNotes || request.adminResponse,
+    latestUpdate: 'Order created and moved into production planning.',
+    trackingNumber: undefined,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  const list = getStore<B2BOrder>(KEYS.orders);
+  list.unshift(order);
+  setStore(KEYS.orders, list);
+  updateProductionRequest(request.id, {
+    convertedToOrderId: order.id,
+    convertedToOrderAt: now,
+  });
+  logB2BActivity('converted', 'order', order.orderNumber, order.clientId);
+  return order;
+}
+
+export function updateOrder(id: string, data: Partial<B2BOrder>): B2BOrder | undefined {
+  const list = getStore<B2BOrder>(KEYS.orders);
+  const idx = list.findIndex((order) => order.id === id);
+  if (idx === -1) return undefined;
+
+  list[idx] = { ...list[idx], ...data, updatedAt: new Date().toISOString() };
+  setStore(KEYS.orders, list);
+  logB2BActivity('updated', 'order', list[idx].orderNumber, list[idx].clientId);
+  return list[idx];
+}
+
+export function updateOrderStatus(
+  id: string,
+  status: OrderStatus,
+  adminNotes?: string,
+  trackingNumber?: string,
+): B2BOrder | undefined {
+  return updateOrder(id, {
+    status,
+    progressPercent: getDefaultOrderProgress(status),
+    adminNotes,
+    latestUpdate: adminNotes,
+    trackingNumber,
+  });
+}
+
 export function getFavorites(clientId: string): ClientFavorite[] {
   return getStore<ClientFavorite>(KEYS.favorites).filter((f) => f.clientId === clientId);
 }
@@ -393,9 +640,96 @@ export function getB2BDashboardStats(): B2BDashboardStats {
 }
 
 // ─── SEED DATA ──────────────────────────────────────
+function migrateLegacyProductionOrders(): void {
+  type LegacyProductionRequest = Omit<ProductionRequest, 'status'> & {
+    status: ProductionStatus | 'in_production' | 'completed';
+  };
+
+  const productionRequests = getStore<LegacyProductionRequest>(KEYS.production);
+  const existingOrders = getStore<B2BOrder>(KEYS.orders);
+
+  if (productionRequests.length === 0) return;
+
+  const orders = [...existingOrders];
+  let requestsChanged = false;
+  let ordersChanged = false;
+
+  for (const request of productionRequests) {
+    if (request.convertedToOrderId && orders.some((order) => order.id === request.convertedToOrderId)) {
+      continue;
+    }
+
+    if (request.status === 'in_production' || request.status === 'completed') {
+      const orderId = request.convertedToOrderId || generateId();
+      const order: B2BOrder = {
+        id: orderId,
+        orderNumber: generateOrderNumber(),
+        productionRequestId: request.id,
+        clientId: request.clientId,
+        modelId: request.modelId,
+        modelName: request.modelName,
+        quantity: request.estimatedQuantity,
+        yarnDetails: request.preferredYarn,
+        colorDetails: request.preferredColor,
+        quotedPrice: request.quotedPrice,
+        targetDeliveryDate: request.targetDeliveryDate,
+        estimatedShipDate: request.targetDeliveryDate,
+        status: request.status === 'completed' ? 'completed' : 'in_production',
+        progressPercent: getDefaultOrderProgress(request.status === 'completed' ? 'completed' : 'in_production'),
+        adminNotes: request.adminResponse,
+        latestUpdate: request.adminResponse,
+        trackingNumber: undefined,
+        createdAt: request.updatedAt,
+        updatedAt: request.updatedAt,
+      };
+
+      orders.unshift(order);
+      request.status = 'approved';
+      request.convertedToOrderId = order.id;
+      request.convertedToOrderAt = request.updatedAt;
+      requestsChanged = true;
+      ordersChanged = true;
+    }
+  }
+
+  if (requestsChanged) {
+    setStore(KEYS.production, productionRequests);
+  }
+
+  if (ordersChanged) {
+    setStore(KEYS.orders, orders);
+  }
+}
+
+function migrateLegacyOrderFields(): void {
+  const orders = getStore<B2BOrder>(KEYS.orders);
+  if (orders.length === 0) return;
+
+  let changed = false;
+  for (const order of orders) {
+    if (typeof order.progressPercent !== 'number') {
+      order.progressPercent = getDefaultOrderProgress(order.status);
+      changed = true;
+    }
+
+    if (order.latestUpdate === undefined && order.adminNotes) {
+      order.latestUpdate = order.adminNotes;
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    setStore(KEYS.orders, orders);
+  }
+}
+
 export async function initializeB2BStore(): Promise<void> {
   if (typeof window === 'undefined') return;
-  if (localStorage.getItem(KEYS.initialized)) return;
+  if (localStorage.getItem(KEYS.initialized)) {
+    migrateLegacyProductionOrders();
+    migrateLegacyOrderFields();
+    return;
+  }
 
   const { sha256 } = await import('@/lib/b2b-auth');
 
@@ -559,6 +893,31 @@ export async function initializeB2BStore(): Promise<void> {
     },
   ];
   setStore(KEYS.production, seedProduction);
+
+  const seedOrders: B2BOrder[] = [
+    {
+      id: 'ord1',
+      orderNumber: 'AKR-260220-314',
+      productionRequestId: 'pr1',
+      clientId: 'bc1',
+      modelId: 'm1',
+      modelName: 'Classic Polo',
+      quantity: 5000,
+      yarnDetails: '100% Supima Cotton',
+      colorDetails: 'Navy',
+      quotedPrice: 'EUR 12.50 per unit',
+      targetDeliveryDate: '2026-06-15',
+      estimatedShipDate: '2026-06-10',
+      status: 'in_production',
+      progressPercent: 45,
+      adminNotes: 'Main order confirmed. Knitting started on April 1.',
+      latestUpdate: 'Knitting started on April 1. First batch review is scheduled for next week.',
+      trackingNumber: undefined,
+      createdAt: '2026-02-20T10:00:00Z',
+      updatedAt: '2026-04-01T08:00:00Z',
+    },
+  ];
+  setStore(KEYS.orders, seedOrders);
 
   // Seed favorites
   const seedFavorites: ClientFavorite[] = [

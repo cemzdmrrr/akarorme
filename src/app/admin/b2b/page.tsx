@@ -2,93 +2,128 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getClients, getSampleRequests, getProductionRequests, getConversations, getB2BActivity, initializeB2BStore, getClientsByStatus } from '@/lib/b2b-store';
-import type { B2BClient, SampleRequest, ProductionRequest, B2BActivityEntry } from '@/types/b2b';
+import {
+  getB2BActivity,
+  getClients,
+  getClientsByStatus,
+  getConversations,
+  getOrders,
+  getProductionRequests,
+  getSampleRequests,
+  initializeB2BStore,
+} from '@/lib/b2b-store';
+import type { B2BActivityEntry, B2BClient, B2BOrder, ProductionRequest, SampleRequest } from '@/types/b2b';
 
 export default function AdminB2BOverview() {
   const [pendingClients, setPendingClients] = useState<B2BClient[]>([]);
   const [allClients, setAllClients] = useState<B2BClient[]>([]);
   const [samples, setSamples] = useState<SampleRequest[]>([]);
   const [productions, setProductions] = useState<ProductionRequest[]>([]);
-  const [unreadConvos, setUnreadConvos] = useState(0);
+  const [orders, setOrders] = useState<B2BOrder[]>([]);
+  const [unreadConversations, setUnreadConversations] = useState(0);
   const [activity, setActivity] = useState<B2BActivityEntry[]>([]);
 
   useEffect(() => {
-    initializeB2BStore();
-    setAllClients(getClients());
-    setPendingClients(getClientsByStatus('pending'));
-    setSamples(getSampleRequests());
-    setProductions(getProductionRequests());
-    setActivity(getB2BActivity().slice(0, 10));
-    const convos = getConversations();
-    setUnreadConvos(convos.filter((c) => c.unreadAdmin > 0).length);
+    let cancelled = false;
+
+    const load = async () => {
+      await initializeB2BStore();
+      if (cancelled) return;
+
+      setAllClients(getClients());
+      setPendingClients(getClientsByStatus('pending'));
+      setSamples(getSampleRequests());
+      setProductions(getProductionRequests());
+      setOrders(getOrders());
+      setActivity(getB2BActivity().slice(0, 10));
+      setUnreadConversations(getConversations().filter((conversation) => conversation.unreadAdmin > 0).length);
+    };
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const approvedClients = allClients.filter((c) => c.status === 'approved').length;
-  const pendingSamples = samples.filter((s) => s.status === 'requested').length;
-  const activeProd = productions.filter((p) => !['completed'].includes(p.status)).length;
+  const approvedClients = allClients.filter((client) => client.status === 'approved').length;
+  const pendingSamples = samples.filter((sample) => sample.status === 'requested').length;
+  const activeRequests = productions.filter((request) => !['approved', 'cancelled'].includes(request.status)).length;
+  const activeOrders = orders.filter((order) => order.status !== 'completed').length;
 
   const stats = [
-    { label: 'Aktif Müşteriler', value: approvedClients, color: 'bg-blue-50 text-blue-700', href: '/admin/b2b/clients' },
-    { label: 'Bekleyen Kayıtlar', value: pendingClients.length, color: 'bg-yellow-50 text-yellow-700', href: '/admin/b2b/clients' },
-    { label: 'Bekleyen Numuneler', value: pendingSamples, color: 'bg-purple-50 text-purple-700', href: '/admin/b2b/samples' },
-    { label: 'Aktif Üretim', value: activeProd, color: 'bg-green-50 text-green-700', href: '/admin/b2b/production' },
-    { label: 'Okunmamış Mesajlar', value: unreadConvos, color: 'bg-red-50 text-red-700', href: '/admin/b2b/messages' },
+    { label: 'Aktif Musteriler', value: approvedClients, color: 'text-blue-700', href: '/admin/b2b/clients' },
+    { label: 'Bekleyen Kayitlar', value: pendingClients.length, color: 'text-yellow-700', href: '/admin/b2b/clients' },
+    { label: 'Bekleyen Numuneler', value: pendingSamples, color: 'text-purple-700', href: '/admin/b2b/samples' },
+    { label: 'Aktif Talepler', value: activeRequests, color: 'text-cyan-700', href: '/admin/b2b/production' },
+    { label: 'Aktif Siparisler', value: activeOrders, color: 'text-green-700', href: '/admin/b2b/orders' },
+    { label: 'Okunmamis Mesajlar', value: unreadConversations, color: 'text-red-700', href: '/admin/b2b/messages' },
+  ];
+
+  const quickLinks = [
+    { label: 'Manage Clients', href: '/admin/b2b/clients', icon: '👥' },
+    { label: 'Sample Requests', href: '/admin/b2b/samples', icon: '📋' },
+    { label: 'Production Requests', href: '/admin/b2b/production', icon: '🧶' },
+    { label: 'Orders', href: '/admin/b2b/orders', icon: '📦' },
+    { label: 'B2B Messages', href: '/admin/b2b/messages', icon: '💬' },
   ];
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">B2B Portal Yönetimi</h1>
-        <p className="mt-1 text-sm text-gray-500">B2B müşteri portalı aktivitesi genel bakış.</p>
+        <h1 className="text-2xl font-bold text-gray-900">B2B Portal Yonetimi</h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Monitor customer accounts, incoming requests, and active orders from one overview.
+        </p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        {stats.map((s) => (
-          <Link key={s.label} href={s.href} className="rounded-xl bg-white border border-gray-200 p-4 hover:shadow-md transition-shadow">
-            <p className="text-xs text-gray-500">{s.label}</p>
-            <p className={`text-2xl font-bold mt-1 ${s.color.split(' ')[1]}`}>{s.value}</p>
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-6">
+        {stats.map((stat) => (
+          <Link key={stat.label} href={stat.href} className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md">
+            <p className="text-xs text-gray-500">{stat.label}</p>
+            <p className={`mt-1 text-2xl font-bold ${stat.color}`}>{stat.value}</p>
           </Link>
         ))}
       </div>
 
-      {/* Pending Registrations */}
       {pendingClients.length > 0 && (
-        <div className="rounded-xl bg-white border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-gray-900">Bekleyen Kayıtlar</h2>
-            <Link href="/admin/b2b/clients" className="text-xs text-blue-600 hover:underline">Tümünü Gör</Link>
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-gray-900">Bekleyen Kayitlar</h2>
+            <Link href="/admin/b2b/clients" className="text-xs text-blue-600 hover:underline">
+              Tumunu gor
+            </Link>
           </div>
           <div className="space-y-3">
-            {pendingClients.slice(0, 5).map((c) => (
-              <div key={c.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+            {pendingClients.slice(0, 5).map((client) => (
+              <div key={client.id} className="flex items-center justify-between border-b border-gray-100 py-2 last:border-0">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{c.companyName}</p>
-                  <p className="text-xs text-gray-500">{c.contactPerson} · {c.email} · {c.country}</p>
+                  <p className="text-sm font-medium text-gray-900">{client.companyName}</p>
+                  <p className="text-xs text-gray-500">
+                    {client.contactPerson} · {client.email} · {client.country}
+                  </p>
                 </div>
-                <span className="rounded-full bg-yellow-100 text-yellow-700 px-3 py-1 text-xs font-medium">Pending</span>
+                <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-700">Pending</span>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Recent Activity */}
-      <div className="rounded-xl bg-white border border-gray-200 p-5">
-        <h2 className="text-sm font-semibold text-gray-900 mb-4">Recent B2B Activity</h2>
+      <div className="rounded-xl border border-gray-200 bg-white p-5">
+        <h2 className="mb-4 text-sm font-semibold text-gray-900">Recent B2B Activity</h2>
         {activity.length === 0 ? (
-          <p className="text-sm text-gray-400">Henüz aktivite yok.</p>
+          <p className="text-sm text-gray-400">No activity yet.</p>
         ) : (
           <div className="space-y-3">
-            {activity.map((a) => (
-              <div key={a.id} className="flex items-start gap-3 py-2 border-b border-gray-100 last:border-0">
-                <div className="mt-0.5 h-2 w-2 rounded-full bg-blue-400 flex-shrink-0" />
+            {activity.map((entry) => (
+              <div key={entry.id} className="flex items-start gap-3 border-b border-gray-100 py-2 last:border-0">
+                <div className="mt-0.5 h-2 w-2 flex-shrink-0 rounded-full bg-blue-400" />
                 <div className="min-w-0">
-                  <p className="text-sm text-gray-700">{a.action} {a.entity}: {a.entityName}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">
-                    {new Date(a.timestamp).toLocaleString()}
+                  <p className="text-sm text-gray-700">
+                    {entry.action} {entry.entity}: {entry.entityName}
                   </p>
+                  <p className="mt-0.5 text-xs text-gray-400">{new Date(entry.timestamp).toLocaleString()}</p>
                 </div>
               </div>
             ))}
@@ -96,15 +131,13 @@ export default function AdminB2BOverview() {
         )}
       </div>
 
-      {/* Quick Links */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Manage Clients', href: '/admin/b2b/clients', icon: '👥' },
-          { label: 'Sample Requests', href: '/admin/b2b/samples', icon: '📋' },
-          { label: 'Production Orders', href: '/admin/b2b/production', icon: '🏭' },
-          { label: 'B2B Messages', href: '/admin/b2b/messages', icon: '💬' },
-        ].map((link) => (
-          <Link key={link.href} href={link.href} className="rounded-xl bg-white border border-gray-200 p-4 flex items-center gap-3 hover:shadow-md transition-shadow">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+        {quickLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
+          >
             <span className="text-xl">{link.icon}</span>
             <span className="text-sm font-medium text-gray-700">{link.label}</span>
           </Link>

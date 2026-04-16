@@ -5,6 +5,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
 import ContactForm from '@/components/ContactForm';
+import { getPersistedPages } from '@/lib/admin-blob-store';
+import { getPageBySlug, getPageSectionContent } from '@/data/page-content';
 
 export async function generateMetadata({
   params,
@@ -24,15 +26,17 @@ export default async function ContactPage({
   params: { locale: Locale };
 }) {
   const dict = await getDictionary(params.locale);
+  const pages = await getPersistedPages();
+  const contactPage = getPageBySlug(pages, 'contact');
 
   return (
     <>
       <Navbar locale={params.locale} dict={{ nav: dict.nav }} />
       <main>
         <PageHero
-          title={dict.contact.heroTitle}
-          highlight={dict.contact.heroHighlight}
-          subtitle={dict.contact.heroSubtitle}
+          title={getPageSectionContent(contactPage, 'hero_title', params.locale, dict.contact.heroTitle)}
+          highlight={getPageSectionContent(contactPage, 'hero_highlight', params.locale, dict.contact.heroHighlight)}
+          subtitle={getPageSectionContent(contactPage, 'hero_subtitle', params.locale, dict.contact.heroSubtitle)}
           breadcrumbs={[
             { label: dict.common.home, href: `/${params.locale}` },
             { label: dict.common.contact },
@@ -41,7 +45,13 @@ export default async function ContactPage({
 
         <section className="section-padding bg-brand-cream">
           <div className="container-xl">
-            <ContactForm dict={dict.contactForm} />
+            <ContactForm
+              dict={{
+                ...dict.contactForm,
+                heading: getPageSectionContent(contactPage, 'form_heading', params.locale, dict.contactForm.heading),
+                subheading: getPageSectionContent(contactPage, 'form_subheading', params.locale, dict.contactForm.subheading),
+              }}
+            />
           </div>
         </section>
       </main>

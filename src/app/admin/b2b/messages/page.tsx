@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   getConversations, getMessagesForConversation, sendMessage, markConversationRead,
   getClients, initializeB2BStore
@@ -8,6 +9,7 @@ import {
 import type { B2BConversation, B2BMessage, B2BClient } from '@/types/b2b';
 
 export default function AdminB2BMessages() {
+  const searchParams = useSearchParams();
   const [conversations, setConversations] = useState<B2BConversation[]>([]);
   const [clients, setClients] = useState<B2BClient[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -30,6 +32,16 @@ export default function AdminB2BMessages() {
       load();
     }
   }, [selectedId, load]);
+
+  useEffect(() => {
+    const conversationId = searchParams.get('conversation');
+    if (!conversationId || conversations.length === 0) return;
+
+    const target = conversations.find((conversation) => conversation.id === conversationId);
+    if (target) {
+      setSelectedId(target.id);
+    }
+  }, [conversations, searchParams]);
 
   useEffect(() => {
     msgEnd.current?.scrollIntoView({ behavior: 'smooth' });

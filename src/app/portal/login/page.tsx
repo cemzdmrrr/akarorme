@@ -44,7 +44,7 @@ export default function PortalLoginPage() {
         {/* Card */}
         <div className="rounded-2xl bg-brand-dark border border-brand-dark-3 p-8">
           <h2 className="text-lg font-semibold text-brand-white mb-1">Sign In</h2>
-          <p className="text-sm text-brand-grey mb-6">Enter your credentials to access the portal.</p>
+          <p className="text-sm text-brand-grey mb-6">Use the login details shared with you by AKAR ORME to access your company portal.</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -92,15 +92,17 @@ export default function PortalLoginPage() {
             <Link href="/portal/reset-password" className="text-brand-accent-light hover:underline">
               Forgot password?
             </Link>
-            <Link href="/portal/register" className="text-brand-accent-light hover:underline">
-              Request access
+            <Link href="/contact" className="text-brand-accent-light hover:underline">
+              Need access?
             </Link>
           </div>
         </div>
 
-        {/* Demo credentials */}
-        <div className="mt-6 rounded-xl bg-brand-dark-2 border border-brand-dark-3 px-4 py-3 text-center">
-          <p className="text-xs text-brand-grey">Demo: <span className="text-brand-grey-light">erik@nordmode.se</span> / <span className="text-brand-grey-light">demo2024</span></p>
+        <div className="mt-6 rounded-xl bg-brand-dark-2 border border-brand-dark-3 px-4 py-3">
+          <p className="text-xs font-medium uppercase tracking-wider text-brand-grey">Account access</p>
+          <p className="mt-1 text-xs text-brand-grey-light">
+            Portal accounts are created by AKAR ORME. If your company needs access, contact your account manager or use the contact page.
+          </p>
         </div>
 
         <div className="mt-4 text-center">

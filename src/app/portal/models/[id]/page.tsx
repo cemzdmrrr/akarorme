@@ -5,11 +5,11 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getModel } from '@/lib/admin-store';
 import { getCurrentClientId } from '@/lib/b2b-auth';
-import { addFavorite, removeFavorite, isFavorited, createSampleRequest, createProductionRequest } from '@/lib/b2b-store';
+import { addFavorite, removeFavorite, isFavorited, createSampleRequest, createProductionRequest, createConversation, sendMessage } from '@/lib/b2b-store';
 import { usePortalContext } from '@/app/portal/template';
 import type { AdminModel } from '@/types/admin';
 
-type ModalType = 'sample' | 'production' | null;
+type ModalType = 'sample' | 'production' | 'question' | null;
 
 export default function PortalModelDetail() {
   const params = useParams();
@@ -86,6 +86,24 @@ export default function PortalModelDetail() {
     setModal(null);
     setSuccess('Production request submitted successfully!');
     setTimeout(() => setSuccess(''), 4000);
+  }
+
+  function handleQuestionSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const cid = getCurrentClientId();
+    if (!cid || !model || !client) return;
+
+    const form = e.target as HTMLFormElement;
+    const data = new FormData(form);
+    const subject = (data.get('subject') as string)?.trim() || `Question about ${model.name}`;
+    const body = (data.get('message') as string)?.trim();
+    if (!body) return;
+
+    const conversation = createConversation(cid, client.contactPerson, client.companyName, subject);
+    sendMessage(conversation.id, cid, 'client', client.contactPerson, subject, body);
+
+    setModal(null);
+    router.push(`/portal/messages?conversation=${conversation.id}`);
   }
 
   if (!model) {
@@ -178,6 +196,12 @@ export default function PortalModelDetail() {
           {/* Actions */}
           <div className="flex flex-wrap gap-3">
             <button
+              onClick={() => setModal('question')}
+              className="rounded-lg border border-brand-dark-3 bg-brand-dark-2 px-5 py-2.5 text-sm font-medium text-brand-grey-light hover:text-brand-white hover:border-brand-dark-4 transition-colors"
+            >
+              Ask a Question
+            </button>
+            <button
               onClick={() => setModal('sample')}
               className="rounded-lg bg-brand-accent px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-accent-light transition-colors"
             >
@@ -207,7 +231,41 @@ export default function PortalModelDetail() {
       {modal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setModal(null)}>
           <div className="w-full max-w-md rounded-2xl bg-brand-dark border border-brand-dark-3 p-6" onClick={(e) => e.stopPropagation()}>
-            {modal === 'sample' ? (
+            {modal === 'question' ? (
+              <>
+                <h2 className="text-lg font-semibold text-brand-white mb-1">Ask About This Model</h2>
+                <p className="text-xs text-brand-grey mb-4">Model: {model.name}</p>
+                <form onSubmit={handleQuestionSubmit} className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-brand-grey mb-1">Subject</label>
+                    <input
+                      name="subject"
+                      defaultValue={`Question about ${model.name}`}
+                      className={inputClass}
+                      placeholder="Message subject"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-brand-grey mb-1">Message</label>
+                    <textarea
+                      name="message"
+                      rows={5}
+                      required
+                      className={inputClass}
+                      placeholder="Ask about yarn, MOQ, lead time, color options, pricing approach..."
+                    />
+                  </div>
+                  <div className="flex gap-2 pt-2">
+                    <button type="submit" className="flex-1 rounded-lg bg-brand-accent px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-accent-light transition-colors">
+                      Send Message
+                    </button>
+                    <button type="button" onClick={() => setModal(null)} className="rounded-lg border border-brand-dark-3 px-4 py-2.5 text-sm text-brand-grey hover:text-brand-white transition-colors">
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </>
+            ) : modal === 'sample' ? (
               <>
                 <h2 className="text-lg font-semibold text-brand-white mb-1">Request Sample</h2>
                 <p className="text-xs text-brand-grey mb-4">Model: {model.name}</p>

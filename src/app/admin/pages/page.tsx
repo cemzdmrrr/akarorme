@@ -5,10 +5,39 @@ import AdminHeader from '@/components/admin/AdminHeader';
 import { useAdminContext } from '../template';
 import { fetchPages, apiUpdatePage } from '@/lib/admin-api';
 import type { PageContent, PageSection } from '@/types/admin';
+import { localeNames, locales, type Locale } from '@/i18n/config';
+import { getSectionLocaleValue, setSectionLocaleValue } from '@/data/page-content';
 
 function genId() {
   return 'sec_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 }
+
+const PAGE_HELP: Record<string, { description: string; tip: string }> = {
+  home: {
+    description: 'Ana sayfadaki hero, marka hikayesi ve alt CTA alanlarini buradan yonetebilirsiniz.',
+    tip: 'Basliklar ve buton metinleri degistiginde ana sayfada dogrudan gorunur.',
+  },
+  about: {
+    description: 'Hakkimizda sayfasinin ust banner, deger kartlari, misyon ve vizyon metinleri burada yer alir.',
+    tip: 'Deger kartlarindaki 3 kutu icin ayri ayri baslik ve aciklama kullanabilirsiniz.',
+  },
+  contact: {
+    description: 'Iletisim sayfasinin ust bolumu ve form basliklari bu alandan degistirilir.',
+    tip: 'Form alan etiketleri sozlukten geliyor; bu ekran daha cok tanitim metinleri icindir.',
+  },
+  collections: {
+    description: 'Koleksiyonlar sayfasinin ust tanitim metinlerini duzenler.',
+    tip: 'Buradaki metinler filtre alaninin ustunde gorunen aciklamayi kontrol eder.',
+  },
+  references: {
+    description: 'Referanslar sayfasinin banner ve logo bolumu basliklari buradan degistirilir.',
+    tip: 'Marka logolari/verileri ayri sekmeden gelir; burada sadece ust metinleri yonetirsiniz.',
+  },
+  footer: {
+    description: 'Footer telif metni tum sayfalarda ortaktir.',
+    tip: '{year} ifadesi mevcut yil ile degistirilir.',
+  },
+};
 
 export default function PagesPage() {
   const { toggleSidebar } = useAdminContext();
@@ -43,6 +72,13 @@ export default function PagesPage() {
 
   const updateField = (id: string, field: keyof PageSection, value: string | boolean | number) => {
     setSections((s) => s.map((sec) => (sec.id === id ? { ...sec, [field]: value } : sec)));
+    setSaved(false);
+  };
+
+  const updateLocalizedField = (id: string, locale: Locale, value: string) => {
+    setSections((items) =>
+      items.map((section) => (section.id === id ? setSectionLocaleValue(section, locale, value) : section)),
+    );
     setSaved(false);
   };
 
@@ -81,6 +117,7 @@ export default function PagesPage() {
       label: newLabel.trim(),
       type: newType,
       content: '',
+      translations: newType === 'image' ? undefined : { tr: '', en: '', ar: '', zh: '' },
       visible: true,
       order: maxOrder + 1,
     }]);
@@ -111,6 +148,7 @@ export default function PagesPage() {
   };
 
   const inputCls = 'w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100';
+  const localeCardCls = 'rounded-lg border border-gray-200 bg-gray-50 p-3 space-y-2';
 
   return (
     <>
@@ -169,6 +207,12 @@ export default function PagesPage() {
                   <div>
                     <h2 className="text-base font-semibold text-gray-900">{activePage.title}</h2>
                     <p className="text-xs text-gray-400 mt-0.5">/{activePage.slug}</p>
+                    <p className="mt-2 max-w-2xl text-sm text-gray-500">
+                      {PAGE_HELP[activePage.slug]?.description}
+                    </p>
+                    <p className="mt-1 text-xs text-blue-600">
+                      {PAGE_HELP[activePage.slug]?.tip}
+                    </p>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-[11px] text-gray-400">
@@ -247,10 +291,46 @@ export default function PagesPage() {
                             </label>
                           </div>
                         </div>
-                      ) : section.type === 'textarea' ? (
-                        <textarea rows={3} value={section.content} onChange={(e) => updateField(section.id, 'content', e.target.value)} className={`${inputCls} resize-y`} />
                       ) : (
-                        <input type="text" value={section.content} onChange={(e) => updateField(section.id, 'content', e.target.value)} className={inputCls} />
+                        <div className="grid gap-3 md:grid-cols-2">
+                          {locales.map((locale) => {
+                            const value = getSectionLocaleValue(section, locale);
+                            const isTextarea = section.type === 'textarea';
+
+                            return (
+                              <div key={locale} className={localeCardCls}>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs font-semibold uppercase tracking-wider text-gray-600">
+                                    {locale}
+                                  </span>
+                                  <span className="text-[11px] text-gray-400">
+                                    {localeNames[locale]}
+                                  </span>
+                                </div>
+
+                                {isTextarea ? (
+                                  <textarea
+                                    rows={4}
+                                    value={value}
+                                    onChange={(e) => updateLocalizedField(section.id, locale, e.target.value)}
+                                    placeholder={locale === 'tr' ? 'Metni buraya girin' : `${locale.toUpperCase()} metni bos birakilabilir`}
+                                    className={`${inputCls} resize-y bg-white`}
+                                    dir={locale === 'ar' ? 'rtl' : 'ltr'}
+                                  />
+                                ) : (
+                                  <input
+                                    type="text"
+                                    value={value}
+                                    onChange={(e) => updateLocalizedField(section.id, locale, e.target.value)}
+                                    placeholder={locale === 'tr' ? 'Metni buraya girin' : `${locale.toUpperCase()} metni bos birakilabilir`}
+                                    className={`${inputCls} bg-white`}
+                                    dir={locale === 'ar' ? 'rtl' : 'ltr'}
+                                  />
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
                       )}
                     </div>
                   ))}

@@ -3,6 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import type { PageContent } from '@/types/admin';
+import type { Locale } from '@/i18n/config';
+import { getPageBySlug, getPageSectionContent } from '@/data/page-content';
 
 interface FooterDict {
   nav: {
@@ -18,7 +21,7 @@ interface FooterDict {
   };
 }
 
-export default function Footer({ locale, dict }: { locale: string; dict: FooterDict }) {
+export default function Footer({ locale, dict }: { locale: Locale; dict: FooterDict }) {
   const [footerText, setFooterText] = useState('');
 
   const navLinks = [
@@ -31,11 +34,31 @@ export default function Footer({ locale, dict }: { locale: string; dict: FooterD
   ];
 
   useEffect(() => {
-    fetch('/api/settings', { cache: 'no-store' })
-      .then((res) => res.ok ? res.json() : null)
-      .then((s) => { if (s?.footerText) setFooterText(s.footerText); })
+    let cancelled = false;
+
+    Promise.all([
+      fetch('/api/pages', { cache: 'no-store' }).then((res) => res.ok ? res.json() : null),
+      fetch('/api/settings', { cache: 'no-store' }).then((res) => res.ok ? res.json() : null),
+    ])
+      .then(([pages, settings]) => {
+        if (cancelled) return;
+
+        const footerPage = Array.isArray(pages)
+          ? getPageBySlug(pages as PageContent[], 'footer')
+          : null;
+        const pageFooterText = getPageSectionContent(footerPage, 'copyright', locale, '');
+        const resolvedText = pageFooterText || settings?.footerText || '';
+
+        if (resolvedText) {
+          setFooterText(resolvedText);
+        }
+      })
       .catch(() => {});
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [locale]);
 
   return (
     <footer className="border-t border-white/10 bg-brand-green py-16">

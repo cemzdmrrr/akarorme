@@ -46,8 +46,8 @@ export default function PortalCollections() {
     <div className="p-6 lg:p-8 space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-display font-bold text-brand-white">Collections</h1>
-        <p className="mt-1 text-sm text-brand-grey">Browse our knitwear collections and explore detailed specifications.</p>
+        <h1 className="text-2xl font-display font-bold text-brand-white">Collection Catalog</h1>
+        <p className="mt-1 text-sm text-brand-grey">Browse available models, review specifications, and open a conversation when something fits your collection.</p>
       </div>
 
       {/* Filters */}

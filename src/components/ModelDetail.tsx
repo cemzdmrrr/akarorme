@@ -49,7 +49,7 @@ export default function ModelDetail({
         {/* Image area */}
         <RevealOnScroll>
           <div className="space-y-3">
-            <div className="relative rounded-2xl overflow-hidden bg-brand-cream">
+            <div className="relative h-[360px] overflow-hidden rounded-2xl bg-brand-cream sm:h-[460px] lg:h-[620px] xl:h-[720px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeImage}
@@ -57,15 +57,16 @@ export default function ModelDetail({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
+                  className="flex h-full w-full items-center justify-center p-4 sm:p-6"
                 >
                   {activeImage ? (
                     <img
                       src={activeImage}
                       alt={model.name}
-                      className="w-full h-auto rounded-2xl"
+                      className="h-full w-full object-contain object-center"
                     />
                   ) : (
-                    <div className="aspect-square flex items-center justify-center text-brand-grey text-lg">{model.name}</div>
+                    <div className="flex h-full w-full items-center justify-center text-lg text-brand-grey">{model.name}</div>
                   )}
                 </motion.div>
               </AnimatePresence>

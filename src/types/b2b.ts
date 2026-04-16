@@ -54,7 +54,7 @@ export interface SampleRequest {
 }
 
 // ─── Production Request ─────────────────────────────
-export type ProductionStatus = 'submitted' | 'under_review' | 'quoted' | 'approved' | 'in_production' | 'completed';
+export type ProductionStatus = 'submitted' | 'under_review' | 'quoted' | 'revision_requested' | 'approved' | 'cancelled';
 
 export interface ProductionRequest {
   id: string;
@@ -68,7 +68,36 @@ export interface ProductionRequest {
   notes: string;
   status: ProductionStatus;
   adminResponse?: string;
+  clientResponse?: string;
   quotedPrice?: string;
+  discussionConversationId?: string;
+  convertedToOrderId?: string;
+  convertedToOrderAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Orders created after a production request is approved
+export type OrderStatus = 'confirmed' | 'in_production' | 'quality_control' | 'ready_to_ship' | 'shipped' | 'completed';
+
+export interface B2BOrder {
+  id: string;
+  orderNumber: string;
+  productionRequestId: string;
+  clientId: string;
+  modelId: string;
+  modelName: string;
+  quantity: number;
+  yarnDetails: string;
+  colorDetails: string;
+  quotedPrice?: string;
+  targetDeliveryDate: string;
+  estimatedShipDate?: string;
+  status: OrderStatus;
+  progressPercent: number;
+  adminNotes?: string;
+  latestUpdate?: string;
+  trackingNumber?: string;
   createdAt: string;
   updatedAt: string;
 }

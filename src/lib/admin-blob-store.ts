@@ -14,6 +14,7 @@ import type {
   PageContent,
   SiteSettings,
 } from '@/types/admin';
+import { DEFAULT_PAGE_CONTENT, mergePagesWithDefaults } from '@/data/page-content';
 
 // ─── Blob Paths ──────────────────────────────────────
 const BLOB = {
@@ -294,7 +295,10 @@ export async function deletePersistedMedia(id: string): Promise<boolean> {
 // ─── PAGES ──────────────────────────────────────────
 export async function getPersistedPages(): Promise<PageContent[]> {
   const data = await readBlob<PageContent[]>(BLOB.pages);
-  return Array.isArray(data) ? data : [];
+  if (!Array.isArray(data) || data.length === 0) {
+    return DEFAULT_PAGE_CONTENT;
+  }
+  return mergePagesWithDefaults(data);
 }
 
 export async function updatePersistedPage(

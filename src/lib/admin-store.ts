@@ -16,6 +16,7 @@ import type {
   DashboardStats,
   ActivityEntry,
 } from '@/types/admin';
+import { DEFAULT_PAGE_CONTENT } from '@/data/page-content';
 
 // ─── Keys ────────────────────────────────────────────
 const KEYS = {
@@ -478,46 +479,7 @@ export function initializeStore(): void {
   setStore(KEYS.messages, seedMessages);
 
   // Seed pages
-  const seedPages: PageContent[] = [
-    { id: 'p1', slug: 'home', title: 'Homepage', sections: [
-      { id: 's1', key: 'hero_title', label: 'Hero Title', type: 'text', content: 'Precision in Every Thread', visible: true, order: 0 },
-      { id: 's2', key: 'hero_subtitle', label: 'Hero Subtitle', type: 'textarea', content: 'Decades of textile expertise woven into every metre. From premium yarn to finished fabric — engineered for the world\'s leading fashion houses.', visible: true, order: 1 },
-      { id: 's3', key: 'hero_badge', label: 'Hero Badge Text', type: 'text', content: 'Premium Knitwear Manufacturing', visible: true, order: 2 },
-      { id: 's4', key: 'cta_primary', label: 'Primary CTA Text', type: 'text', content: 'Explore Collections', visible: true, order: 3 },
-      { id: 's5', key: 'cta_secondary', label: 'Secondary CTA Text', type: 'text', content: 'Request a Sample', visible: true, order: 4 },
-      { id: 's6', key: 'brand_story_title', label: 'Brand Story Title', type: 'text', content: 'Crafting Excellence, Thread by Thread', visible: true, order: 5 },
-      { id: 's7', key: 'brand_story_text', label: 'Brand Story Text', type: 'textarea', content: 'For over two decades, Akar Örme has been the trusted production partner behind some of the world\'s finest knitwear labels. Our 15,000 m² facility in İstanbul houses 120+ state-of-the-art knitting machines.', visible: true, order: 6 },
-      { id: 's8', key: 'brand_story_since', label: 'Since Year', type: 'text', content: 'Since 2000', visible: true, order: 7 },
-      { id: 's9', key: 'cta_section_title', label: 'CTA Section Title', type: 'text', content: 'Ready to Bring Your Vision to Life?', visible: true, order: 8 },
-      { id: 's10', key: 'cta_section_text', label: 'CTA Section Body', type: 'textarea', content: 'Whether you need 500 metres or 50,000 — our team is ready to engineer the perfect knitwear solution for your brand.', visible: true, order: 9 },
-    ], updatedAt: '2025-01-01T10:00:00Z' },
-    { id: 'p2', slug: 'about', title: 'About Us', sections: [
-      { id: 's11', key: 'page_title', label: 'Page Title', type: 'text', content: 'About Us', visible: true, order: 0 },
-      { id: 's12', key: 'page_subtitle', label: 'Page Subtitle', type: 'textarea', content: '25+ years of precision knitwear manufacturing — from a 12-machine workshop to a world-class production facility.', visible: true, order: 1 },
-      { id: 's13', key: 'philosophy_precision', label: 'Philosophy: Precision', type: 'textarea', content: 'Every stitch is calibrated, every tension measured. We treat knitwear manufacturing as an exact science.', visible: true, order: 2 },
-      { id: 's14', key: 'philosophy_innovation', label: 'Philosophy: Innovation', type: 'textarea', content: 'Continuous investment in R&D and next-gen knitting technology keeps us at the leading edge of textile production.', visible: true, order: 3 },
-      { id: 's15', key: 'philosophy_sustainability', label: 'Philosophy: Sustainability', type: 'textarea', content: 'From waterless dyeing pilots to solar-powered operations — responsible production is woven into our DNA.', visible: true, order: 4 },
-      { id: 's16', key: 'mission', label: 'Mission Statement', type: 'textarea', content: 'To deliver premium knitwear fabrics and finished garments that exceed our partners\' expectations — through cutting-edge technology, rigorous quality control, and a deeply collaborative approach to manufacturing.', visible: true, order: 5 },
-      { id: 's17', key: 'vision', label: 'Vision', type: 'textarea', content: 'To be recognized globally as the gold-standard partner for premium knitwear production — setting new benchmarks in quality, innovation, and responsible manufacturing.', visible: true, order: 6 },
-    ], updatedAt: '2025-01-01T10:00:00Z' },
-    { id: 'p3', slug: 'contact', title: 'Contact', sections: [
-      { id: 's18', key: 'page_title', label: 'Page Title', type: 'text', content: 'Get In Touch', visible: true, order: 0 },
-      { id: 's19', key: 'page_subtitle', label: 'Page Subtitle', type: 'textarea', content: 'Ready to start your next knitwear project? Reach out to our team — we\'d love to hear from you.', visible: true, order: 1 },
-      { id: 's20', key: 'form_heading', label: 'Form Heading', type: 'text', content: 'Send Us a Message', visible: true, order: 2 },
-      { id: 's21', key: 'form_description', label: 'Form Description', type: 'text', content: 'Fill in the form below and our team will get back to you within 24 hours.', visible: true, order: 3 },
-    ], updatedAt: '2025-01-01T10:00:00Z' },
-    { id: 'p4', slug: 'collections', title: 'Collections', sections: [
-      { id: 's22', key: 'page_title', label: 'Page Title', type: 'text', content: 'Our Collections', visible: true, order: 0 },
-      { id: 's23', key: 'page_subtitle', label: 'Page Subtitle', type: 'textarea', content: 'Discover our curated knitwear collections — from lightweight summer essentials to heritage winter knits.', visible: true, order: 1 },
-    ], updatedAt: '2025-01-01T10:00:00Z' },
-    { id: 'p5', slug: 'references', title: 'References', sections: [
-      { id: 's24', key: 'page_title', label: 'Page Title', type: 'text', content: 'Our References', visible: true, order: 0 },
-      { id: 's25', key: 'page_subtitle', label: 'Page Subtitle', type: 'textarea', content: 'Trusted by 500+ brands across 30+ countries — building long-term partnerships through quality and reliability.', visible: true, order: 1 },
-    ], updatedAt: '2025-01-01T10:00:00Z' },
-    { id: 'p6', slug: 'footer', title: 'Footer', sections: [
-      { id: 's26', key: 'copyright', label: 'Copyright Text', type: 'text', content: '© {year} Akar Örme. All rights reserved.', visible: true, order: 0 },
-    ], updatedAt: '2025-01-01T10:00:00Z' },
-  ];
+  const seedPages: PageContent[] = DEFAULT_PAGE_CONTENT;
   setStore(KEYS.pages, seedPages);
 
   // Seed activity

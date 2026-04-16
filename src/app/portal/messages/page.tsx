@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { getCurrentClientId } from '@/lib/b2b-auth';
 import { usePortalContext } from '@/app/portal/template';
 import {
@@ -14,6 +15,7 @@ import type { B2BConversation, B2BMessage } from '@/types/b2b';
 
 export default function PortalMessages() {
   const { client } = usePortalContext();
+  const searchParams = useSearchParams();
   const [conversations, setConversations] = useState<B2BConversation[]>([]);
   const [selectedConv, setSelectedConv] = useState<B2BConversation | null>(null);
   const [messages, setMessages] = useState<B2BMessage[]>([]);
@@ -27,18 +29,28 @@ export default function PortalMessages() {
 
   const refresh = useCallback(() => {
     if (!cid) return;
-    setConversations(getConversations(cid));
+    const items = getConversations(cid);
+    setConversations(items);
   }, [cid]);
 
   useEffect(() => { refresh(); }, [refresh]);
 
-  function openConversation(conv: B2BConversation) {
+  const openConversation = useCallback((conv: B2BConversation) => {
     setSelectedConv(conv);
     setMessages(getMessagesForConversation(conv.id));
     markConversationRead(conv.id, 'client');
     refresh();
     setShowNew(false);
-  }
+  }, [refresh]);
+
+  useEffect(() => {
+    const conversationId = searchParams.get('conversation');
+    if (!conversationId || conversations.length === 0) return;
+    const target = conversations.find((item) => item.id === conversationId);
+    if (target) {
+      openConversation(target);
+    }
+  }, [conversations, openConversation, searchParams]);
 
   function handleSend(e: React.FormEvent) {
     e.preventDefault();

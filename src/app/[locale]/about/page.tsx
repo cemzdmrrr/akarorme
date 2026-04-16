@@ -6,6 +6,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
 import Timeline from '@/components/Timeline';
+import { getPersistedPages } from '@/lib/admin-blob-store';
+import { getPageBySlug, getPageSectionContent } from '@/data/page-content';
 
 export async function generateMetadata({
   params,
@@ -26,15 +28,31 @@ export default async function AboutPage({
 }) {
   const dict = await getDictionary(params.locale);
   const t = dict.about;
+  const pages = await getPersistedPages();
+  const aboutPage = getPageBySlug(pages, 'about');
+  const values = [
+    {
+      title: getPageSectionContent(aboutPage, 'value_1_title', params.locale, t.values[0].title),
+      description: getPageSectionContent(aboutPage, 'value_1_description', params.locale, t.values[0].description),
+    },
+    {
+      title: getPageSectionContent(aboutPage, 'value_2_title', params.locale, t.values[1].title),
+      description: getPageSectionContent(aboutPage, 'value_2_description', params.locale, t.values[1].description),
+    },
+    {
+      title: getPageSectionContent(aboutPage, 'value_3_title', params.locale, t.values[2].title),
+      description: getPageSectionContent(aboutPage, 'value_3_description', params.locale, t.values[2].description),
+    },
+  ];
 
   return (
     <>
       <Navbar locale={params.locale} dict={{ nav: dict.nav }} />
       <main>
         <PageHero
-          title={t.heroTitle}
-          highlight={t.heroHighlight}
-          subtitle={t.heroSubtitle}
+          title={getPageSectionContent(aboutPage, 'hero_title', params.locale, t.heroTitle)}
+          highlight={getPageSectionContent(aboutPage, 'hero_highlight', params.locale, t.heroHighlight)}
+          subtitle={getPageSectionContent(aboutPage, 'hero_subtitle', params.locale, t.heroSubtitle)}
           breadcrumbs={[
             { label: dict.common.home, href: `/${params.locale}` },
             { label: dict.common.about },
@@ -47,14 +65,15 @@ export default async function AboutPage({
         <section className="section-padding bg-brand-cream">
           <div className="container-xl text-center">
             <p className="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-brand-accent-dark">
-              {t.philosophyLabel}
+              {getPageSectionContent(aboutPage, 'philosophy_label', params.locale, t.philosophyLabel)}
             </p>
             <h2 className="font-display text-4xl font-bold tracking-tight text-brand-dark md:text-5xl">
-              {t.philosophyTitle} <span className="accent">{t.philosophyHighlight}</span>
+              {getPageSectionContent(aboutPage, 'philosophy_title', params.locale, t.philosophyTitle)}{' '}
+              <span className="accent">{getPageSectionContent(aboutPage, 'philosophy_highlight', params.locale, t.philosophyHighlight)}</span>
             </h2>
 
             <div className="mx-auto mt-14 grid max-w-4xl gap-6 md:grid-cols-3">
-              {t.values.map((card) => (
+              {values.map((card) => (
                 <div
                   key={card.title}
                   className="rounded-2xl border border-brand-sand/60 bg-white p-8 text-left transition-all hover:border-brand-accent/20 hover:shadow-card-hover"
@@ -76,18 +95,18 @@ export default async function AboutPage({
           <div className="container-xl grid gap-8 md:grid-cols-2">
             <div className="rounded-2xl border border-brand-sand/60 bg-brand-cream p-10">
               <h3 className="mb-4 font-display text-xl font-bold text-brand-dark">
-                {t.missionTitle}
+                {getPageSectionContent(aboutPage, 'mission_title', params.locale, t.missionTitle)}
               </h3>
               <p className="text-sm leading-relaxed text-brand-grey">
-                {t.missionText}
+                {getPageSectionContent(aboutPage, 'mission_text', params.locale, t.missionText)}
               </p>
             </div>
             <div className="rounded-2xl border border-brand-sand/60 bg-brand-cream p-10">
               <h3 className="mb-4 font-display text-xl font-bold text-brand-dark">
-                {t.visionTitle}
+                {getPageSectionContent(aboutPage, 'vision_title', params.locale, t.visionTitle)}
               </h3>
               <p className="text-sm leading-relaxed text-brand-grey">
-                {t.visionText}
+                {getPageSectionContent(aboutPage, 'vision_text', params.locale, t.visionText)}
               </p>
             </div>
           </div>
@@ -97,10 +116,11 @@ export default async function AboutPage({
         <section className="section-padding bg-brand-cream">
           <div className="container-xl">
             <h2 className="mb-4 text-center font-display text-4xl font-bold tracking-tight text-brand-dark md:text-5xl">
-              {t.factoryTitle} <span className="accent">{t.factoryHighlight}</span>
+              {getPageSectionContent(aboutPage, 'factory_title', params.locale, t.factoryTitle)}{' '}
+              <span className="accent">{getPageSectionContent(aboutPage, 'factory_highlight', params.locale, t.factoryHighlight)}</span>
             </h2>
             <p className="mx-auto mb-12 max-w-lg text-center text-brand-grey">
-              {t.factoryDesc}
+              {getPageSectionContent(aboutPage, 'factory_description', params.locale, t.factoryDesc)}
             </p>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

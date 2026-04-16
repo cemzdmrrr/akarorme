@@ -6,6 +6,8 @@ import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
 import CollectionFilter from '@/components/CollectionFilter';
 import { getServerModels } from '@/data/models';
+import { getPersistedPages } from '@/lib/admin-blob-store';
+import { getPageBySlug, getPageSectionContent } from '@/data/page-content';
 
 export const revalidate = 60;
 
@@ -28,15 +30,17 @@ export default async function CollectionsPage({
 }) {
   const dict = await getDictionary(params.locale);
   const models = await getServerModels();
+  const pages = await getPersistedPages();
+  const collectionsPage = getPageBySlug(pages, 'collections');
 
   return (
     <>
       <Navbar locale={params.locale} dict={{ nav: dict.nav }} />
       <main>
         <PageHero
-          title={dict.collections.heroTitle}
-          highlight={dict.collections.heroHighlight}
-          subtitle={dict.collections.heroSubtitle}
+          title={getPageSectionContent(collectionsPage, 'hero_title', params.locale, dict.collections.heroTitle)}
+          highlight={getPageSectionContent(collectionsPage, 'hero_highlight', params.locale, dict.collections.heroHighlight)}
+          subtitle={getPageSectionContent(collectionsPage, 'hero_subtitle', params.locale, dict.collections.heroSubtitle)}
           breadcrumbs={[
             { label: dict.common.home, href: `/${params.locale}` },
             { label: dict.common.collections },

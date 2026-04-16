@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { revalidatePath } from 'next/cache';
 import {
   getPersistedPages,
 } from '@/lib/admin-blob-store';

@@ -1,3 +1,5 @@
+import type { Locale } from '@/i18n/config';
+
 /* ===================================================
    Admin CMS type definitions
    =================================================== */
@@ -99,6 +101,7 @@ export interface PageSection {
   label: string;
   type: 'text' | 'textarea' | 'image' | 'rich-text';
   content: string;
+  translations?: Partial<Record<Locale, string>>;
   visible: boolean;
   order: number;
 }
