@@ -48,7 +48,7 @@ export default function BrandStory({ dict, locale }: { dict: BrandStoryDict; loc
             <div className="relative aspect-square overflow-hidden rounded-2xl">
               <Image
                 src="/images/brand/brand-1.jpg"
-                alt="Colorful yarn spools and thread bobbins"
+                alt="Renkli iplik makaraları ve bobinler"
                 fill
                 className="object-cover"
                 sizes="(min-width: 1024px) 25vw, 50vw"
@@ -57,7 +57,7 @@ export default function BrandStory({ dict, locale }: { dict: BrandStoryDict; loc
             <div className="relative aspect-[3/4] translate-y-8 overflow-hidden rounded-2xl">
               <Image
                 src="/images/brand/brand-2.jpg"
-                alt="Industrial textile knitting machine"
+                alt="Endüstriyel tekstil örme makinesi"
                 fill
                 className="object-cover"
                 sizes="(min-width: 1024px) 25vw, 50vw"
@@ -66,7 +66,7 @@ export default function BrandStory({ dict, locale }: { dict: BrandStoryDict; loc
             <div className="relative col-span-2 aspect-[2/1] overflow-hidden rounded-2xl">
               <Image
                 src="/images/brand/brand-3.jpg"
-                alt="Rows of finished fabric rolls in factory"
+                alt="Fabrikada sıralanmış bitmiş kumaş ruloları"
                 fill
                 className="object-cover"
                 sizes="(min-width: 1024px) 50vw, 100vw"

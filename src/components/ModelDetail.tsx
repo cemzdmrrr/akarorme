@@ -29,9 +29,10 @@ export default function ModelDetail({
   const [colorImageIdx, setColorImageIdx] = useState(0);
 
   // Get all images for the active color
-  const colorImages = model.colors[activeColor]?.images ?? 
+  const colorImages =
+    model.colors[activeColor]?.images ??
     (model.colors[activeColor]?.image ? [model.colors[activeColor].image!] : []);
-  
+
   // Determine which image to show based on selected color and image index
   const activeImage = colorImages[colorImageIdx] || model.colors[activeColor]?.image || model.image;
 
@@ -66,19 +67,25 @@ export default function ModelDetail({
                       className="h-full w-full object-contain object-center"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center text-lg text-brand-grey">{model.name}</div>
+                    <div className="flex h-full w-full items-center justify-center text-lg text-brand-grey">
+                      {model.name}
+                    </div>
                   )}
                 </motion.div>
               </AnimatePresence>
+
               {/* Colour indicator ring */}
-              <div className="absolute inset-0 rounded-2xl ring-2 ring-inset" style={{ '--tw-ring-color': model.colors[activeColor]?.hex } as React.CSSProperties} />
+              <div
+                className="absolute inset-0 rounded-2xl ring-2 ring-inset"
+                style={{ '--tw-ring-color': model.colors[activeColor]?.hex } as React.CSSProperties}
+              />
 
               {/* Prev / Next arrows */}
               {colorImages.length > 1 && (
                 <>
                   <button
                     onClick={() => setColorImageIdx((prev) => (prev - 1 + colorImages.length) % colorImages.length)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 backdrop-blur-sm p-3 shadow-md text-brand-dark hover:bg-white transition-colors"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-3 text-brand-dark shadow-md transition-colors hover:bg-white"
                     aria-label="Önceki görsel"
                   >
                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -87,7 +94,7 @@ export default function ModelDetail({
                   </button>
                   <button
                     onClick={() => setColorImageIdx((prev) => (prev + 1) % colorImages.length)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 backdrop-blur-sm p-3 shadow-md text-brand-dark hover:bg-white transition-colors"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-3 text-brand-dark shadow-md transition-colors hover:bg-white"
                     aria-label="Sonraki görsel"
                   >
                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -95,7 +102,7 @@ export default function ModelDetail({
                     </svg>
                   </button>
                   {/* Image counter */}
-                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/50 backdrop-blur-sm px-3 py-1 text-xs text-white font-medium">
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
                     {colorImageIdx + 1} / {colorImages.length}
                   </div>
                 </>
@@ -109,10 +116,10 @@ export default function ModelDetail({
                   <button
                     key={idx}
                     onClick={() => setColorImageIdx(idx)}
-                    className={`shrink-0 h-16 w-16 rounded-lg overflow-hidden border-2 transition-all ${
+                    className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 transition-all ${
                       colorImageIdx === idx
                         ? 'border-brand-accent-dark ring-1 ring-brand-accent'
-                        : 'border-transparent hover:border-brand-sand-dark opacity-70 hover:opacity-100'
+                        : 'border-transparent opacity-70 hover:border-brand-sand-dark hover:opacity-100'
                     }`}
                   >
                     <img src={img} alt="" className="h-full w-full object-cover" />
@@ -135,9 +142,7 @@ export default function ModelDetail({
             {dict.backToCollections}
           </Link>
 
-          <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-            {model.name}
-          </h1>
+          <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">{model.name}</h1>
           <p className="mt-1 text-brand-accent-dark">{model.tagline}</p>
 
           {/* Tags */}
@@ -166,14 +171,14 @@ export default function ModelDetail({
                   onClick={() => handleColorChange(i)}
                   className={`group relative h-11 w-11 rounded-full border-2 transition-all ${
                     activeColor === i
-                      ? 'border-brand-accent-dark scale-110'
+                      ? 'scale-110 border-brand-accent-dark'
                       : 'border-transparent hover:border-brand-sand-dark'
                   }`}
                   style={{ backgroundColor: c.hex }}
                   title={c.name}
                 >
                   {activeColor === i && (
-                    <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-brand-grey-light whitespace-nowrap">
+                    <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] text-brand-grey-light">
                       {c.name}
                     </span>
                   )}
@@ -189,7 +194,13 @@ export default function ModelDetail({
               className="group inline-flex items-center gap-2 rounded-full bg-brand-accent px-8 py-3.5 text-sm font-semibold text-white transition-all hover:bg-brand-accent-light hover:shadow-glow"
             >
               {dict.requestProduction}
-              <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
@@ -236,11 +247,9 @@ export default function ModelDetail({
             className="pt-8"
           >
             {activeTab === 'overview' && (
-              <div className="max-w-2xl space-y-4 text-brand-grey leading-relaxed">
+              <div className="max-w-2xl space-y-4 leading-relaxed text-brand-grey">
                 <p>{model.description}</p>
-                <p>
-                  {dict.overviewExtra}
-                </p>
+                <p>{dict.overviewExtra}</p>
               </div>
             )}
 
@@ -252,26 +261,21 @@ export default function ModelDetail({
                     className="flex items-center justify-between rounded-xl bg-brand-cream px-6 py-4"
                   >
                     <span className="text-sm text-brand-grey">{spec.label}</span>
-                    <span className="font-display text-sm font-semibold text-brand-dark">
-                      {spec.value}
-                    </span>
+                    <span className="font-display text-sm font-semibold text-brand-dark">{spec.value}</span>
                   </div>
                 ))}
                 {model.specs.length === 0 && (
-                  <p className="text-sm text-brand-grey col-span-2">Teknik bilgi henüz eklenmemiş.</p>
+                  <p className="col-span-2 text-sm text-brand-grey">Teknik bilgi henüz eklenmemiş.</p>
                 )}
               </div>
             )}
 
             {activeTab === 'gallery' && (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {(model.gallery.length > 0
-                  ? model.gallery
-                  : [model.image]
-                ).map((src, i) => (
+                {(model.gallery.length > 0 ? model.gallery : [model.image]).map((src, i) => (
                   <div
                     key={i}
-                    className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-brand-cream"
+                    className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-brand-cream"
                   >
                     {src && (
                       <img

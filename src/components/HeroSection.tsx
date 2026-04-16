@@ -113,7 +113,7 @@ export default function HeroSection({ dict, locale }: { dict: HeroDict; locale: 
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl">
             <Image
               src="/images/hero/hero-showcase.jpg"
-              alt="Premium knit fabric texture close-up"
+              alt="Premium triko kumaş dokusunun yakın plan görünümü"
               fill
               className="object-cover"
               priority
