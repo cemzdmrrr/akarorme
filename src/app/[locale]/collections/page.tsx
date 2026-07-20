@@ -49,7 +49,26 @@ export default async function CollectionsPage({
 
         <section className="section-padding bg-brand-cream">
           <div className="container-xl">
-            <CollectionFilter models={models} dict={dict.collectionFilter} locale={params.locale} />
+            <CollectionFilter
+              models={models}
+              locale={params.locale}
+              dict={{
+                ...dict.collectionFilter,
+                men: getPageSectionContent(collectionsPage, 'filter_men', params.locale, dict.collectionFilter.men),
+                women: getPageSectionContent(collectionsPage, 'filter_women', params.locale, dict.collectionFilter.women),
+                winter: getPageSectionContent(collectionsPage, 'filter_winter', params.locale, dict.collectionFilter.winter),
+                summer: getPageSectionContent(collectionsPage, 'filter_summer', params.locale, dict.collectionFilter.summer),
+                fine: getPageSectionContent(collectionsPage, 'filter_fine', params.locale, dict.collectionFilter.fine),
+                heavy: getPageSectionContent(collectionsPage, 'filter_heavy', params.locale, dict.collectionFilter.heavy),
+                viewDetails: getPageSectionContent(
+                  collectionsPage,
+                  'view_details',
+                  params.locale,
+                  dict.collectionFilter.viewDetails,
+                ),
+                noMatch: getPageSectionContent(collectionsPage, 'no_match', params.locale, dict.collectionFilter.noMatch),
+              }}
+            />
           </div>
         </section>
       </main>

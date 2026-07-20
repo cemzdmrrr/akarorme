@@ -61,6 +61,24 @@ export interface AdminReference {
   createdAt: string;
 }
 
+export interface AdminBlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  coverImage: string;
+  category: string;
+  author: string;
+  seoDescription: string;
+  tags: string[];
+  status: 'published' | 'draft';
+  featured: boolean;
+  publishedAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ContactMessage {
   id: string;
   name: string;
@@ -77,19 +95,19 @@ export interface ContactMessage {
 export interface MediaItem {
   id: string;
   name: string;
-  url: string;           // base64 data URL for local storage
-  type: string;          // mime type
-  size: number;          // bytes
+  url: string;
+  type: string;
+  size: number;
   width?: number;
   height?: number;
-  folder: string;        // folder path e.g. 'general', 'products', 'references'
+  folder: string;
   alt?: string;
   createdAt: string;
 }
 
 export interface PageContent {
   id: string;
-  slug: string;          // 'home' | 'about' | 'contact' etc
+  slug: string;
   title: string;
   sections: PageSection[];
   updatedAt: string;
@@ -128,8 +146,8 @@ export interface DashboardStats {
 
 export interface ActivityEntry {
   id: string;
-  action: string;       // 'created' | 'updated' | 'deleted'
-  entity: string;       // 'model' | 'collection' etc
+  action: string;
+  entity: string;
   entityName: string;
   timestamp: string;
 }

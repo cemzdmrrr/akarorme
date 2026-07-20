@@ -6,6 +6,7 @@
 
 import { put, get } from '@vercel/blob';
 import type {
+  AdminBlogPost,
   AdminCollection,
   AdminFabricType,
   AdminReference,
@@ -18,6 +19,7 @@ import { DEFAULT_PAGE_CONTENT, mergePagesWithDefaults } from '@/data/page-conten
 
 // ─── Blob Paths ──────────────────────────────────────
 const BLOB = {
+  blogPosts: 'data/blog-posts.json',
   references: 'data/references.json',
   collections: 'data/collections.json',
   fabrics: 'data/fabrics.json',
@@ -292,6 +294,58 @@ export async function deletePersistedMedia(id: string): Promise<boolean> {
   return true;
 }
 
+// BLOG POSTS
+export async function getPersistedBlogPosts(): Promise<AdminBlogPost[]> {
+  const data = await readBlob<AdminBlogPost[]>(BLOB.blogPosts);
+  return Array.isArray(data) ? data : [];
+}
+
+export async function createPersistedBlogPost(
+  data: Omit<AdminBlogPost, 'id' | 'slug' | 'createdAt' | 'updatedAt'>,
+): Promise<AdminBlogPost> {
+  const now = new Date().toISOString();
+  const post: AdminBlogPost = {
+    ...data,
+    id: generateId(),
+    slug: slugify(data.title),
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  const list = await getPersistedBlogPosts();
+  list.unshift(post);
+  await writeBlob(BLOB.blogPosts, list);
+  return post;
+}
+
+export async function updatePersistedBlogPost(
+  id: string,
+  data: Partial<AdminBlogPost>,
+): Promise<AdminBlogPost | null> {
+  const list = await getPersistedBlogPosts();
+  const index = list.findIndex((post) => post.id === id);
+  if (index === -1) return null;
+
+  list[index] = {
+    ...list[index],
+    ...data,
+    slug: data.title ? slugify(data.title) : list[index].slug,
+    updatedAt: new Date().toISOString(),
+  };
+
+  await writeBlob(BLOB.blogPosts, list);
+  return list[index];
+}
+
+export async function deletePersistedBlogPost(id: string): Promise<boolean> {
+  const list = await getPersistedBlogPosts();
+  const index = list.findIndex((post) => post.id === id);
+  if (index === -1) return false;
+  list.splice(index, 1);
+  await writeBlob(BLOB.blogPosts, list);
+  return true;
+}
+
 // ─── PAGES ──────────────────────────────────────────
 export async function getPersistedPages(): Promise<PageContent[]> {
   const data = await readBlob<PageContent[]>(BLOB.pages);
@@ -321,7 +375,7 @@ export async function persistPages(pages: PageContent[]): Promise<void> {
 const DEFAULT_SETTINGS: SiteSettings = {
   siteName: 'AKAR ÖRME',
   siteDescription: 'Premium Knitwear Manufacturing',
-  contactEmail: 'info@akarorme.com',
+  contactEmail: 'bilgi@akarorme.com',
   contactPhone: '+90 (212) 886 00 42',
   address: 'İkitelli OSB, Atatürk Bulvarı No: 42, Başakşehir, İstanbul 34307',
   footerText: '© {year} Akar Örme. All rights reserved.',

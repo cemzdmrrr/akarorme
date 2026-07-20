@@ -8,7 +8,7 @@ import ModelGridClient from '@/components/ModelGridClient';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
 import { getServerFeaturedModels } from '@/data/models';
-import { getPersistedPages } from '@/lib/admin-blob-store';
+import { getPersistedFabrics, getPersistedPages } from '@/lib/admin-blob-store';
 import { getPageBySlug, getPageSectionContent } from '@/data/page-content';
 
 export const revalidate = 60; // ISR: revalidate every 60 seconds
@@ -20,6 +20,7 @@ export default async function HomePage({
 }) {
   const dict = await getDictionary(params.locale);
   const featured = await getServerFeaturedModels();
+  const fabrics = await getPersistedFabrics();
   const pages = await getPersistedPages();
   const homePage = getPageBySlug(pages, 'home');
 
@@ -52,7 +53,31 @@ export default async function HomePage({
             link: getPageSectionContent(homePage, 'brand_link_text', params.locale, dict.brandStory.link),
           }}
         />
-        <FabricCards dict={dict.fabricCards} fabrics={dict.data.fabrics} />
+        <FabricCards
+          dict={{
+            ...dict.fabricCards,
+            label: getPageSectionContent(homePage, 'fabric_label', params.locale, dict.fabricCards.label),
+            heading: getPageSectionContent(homePage, 'fabric_heading', params.locale, dict.fabricCards.heading),
+            highlight: getPageSectionContent(homePage, 'fabric_highlight', params.locale, dict.fabricCards.highlight),
+            description: getPageSectionContent(
+              homePage,
+              'fabric_description',
+              params.locale,
+              dict.fabricCards.description,
+            ),
+          }}
+          fabrics={
+            fabrics.length > 0
+              ? fabrics.map((fabric) => ({
+                  name: fabric.name,
+                  gauge: fabric.gauge,
+                  composition: fabric.composition,
+                  description: fabric.description,
+                  image: fabric.image,
+                }))
+              : dict.data.fabrics
+          }
+        />
         <ModelGridClient staticModels={featured} dict={dict.modelGrid} locale={params.locale} onlyFeatured />
         <CTASection
           locale={params.locale}

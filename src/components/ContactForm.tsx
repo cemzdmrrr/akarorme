@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
 import { RevealOnScroll } from '@/components/Motion';
 
 interface ContactFormDict {
@@ -37,7 +37,9 @@ interface ContactFormDict {
     address: string;
     addressLines: string[];
     email: string;
+    emailLines: string[];
     phone: string;
+    phoneLines: string[];
     hours: string;
     hourLines: string[];
   };
@@ -64,9 +66,12 @@ export default function ContactForm({ dict }: { dict: ContactFormDict }) {
       form.reportValidity();
       return;
     }
+
     setError('');
     setSending(true);
+
     const data = new FormData(form);
+
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
@@ -75,15 +80,22 @@ export default function ContactForm({ dict }: { dict: ContactFormDict }) {
           name: data.get('name'),
           email: data.get('email'),
           company: data.get('company') || '',
-          subject: data.get('subject') || 'General Inquiry',
+          subject: data.get('subject') || '',
           message: data.get('message'),
         }),
       });
-      if (!res.ok) throw new Error('Failed to send');
+
+      if (!res.ok) {
+        throw new Error('Failed to send');
+      }
+
       setSubmitted(true);
-      setTimeout(() => { setSubmitted(false); form.reset(); }, 3000);
+      setTimeout(() => {
+        setSubmitted(false);
+        form.reset();
+      }, 3000);
     } catch {
-      setError('Failed to send message. Please try again.');
+      setError(dict.error);
     } finally {
       setSending(false);
     }
@@ -91,24 +103,42 @@ export default function ContactForm({ dict }: { dict: ContactFormDict }) {
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr]">
-      {/* Form */}
       <RevealOnScroll>
         <div className="rounded-2xl border border-brand-sand/60 bg-white p-8 shadow-card-light">
-          <h2 className="font-display text-2xl font-bold text-brand-dark">
-            {dict.heading}
-          </h2>
-          <p className="mt-1 text-sm text-brand-grey">
-            {dict.subheading}
-          </p>
+          <h2 className="font-display text-2xl font-bold text-brand-dark">{dict.heading}</h2>
+          <p className="mt-1 text-sm text-brand-grey">{dict.subheading}</p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5" noValidate>
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label={dict.fields.fullName} name="name" type="text" placeholder={dict.placeholders.name} required />
-              <Field label={dict.fields.email} name="email" type="email" placeholder={dict.placeholders.email} required />
+              <Field
+                label={dict.fields.fullName}
+                name="name"
+                type="text"
+                placeholder={dict.placeholders.name}
+                required
+              />
+              <Field
+                label={dict.fields.email}
+                name="email"
+                type="email"
+                placeholder={dict.placeholders.email}
+                required
+              />
             </div>
+
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label={dict.fields.company} name="company" type="text" placeholder={dict.placeholders.company} />
-              <Field label={dict.fields.phone} name="phone" type="tel" placeholder={dict.placeholders.phone} />
+              <Field
+                label={dict.fields.company}
+                name="company"
+                type="text"
+                placeholder={dict.placeholders.company}
+              />
+              <Field
+                label={dict.fields.phone}
+                name="phone"
+                type="tel"
+                placeholder={dict.placeholders.phone}
+              />
             </div>
 
             <div>
@@ -120,9 +150,9 @@ export default function ContactForm({ dict }: { dict: ContactFormDict }) {
                 defaultValue=""
                 className="w-full appearance-none rounded-xl border border-brand-sand bg-brand-cream px-4 py-3.5 text-sm text-brand-dark outline-none transition-all focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20"
               >
-                {subjects.map((s) => (
-                  <option key={s.value} value={s.value} disabled={s.value === ''}>
-                    {s.label}
+                {subjects.map((subject) => (
+                  <option key={subject.value} value={subject.value} disabled={subject.value === ''}>
+                    {subject.label}
                   </option>
                 ))}
               </select>
@@ -165,50 +195,33 @@ export default function ContactForm({ dict }: { dict: ContactFormDict }) {
                 </>
               )}
             </button>
-            {error && <p className="mt-2 text-sm text-red-400">{dict.error}</p>}
+
+            {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
           </form>
         </div>
       </RevealOnScroll>
 
-      {/* Info column */}
       <div className="flex flex-col gap-5">
         <RevealOnScroll delay={0.1}>
-          <InfoCard
-            icon={<MapPinIcon />}
-            title={dict.infoCards.address}
-            lines={dict.infoCards.addressLines}
-          />
+          <InfoCard icon={<MapPinIcon />} title={dict.infoCards.address} lines={dict.infoCards.addressLines} />
         </RevealOnScroll>
         <RevealOnScroll delay={0.15}>
-          <InfoCard
-            icon={<MailIcon />}
-            title={dict.infoCards.email}
-            lines={['bilgi@akarorme.com']}
-          />
+          <InfoCard icon={<MailIcon />} title={dict.infoCards.email} lines={dict.infoCards.emailLines} />
         </RevealOnScroll>
         <RevealOnScroll delay={0.2}>
-          <InfoCard
-            icon={<PhoneIcon />}
-            title={dict.infoCards.phone}
-            lines={['—']}
-          />
+          <InfoCard icon={<PhoneIcon />} title={dict.infoCards.phone} lines={dict.infoCards.phoneLines} />
         </RevealOnScroll>
         <RevealOnScroll delay={0.25}>
-          <InfoCard
-            icon={<ClockIcon />}
-            title={dict.infoCards.hours}
-            lines={dict.infoCards.hourLines}
-          />
+          <InfoCard icon={<ClockIcon />} title={dict.infoCards.hours} lines={dict.infoCards.hourLines} />
         </RevealOnScroll>
 
-        {/* Map */}
         <RevealOnScroll delay={0.3}>
           <div className="overflow-hidden rounded-2xl border border-brand-sand/60 bg-white">
             <iframe
               src="https://www.google.com/maps?q=2VCH%2BQG+G%C3%BCng%C3%B6ren,+%C4%B0stanbul&output=embed"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Akar Örme Factory Location"
+              title="Akar Orme Factory Location"
               className="aspect-video w-full"
               allowFullScreen
             />
@@ -219,7 +232,6 @@ export default function ContactForm({ dict }: { dict: ContactFormDict }) {
   );
 }
 
-/* ── Field helper ── */
 function Field({
   label,
   name,
@@ -249,25 +261,24 @@ function Field({
   );
 }
 
-/* ── Info card ── */
 function InfoCard({
   icon,
   title,
   lines,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   lines: string[];
 }) {
   return (
-    <div className="flex gap-4 rounded-2xl border border-brand-sand/60 bg-white p-6 transition-all hover:border-brand-accent/20 hover:shadow-card-hover hover:translate-x-1">
+    <div className="flex gap-4 rounded-2xl border border-brand-sand/60 bg-white p-6 transition-all hover:translate-x-1 hover:border-brand-accent/20 hover:shadow-card-hover">
       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-accent/10 text-brand-accent-dark">
         {icon}
       </div>
       <div>
         <h4 className="font-display text-sm font-semibold text-brand-dark">{title}</h4>
-        {lines.map((line, i) => (
-          <p key={i} className="text-sm text-brand-grey leading-relaxed">
+        {lines.map((line, index) => (
+          <p key={index} className="text-sm leading-relaxed text-brand-grey">
             {line}
           </p>
         ))}
@@ -276,7 +287,6 @@ function InfoCard({
   );
 }
 
-/* ── SVG icons ── */
 function MapPinIcon() {
   return (
     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
@@ -285,6 +295,7 @@ function MapPinIcon() {
     </svg>
   );
 }
+
 function MailIcon() {
   return (
     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
@@ -293,6 +304,7 @@ function MailIcon() {
     </svg>
   );
 }
+
 function PhoneIcon() {
   return (
     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
@@ -300,6 +312,7 @@ function PhoneIcon() {
     </svg>
   );
 }
+
 function ClockIcon() {
   return (
     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>

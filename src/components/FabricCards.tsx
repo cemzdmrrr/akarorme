@@ -15,6 +15,7 @@ interface FabricData {
   gauge: string;
   composition: string;
   description: string;
+  image?: string;
 }
 
 const FABRIC_IMAGES: Record<string, string> = {
@@ -67,7 +68,7 @@ export default function FabricCards({ dict, fabrics }: { dict: FabricDict; fabri
                 {/* Fabric image */}
                 <div className="relative mb-5 aspect-[4/3] overflow-hidden rounded-xl bg-brand-cream-dark">
                   <Image
-                    src={FABRIC_IMAGES[fabric.name] || '/images/fabrics/single-jersey.jpg'}
+                    src={fabric.image || FABRIC_IMAGES[fabric.name] || '/images/fabrics/single-jersey.jpg'}
                     alt={fabric.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"

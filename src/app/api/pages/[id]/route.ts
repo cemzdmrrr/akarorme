@@ -10,7 +10,36 @@ function revalidateCmsPage(slug: string) {
   for (const locale of locales) {
     revalidatePath(`/${locale}`);
 
-    if (slug !== 'home' && slug !== 'footer') {
+    if (slug === 'global' || slug === 'footer') {
+      const marketingRoutes = [
+        '',
+        '/about',
+        '/collections',
+        '/technology',
+        '/references',
+        '/contact',
+        '/blog',
+      ];
+
+      for (const route of marketingRoutes) {
+        revalidatePath(`/${locale}${route}`);
+      }
+      continue;
+    }
+
+    if (slug === 'model-detail') {
+      revalidatePath(`/${locale}/collections`);
+      revalidatePath(`/${locale}/models/[slug]`, 'page');
+      continue;
+    }
+
+    if (slug === 'blog') {
+      revalidatePath(`/${locale}/blog`);
+      revalidatePath(`/${locale}/blog/[slug]`, 'page');
+      continue;
+    }
+
+    if (slug !== 'home') {
       revalidatePath(`/${locale}/${slug}`);
     }
   }

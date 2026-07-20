@@ -1,14 +1,12 @@
 /* ===================================================
-   Admin API Client — Calls /api/* for persistent
-   CRUD operations via Vercel Blob. Also syncs to
-   localStorage for backward compatibility with
-   dashboard stats.
+   Admin API Client
    =================================================== */
 
 import type {
-  AdminModel,
+  AdminBlogPost,
   AdminCollection,
   AdminFabricType,
+  AdminModel,
   AdminReference,
   ContactMessage,
   MediaItem,
@@ -19,8 +17,6 @@ import type {
 const headers = () => ({
   'Content-Type': 'application/json',
 });
-
-// ─── Models ─────────────────────────────────────────
 
 export async function fetchModels(): Promise<AdminModel[]> {
   const res = await fetch('/api/models', { cache: 'no-store' });
@@ -52,10 +48,7 @@ export async function apiCreateModel(
   return model;
 }
 
-export async function apiUpdateModel(
-  id: string,
-  data: Partial<AdminModel>,
-): Promise<AdminModel> {
+export async function apiUpdateModel(id: string, data: Partial<AdminModel>): Promise<AdminModel> {
   const res = await fetch(`/api/models/${encodeURIComponent(id)}`, {
     method: 'PUT',
     headers: headers(),
@@ -88,11 +81,9 @@ async function syncModelsToLocalStorage(): Promise<void> {
     localStorage.setItem('admin_models', JSON.stringify(models));
     window.dispatchEvent(new Event('admin-models-updated'));
   } catch {
-    // Silent fail — localStorage sync is best-effort
+    // local storage sync is best-effort
   }
 }
-
-// ─── References ─────────────────────────────────────
 
 export async function fetchReferences(): Promise<AdminReference[]> {
   const res = await fetch('/api/references', { cache: 'no-store' });
@@ -142,8 +133,6 @@ export async function apiDeleteReference(id: string): Promise<void> {
   }
 }
 
-// ─── Collections ────────────────────────────────────
-
 export async function fetchCollections(): Promise<AdminCollection[]> {
   const res = await fetch('/api/collections', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch collections');
@@ -191,8 +180,6 @@ export async function apiDeleteCollection(id: string): Promise<void> {
     throw new Error(err.error || 'Failed to delete collection');
   }
 }
-
-// ─── Fabrics ────────────────────────────────────────
 
 export async function fetchFabrics(): Promise<AdminFabricType[]> {
   const res = await fetch('/api/fabrics', { cache: 'no-store' });
@@ -242,8 +229,6 @@ export async function apiDeleteFabric(id: string): Promise<void> {
   }
 }
 
-// ─── Messages ───────────────────────────────────────
-
 export async function fetchMessages(): Promise<ContactMessage[]> {
   const res = await fetch('/api/messages', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch messages');
@@ -278,17 +263,13 @@ export async function apiDeleteMessage(id: string): Promise<void> {
   if (!res.ok) throw new Error('Failed to delete message');
 }
 
-// ─── Media ──────────────────────────────────────────
-
 export async function fetchMedia(): Promise<MediaItem[]> {
   const res = await fetch('/api/media', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch media');
   return res.json();
 }
 
-export async function apiAddMedia(
-  data: Omit<MediaItem, 'id' | 'createdAt'>,
-): Promise<MediaItem> {
+export async function apiAddMedia(data: Omit<MediaItem, 'id' | 'createdAt'>): Promise<MediaItem> {
   const res = await fetch('/api/media', {
     method: 'POST',
     headers: headers(),
@@ -301,10 +282,7 @@ export async function apiAddMedia(
   return res.json();
 }
 
-export async function apiUpdateMedia(
-  id: string,
-  data: Partial<MediaItem>,
-): Promise<MediaItem> {
+export async function apiUpdateMedia(id: string, data: Partial<MediaItem>): Promise<MediaItem> {
   const res = await fetch(`/api/media/${encodeURIComponent(id)}`, {
     method: 'PUT',
     headers: headers(),
@@ -322,7 +300,53 @@ export async function apiDeleteMedia(id: string): Promise<void> {
   if (!res.ok) throw new Error('Failed to delete media');
 }
 
-// ─── Pages ──────────────────────────────────────────
+export async function fetchBlogPosts(): Promise<AdminBlogPost[]> {
+  const res = await fetch('/api/blog-posts', { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch blog posts');
+  return res.json();
+}
+
+export async function apiCreateBlogPost(
+  data: Omit<AdminBlogPost, 'id' | 'slug' | 'createdAt' | 'updatedAt'>,
+): Promise<AdminBlogPost> {
+  const res = await fetch('/api/blog-posts', {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error(err.error || 'Failed to create blog post');
+  }
+  return res.json();
+}
+
+export async function apiUpdateBlogPost(
+  id: string,
+  data: Partial<AdminBlogPost>,
+): Promise<AdminBlogPost> {
+  const res = await fetch(`/api/blog-posts/${encodeURIComponent(id)}`, {
+    method: 'PUT',
+    headers: headers(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error(err.error || 'Failed to update blog post');
+  }
+  return res.json();
+}
+
+export async function apiDeleteBlogPost(id: string): Promise<void> {
+  const res = await fetch(`/api/blog-posts/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: headers(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error(err.error || 'Failed to delete blog post');
+  }
+}
 
 export async function fetchPages(): Promise<PageContent[]> {
   const res = await fetch('/api/pages', { cache: 'no-store' });
@@ -343,17 +367,13 @@ export async function apiUpdatePage(
   return res.json();
 }
 
-// ─── Settings ───────────────────────────────────────
-
 export async function fetchSettings(): Promise<SiteSettings> {
   const res = await fetch('/api/settings', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch settings');
   return res.json();
 }
 
-export async function apiUpdateSettings(
-  data: Partial<SiteSettings>,
-): Promise<SiteSettings> {
+export async function apiUpdateSettings(data: Partial<SiteSettings>): Promise<SiteSettings> {
   const res = await fetch('/api/settings', {
     method: 'PUT',
     headers: headers(),
@@ -363,12 +383,6 @@ export async function apiUpdateSettings(
   return res.json();
 }
 
-// ─── Utilities ──────────────────────────────────────
-
-/**
- * Save the admin API key to localStorage.
- * Called once from the settings page.
- */
 export function setApiKey(key: string): void {
   if (typeof window !== 'undefined') {
     localStorage.setItem('admin_api_key', key);

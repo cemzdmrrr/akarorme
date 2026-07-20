@@ -1,13 +1,13 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { usePortalContext } from '@/app/portal/template';
-import { getUnreadMessageCount } from '@/lib/b2b-store';
-import { getCurrentClientId } from '@/lib/b2b-auth';
-import { useEffect, useState } from 'react';
 import type { B2BClient } from '@/types/b2b';
+import { usePortalContext } from '@/app/portal/template';
+import { getCurrentClientId } from '@/lib/b2b-auth';
+import { getUnreadMessageCount } from '@/lib/b2b-store';
 
 const navItems = [
   { href: '/portal', label: 'Genel Bakış', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4' },
@@ -32,24 +32,35 @@ export default function PortalSidebar({ open, onClose, client }: Props) {
   const [unread, setUnread] = useState(0);
 
   useEffect(() => {
-    const cid = getCurrentClientId();
-    if (cid) setUnread(getUnreadMessageCount(cid));
+    const clientId = getCurrentClientId();
+    if (clientId) {
+      setUnread(getUnreadMessageCount(clientId));
+    }
   }, [pathname]);
 
   return (
     <>
-      {open && (
-        <div className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={onClose} />
-      )}
+      {open && <div className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={onClose} />}
 
-      <aside className={`
-        fixed inset-y-0 left-0 z-50 w-72 transform bg-brand-dark border-r border-brand-dark-3 transition-transform duration-300 lg:relative lg:translate-x-0
-        ${open ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+      <aside
+        className={`
+          fixed inset-y-0 left-0 z-50 w-72 transform border-r border-brand-dark-3 bg-brand-dark transition-transform duration-300 lg:relative lg:translate-x-0
+          ${open ? 'translate-x-0' : '-translate-x-full'}
+        `}
+      >
         <div className="flex h-full flex-col">
           <div className="border-b border-brand-dark-3 px-6 py-5">
             <Link href="/portal" className="block" onClick={onClose}>
-              <Image src="/images/logo-full.png" alt="AKAR ÖRME" width={120} height={32} className="h-7 w-auto brightness-0 invert" priority />
+              <Image
+                src="/images/logo-full.png"
+                alt="AKAR ÖRME"
+                width={120}
+                height={32}
+                className="h-7 w-auto brightness-0 invert"
+                quality={100}
+                unoptimized
+                priority
+              />
               <p className="mt-1.5 text-xs text-brand-grey">B2B Müşteri Portalı</p>
             </Link>
           </div>
@@ -70,9 +81,7 @@ export default function PortalSidebar({ open, onClose, client }: Props) {
 
           <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
             {navItems.map((item) => {
-              const active = item.href === '/portal'
-                ? pathname === '/portal'
-                : pathname.startsWith(item.href);
+              const active = item.href === '/portal' ? pathname === '/portal' : pathname.startsWith(item.href);
 
               return (
                 <Link

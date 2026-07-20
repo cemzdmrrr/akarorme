@@ -4,8 +4,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import type { Locale } from '@/i18n/config';
+import type { PageContent } from '@/types/admin';
+import { getPageBySlug, getPageSectionContent } from '@/data/page-content';
+import { cn } from '@/lib/utils';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 interface NavDict {
@@ -13,6 +16,7 @@ interface NavDict {
   about: string;
   collections: string;
   technology: string;
+  blog?: string;
   references: string;
   contact: string;
   toggleMenu: string;
@@ -22,14 +26,16 @@ export default function Navbar({ locale, dict }: { locale: string; dict: { nav: 
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [navLabels, setNavLabels] = useState(dict.nav);
 
   const navLinks = [
-    { href: `/${locale}`, label: dict.nav.home },
-    { href: `/${locale}/about`, label: dict.nav.about },
-    { href: `/${locale}/collections`, label: dict.nav.collections },
-    { href: `/${locale}/technology`, label: dict.nav.technology },
-    { href: `/${locale}/references`, label: dict.nav.references },
-    { href: `/${locale}/contact`, label: dict.nav.contact, cta: true },
+    { href: `/${locale}`, label: navLabels.home },
+    { href: `/${locale}/about`, label: navLabels.about },
+    { href: `/${locale}/collections`, label: navLabels.collections },
+    { href: `/${locale}/technology`, label: navLabels.technology },
+    { href: `/${locale}/blog`, label: navLabels.blog ?? 'Blog' },
+    { href: `/${locale}/references`, label: navLabels.references },
+    { href: `/${locale}/contact`, label: navLabels.contact, cta: true },
   ];
 
   useEffect(() => {
@@ -38,17 +44,41 @@ export default function Navbar({ locale, dict }: { locale: string; dict: { nav: 
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => setMobileOpen(false), [pathname]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch('/api/pages', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((pages) => {
+        if (cancelled || !Array.isArray(pages)) return;
+
+        const globalPage = getPageBySlug(pages as PageContent[], 'global');
+        setNavLabels({
+          ...dict.nav,
+          home: getPageSectionContent(globalPage, 'nav_home', locale as Locale, dict.nav.home),
+          about: getPageSectionContent(globalPage, 'nav_about', locale as Locale, dict.nav.about),
+          collections: getPageSectionContent(globalPage, 'nav_collections', locale as Locale, dict.nav.collections),
+          technology: getPageSectionContent(globalPage, 'nav_technology', locale as Locale, dict.nav.technology),
+          blog: getPageSectionContent(globalPage, 'nav_blog', locale as Locale, dict.nav.blog ?? 'Blog'),
+          references: getPageSectionContent(globalPage, 'nav_references', locale as Locale, dict.nav.references),
+          contact: getPageSectionContent(globalPage, 'nav_contact', locale as Locale, dict.nav.contact),
+        });
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [dict.nav, locale]);
 
   return (
     <>
       <header
         className={cn(
           'fixed inset-x-0 top-0 z-50 transition-all duration-500',
-          scrolled
-            ? 'bg-white shadow-md py-3'
-            : 'bg-white py-5',
+          scrolled ? 'bg-white py-3 shadow-md' : 'bg-white py-5',
         )}
       >
         <nav className="container-xl flex items-center justify-between">
@@ -59,17 +89,19 @@ export default function Navbar({ locale, dict }: { locale: string; dict: { nav: 
               width={120}
               height={32}
               className="h-8 w-auto"
+              quality={100}
+              unoptimized
               priority
             />
           </Link>
 
-          {/* Desktop links */}
           <div className="hidden items-center gap-8 md:flex">
             {navLinks.map((link) => {
               const active =
                 link.href === `/${locale}`
                   ? pathname === `/${locale}` || pathname === `/${locale}/`
                   : pathname.startsWith(link.href);
+
               return (
                 <Link
                   key={link.href}
@@ -97,35 +129,33 @@ export default function Navbar({ locale, dict }: { locale: string; dict: { nav: 
             <LanguageSwitcher locale={locale} />
           </div>
 
-          {/* Mobile toggle */}
           <button
             className="relative z-50 flex h-11 w-11 flex-col items-center justify-center gap-1.5 md:hidden"
-            onClick={() => setMobileOpen((p) => !p)}
+            onClick={() => setMobileOpen((prev) => !prev)}
             aria-label={dict.nav.toggleMenu}
           >
             <span
               className={cn(
                 'h-0.5 w-6 rounded transition-all duration-300',
-                mobileOpen ? 'bg-brand-dark-4 translate-y-2 rotate-45' : 'bg-brand-dark-4',
+                mobileOpen ? 'translate-y-2 rotate-45 bg-brand-dark-4' : 'bg-brand-dark-4',
               )}
             />
             <span
               className={cn(
                 'h-0.5 w-6 rounded transition-all duration-300',
-                mobileOpen ? 'bg-brand-dark-4 scale-x-0 opacity-0' : 'bg-brand-dark-4',
+                mobileOpen ? 'scale-x-0 opacity-0 bg-brand-dark-4' : 'bg-brand-dark-4',
               )}
             />
             <span
               className={cn(
                 'h-0.5 w-6 rounded transition-all duration-300',
-                mobileOpen ? 'bg-brand-dark-4 -translate-y-2 -rotate-45' : 'bg-brand-dark-4',
+                mobileOpen ? '-translate-y-2 -rotate-45 bg-brand-dark-4' : 'bg-brand-dark-4',
               )}
             />
           </button>
         </nav>
       </header>
 
-      {/* Mobile menu overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -134,17 +164,17 @@ export default function Navbar({ locale, dict }: { locale: string; dict: { nav: 
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-white/95 backdrop-blur-xl md:hidden"
           >
-            {navLinks.map((link, i) => (
+            {navLinks.map((link, index) => (
               <motion.div
                 key={link.href}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 * i }}
+                transition={{ delay: 0.05 * index }}
               >
                 <Link
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="font-display text-2xl font-semibold tracking-wide text-brand-dark transition-colors hover:text-brand-green py-3"
+                  className="py-3 font-display text-2xl font-semibold tracking-wide text-brand-dark transition-colors hover:text-brand-green"
                 >
                   {link.label}
                 </Link>

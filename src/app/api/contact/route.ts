@@ -1,6 +1,12 @@
-
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+
+const CONTACT_FORM_TO_EMAIL =
+  process.env.CONTACT_FORM_TO_EMAIL?.trim() || 'bilgi@akarorme.com';
+
+function sanitize(value: string) {
+  return value.replace(/<[^>]*>/g, '').trim().slice(0, 2000);
+}
 
 export async function POST(request: Request) {
   try {
@@ -11,13 +17,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Basic email format validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
-
-    // Sanitize inputs - strip HTML tags
-    const sanitize = (str: string) => str.replace(/<[^>]*>/g, '').trim().slice(0, 2000);
 
     const sanitizedData = {
       name: sanitize(name),
@@ -27,20 +29,16 @@ export async function POST(request: Request) {
       message: sanitize(message),
     };
 
-    // Save to admin CMS messages (Vercel Blob-backed)
-    const { createPersistedMessage, getPersistedSettings } = await import('@/lib/admin-blob-store');
+    const { createPersistedMessage } = await import('@/lib/admin-blob-store');
     await createPersistedMessage(sanitizedData);
 
-    // Send email notification to the configured contact email
     if (process.env.RESEND_API_KEY) {
       try {
-        const settings = await getPersistedSettings();
-        const toEmail = settings.contactEmail || 'info@akarorme.com';
-
         const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
           from: 'AKAR ÖRME İletişim <onboarding@resend.dev>',
-          to: toEmail,
+          to: CONTACT_FORM_TO_EMAIL,
+          replyTo: sanitizedData.email,
           subject: `Yeni İletişim Formu: ${sanitizedData.subject}`,
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -67,7 +65,7 @@ export async function POST(request: Request) {
                 </tr>
               </table>
               <div style="margin-top: 20px; padding: 16px; background: #f5f5f0; border-radius: 8px;">
-                <p style="margin: 0; font-weight: bold; color: #555; margin-bottom: 8px;">Mesaj:</p>
+                <p style="margin: 0 0 8px; font-weight: bold; color: #555;">Mesaj:</p>
                 <p style="margin: 0; white-space: pre-wrap; color: #333;">${sanitizedData.message}</p>
               </div>
               <p style="margin-top: 20px; font-size: 12px; color: #999;">
@@ -77,7 +75,6 @@ export async function POST(request: Request) {
           `,
         });
       } catch (emailErr) {
-        // Log but don't fail the request if email sending fails
         console.error('Email sending failed:', emailErr);
       }
     }

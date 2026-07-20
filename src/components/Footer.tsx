@@ -13,6 +13,7 @@ interface FooterDict {
     about: string;
     collections: string;
     technology: string;
+    blog?: string;
     references: string;
     contact: string;
   };
@@ -23,22 +24,24 @@ interface FooterDict {
 
 export default function Footer({ locale, dict }: { locale: Locale; dict: FooterDict }) {
   const [footerText, setFooterText] = useState('');
+  const [navLabels, setNavLabels] = useState(dict.nav);
 
   const navLinks = [
-    { href: `/${locale}`, label: dict.nav.home },
-    { href: `/${locale}/about`, label: dict.nav.about },
-    { href: `/${locale}/collections`, label: dict.nav.collections },
-    { href: `/${locale}/technology`, label: dict.nav.technology },
-    { href: `/${locale}/references`, label: dict.nav.references },
-    { href: `/${locale}/contact`, label: dict.nav.contact },
+    { href: `/${locale}`, label: navLabels.home },
+    { href: `/${locale}/about`, label: navLabels.about },
+    { href: `/${locale}/collections`, label: navLabels.collections },
+    { href: `/${locale}/technology`, label: navLabels.technology },
+    { href: `/${locale}/blog`, label: navLabels.blog ?? 'Blog' },
+    { href: `/${locale}/references`, label: navLabels.references },
+    { href: `/${locale}/contact`, label: navLabels.contact },
   ];
 
   useEffect(() => {
     let cancelled = false;
 
     Promise.all([
-      fetch('/api/pages', { cache: 'no-store' }).then((res) => res.ok ? res.json() : null),
-      fetch('/api/settings', { cache: 'no-store' }).then((res) => res.ok ? res.json() : null),
+      fetch('/api/pages', { cache: 'no-store' }).then((res) => (res.ok ? res.json() : null)),
+      fetch('/api/settings', { cache: 'no-store' }).then((res) => (res.ok ? res.json() : null)),
     ])
       .then(([pages, settings]) => {
         if (cancelled) return;
@@ -46,19 +49,33 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: FooterD
         const footerPage = Array.isArray(pages)
           ? getPageBySlug(pages as PageContent[], 'footer')
           : null;
+        const globalPage = Array.isArray(pages)
+          ? getPageBySlug(pages as PageContent[], 'global')
+          : null;
         const pageFooterText = getPageSectionContent(footerPage, 'copyright', locale, '');
         const resolvedText = pageFooterText || settings?.footerText || '';
 
         if (resolvedText) {
           setFooterText(resolvedText);
         }
+
+        setNavLabels({
+          ...dict.nav,
+          home: getPageSectionContent(globalPage, 'nav_home', locale, dict.nav.home),
+          about: getPageSectionContent(globalPage, 'nav_about', locale, dict.nav.about),
+          collections: getPageSectionContent(globalPage, 'nav_collections', locale, dict.nav.collections),
+          technology: getPageSectionContent(globalPage, 'nav_technology', locale, dict.nav.technology),
+          blog: getPageSectionContent(globalPage, 'nav_blog', locale, dict.nav.blog ?? 'Blog'),
+          references: getPageSectionContent(globalPage, 'nav_references', locale, dict.nav.references),
+          contact: getPageSectionContent(globalPage, 'nav_contact', locale, dict.nav.contact),
+        });
       })
       .catch(() => {});
 
     return () => {
       cancelled = true;
     };
-  }, [locale]);
+  }, [dict.nav, locale]);
 
   return (
     <footer className="border-t border-white/10 bg-brand-green py-16">
@@ -71,6 +88,8 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: FooterD
               width={120}
               height={32}
               className="h-8 w-auto brightness-0 invert"
+              quality={100}
+              unoptimized
               priority
             />
           </Link>
@@ -80,7 +99,7 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: FooterD
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm text-white/60 transition-colors hover:text-white py-2"
+                className="py-2 text-sm text-white/60 transition-colors hover:text-white"
               >
                 {link.label}
               </Link>

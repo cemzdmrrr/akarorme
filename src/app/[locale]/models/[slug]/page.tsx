@@ -6,17 +6,16 @@ import { getDictionary } from '@/i18n/getDictionary';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ModelDetail from '@/components/ModelDetail';
-import { getServerModelBySlug, getServerModelSlugs, useSiteModelslugs } from '@/data/models';
+import { getServerModelBySlug, getServerModelSlugs } from '@/data/models';
+import { getPersistedPages } from '@/lib/admin-blob-store';
+import { getPageBySlug, getPageSectionContent } from '@/data/page-content';
 
 export const revalidate = 60;
-export const dynamicParams = true; // Allow slugs not in generateStaticParams
+export const dynamicParams = true;
 
-export function generateStaticParams() {
-  // Use static slugs for build-time generation
-  const slugs = useSiteModelslugs();
-  return locales.flatMap((locale) =>
-    slugs.map((slug) => ({ locale, slug }))
-  );
+export async function generateStaticParams() {
+  const slugs = await getServerModelSlugs();
+  return locales.flatMap((locale) => slugs.map((slug) => ({ locale, slug })));
 }
 
 export async function generateMetadata({
@@ -38,7 +37,7 @@ export async function generateMetadata({
     alternates: {
       canonical: url,
       languages: Object.fromEntries(
-        locales.map((l) => [l, `https://akarorme.com/${l}/models/${params.slug}`]),
+        locales.map((locale) => [locale, `https://akarorme.com/${locale}/models/${params.slug}`]),
       ),
     },
     openGraph: {
@@ -58,8 +57,8 @@ export async function generateMetadata({
     },
     other: {
       'product:brand': 'AKAR ÖRME',
-      ...(model.specs?.find((s) => s.label === 'Composition')
-        ? { 'product:material': model.specs.find((s) => s.label === 'Composition')!.value }
+      ...(model.specs?.find((spec) => spec.label === 'Composition')
+        ? { 'product:material': model.specs.find((spec) => spec.label === 'Composition')!.value }
         : {}),
     },
   };
@@ -74,8 +73,9 @@ export default async function ModelPage({
   if (!model) notFound();
 
   const dict = await getDictionary(params.locale);
+  const pages = await getPersistedPages();
+  const modelDetailPage = getPageBySlug(pages, 'model-detail');
 
-  // JSON-LD structured data for product
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -85,10 +85,10 @@ export default async function ModelPage({
     ...(model.image ? { image: model.image } : {}),
     ...(model.specs?.length
       ? {
-          additionalProperty: model.specs.map((s) => ({
+          additionalProperty: model.specs.map((spec) => ({
             '@type': 'PropertyValue',
-            name: s.label,
-            value: s.value,
+            name: spec.label,
+            value: spec.value,
           })),
         }
       : {}),
@@ -107,7 +107,69 @@ export default async function ModelPage({
       />
       <Navbar locale={params.locale} dict={{ nav: dict.nav }} />
       <main>
-        <ModelDetail model={model} dict={dict.modelDetail} locale={params.locale} />
+        <ModelDetail
+          model={model}
+          locale={params.locale}
+          dict={{
+            ...dict.modelDetail,
+            backToCollections: getPageSectionContent(
+              modelDetailPage,
+              'back_to_collections',
+              params.locale,
+              dict.modelDetail.backToCollections,
+            ),
+            availableColours: getPageSectionContent(
+              modelDetailPage,
+              'available_colours',
+              params.locale,
+              dict.modelDetail.availableColours,
+            ),
+            requestProduction: getPageSectionContent(
+              modelDetailPage,
+              'request_production',
+              params.locale,
+              dict.modelDetail.requestProduction,
+            ),
+            orderSample: getPageSectionContent(
+              modelDetailPage,
+              'order_sample',
+              params.locale,
+              dict.modelDetail.orderSample,
+            ),
+            tabs: {
+              overview: getPageSectionContent(
+                modelDetailPage,
+                'tab_overview',
+                params.locale,
+                dict.modelDetail.tabs.overview,
+              ),
+              technical: getPageSectionContent(
+                modelDetailPage,
+                'tab_technical',
+                params.locale,
+                dict.modelDetail.tabs.technical,
+              ),
+              gallery: getPageSectionContent(
+                modelDetailPage,
+                'tab_gallery',
+                params.locale,
+                dict.modelDetail.tabs.gallery,
+              ),
+            },
+            overviewExtra: getPageSectionContent(
+              modelDetailPage,
+              'overview_extra',
+              params.locale,
+              dict.modelDetail.overviewExtra,
+            ),
+            technicalEmpty: getPageSectionContent(
+              modelDetailPage,
+              'technical_empty',
+              params.locale,
+              'Teknik bilgi henüz eklenmemiş.',
+            ),
+          }}
+        />
       </main>
       <Footer locale={params.locale} dict={{ nav: dict.nav, footer: dict.footer }} />
     </>

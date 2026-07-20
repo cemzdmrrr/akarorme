@@ -13,6 +13,10 @@ function genId() {
 }
 
 const PAGE_HELP: Record<string, { description: string; tip: string }> = {
+  global: {
+    description: 'Menu basliklari ve genel site metinleri bu alandan yonetilir.',
+    tip: 'Buradaki degisiklikler navbar ve footer uzerindeki genel baglantilara yansir.',
+  },
   home: {
     description: 'Ana sayfadaki hero, marka hikayesi ve alt CTA alanlarini buradan yonetebilirsiniz.',
     tip: 'Basliklar ve buton metinleri degistiginde ana sayfada dogrudan gorunur.',
@@ -22,16 +26,28 @@ const PAGE_HELP: Record<string, { description: string; tip: string }> = {
     tip: 'Deger kartlarindaki 3 kutu icin ayri ayri baslik ve aciklama kullanabilirsiniz.',
   },
   contact: {
-    description: 'Iletisim sayfasinin ust bolumu ve form basliklari bu alandan degistirilir.',
-    tip: 'Form alan etiketleri sozlukten geliyor; bu ekran daha cok tanitim metinleri icindir.',
+    description: 'Iletisim sayfasinin ust bolumu, form etiketleri ve bilgi kartlari bu alandan degistirilir.',
+    tip: 'Formdaki her metin her dil icin ayri kaydedilebilir.',
   },
   collections: {
     description: 'Koleksiyonlar sayfasinin ust tanitim metinlerini duzenler.',
     tip: 'Buradaki metinler filtre alaninin ustunde gorunen aciklamayi kontrol eder.',
   },
+  technology: {
+    description: 'Teknoloji sayfasinin hero, moduller ve etiket alanlari burada yonetilir.',
+    tip: 'Modul etiketlerini virgul ile ayirarak girebilirsiniz.',
+  },
   references: {
     description: 'Referanslar sayfasinin banner ve logo bolumu basliklari buradan degistirilir.',
     tip: 'Marka logolari/verileri ayri sekmeden gelir; burada sadece ust metinleri yonetirsiniz.',
+  },
+  blog: {
+    description: 'Blog liste sayfasinin hero ve bos durum metinleri burada yonetilir.',
+    tip: 'Blog yazilarinin kendisi Blog yonetimi ekranindan duzenlenir.',
+  },
+  'model-detail': {
+    description: 'Model detay sayfasindaki sabit butonlar, sekmeler ve yardimci metinler burada yonetilir.',
+    tip: 'Urun adi, aciklama ve teknik bilgiler model kaydindan gelmeye devam eder.',
   },
   footer: {
     description: 'Footer telif metni tum sayfalarda ortaktir.',

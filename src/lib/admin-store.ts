@@ -377,7 +377,7 @@ export function getSettings(): SiteSettings {
     getObject<SiteSettings>(KEYS.settings) ?? {
       siteName: 'AKAR ÖRME',
       siteDescription: 'Premium Knitwear Manufacturing',
-      contactEmail: 'info@akarorme.com',
+      contactEmail: 'bilgi@akarorme.com',
       contactPhone: '+90 (212) 886 00 42',
       address: 'İkitelli OSB, Atatürk Bulvarı No: 42, Başakşehir, İstanbul 34307',
       footerText: '© {year} Akar Örme. All rights reserved.',

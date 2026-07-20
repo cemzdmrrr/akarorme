@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import type { KnitwearModel } from '@/types';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RevealOnScroll } from '@/components/Motion';
 
@@ -13,6 +13,7 @@ interface ModelDetailDict {
   orderSample: string;
   tabs: { overview: string; technical: string; gallery: string };
   overviewExtra: string;
+  technicalEmpty: string;
 }
 
 export default function ModelDetail({
@@ -28,16 +29,14 @@ export default function ModelDetail({
   const [activeTab, setActiveTab] = useState<'overview' | 'technical' | 'gallery'>('overview');
   const [colorImageIdx, setColorImageIdx] = useState(0);
 
-  // Get all images for the active color
   const colorImages =
     model.colors[activeColor]?.images ??
-    (model.colors[activeColor]?.image ? [model.colors[activeColor].image!] : []);
+    (model.colors[activeColor]?.image ? [model.colors[activeColor].image] : []);
 
-  // Determine which image to show based on selected color and image index
   const activeImage = colorImages[colorImageIdx] || model.colors[activeColor]?.image || model.image;
 
-  const handleColorChange = (idx: number) => {
-    setActiveColor(idx);
+  const handleColorChange = (index: number) => {
+    setActiveColor(index);
     setColorImageIdx(0);
   };
 
@@ -45,9 +44,7 @@ export default function ModelDetail({
 
   return (
     <div className="container-xl section-padding">
-      {/* Header row */}
       <div className="grid gap-12 lg:grid-cols-2">
-        {/* Image area */}
         <RevealOnScroll>
           <div className="space-y-3">
             <div className="relative h-[360px] overflow-hidden rounded-2xl bg-brand-cream sm:h-[460px] lg:h-[620px] xl:h-[720px]">
@@ -74,17 +71,17 @@ export default function ModelDetail({
                 </motion.div>
               </AnimatePresence>
 
-              {/* Colour indicator ring */}
               <div
                 className="absolute inset-0 rounded-2xl ring-2 ring-inset"
-                style={{ '--tw-ring-color': model.colors[activeColor]?.hex } as React.CSSProperties}
+                style={{ '--tw-ring-color': model.colors[activeColor]?.hex } as CSSProperties}
               />
 
-              {/* Prev / Next arrows */}
               {colorImages.length > 1 && (
                 <>
                   <button
-                    onClick={() => setColorImageIdx((prev) => (prev - 1 + colorImages.length) % colorImages.length)}
+                    onClick={() =>
+                      setColorImageIdx((prev) => (prev - 1 + colorImages.length) % colorImages.length)
+                    }
                     className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-3 text-brand-dark shadow-md transition-colors hover:bg-white"
                     aria-label="Önceki görsel"
                   >
@@ -101,7 +98,6 @@ export default function ModelDetail({
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                   </button>
-                  {/* Image counter */}
                   <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
                     {colorImageIdx + 1} / {colorImages.length}
                   </div>
@@ -109,20 +105,19 @@ export default function ModelDetail({
               )}
             </div>
 
-            {/* Thumbnail strip for color images */}
             {colorImages.length > 1 && (
               <div className="flex gap-2 overflow-x-auto pb-1">
-                {colorImages.map((img, idx) => (
+                {colorImages.map((image, index) => (
                   <button
-                    key={idx}
-                    onClick={() => setColorImageIdx(idx)}
+                    key={index}
+                    onClick={() => setColorImageIdx(index)}
                     className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 transition-all ${
-                      colorImageIdx === idx
+                      colorImageIdx === index
                         ? 'border-brand-accent-dark ring-1 ring-brand-accent'
                         : 'border-transparent opacity-70 hover:border-brand-sand-dark hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt="" className="h-full w-full object-cover" />
+                    <img src={image} alt="" className="h-full w-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -130,7 +125,6 @@ export default function ModelDetail({
           </div>
         </RevealOnScroll>
 
-        {/* Info */}
         <RevealOnScroll delay={0.15}>
           <Link
             href={`/${locale}/collections`}
@@ -145,7 +139,6 @@ export default function ModelDetail({
           <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">{model.name}</h1>
           <p className="mt-1 text-brand-accent-dark">{model.tagline}</p>
 
-          {/* Tags */}
           <div className="mt-4 flex flex-wrap gap-2">
             {model.tags.map((tag) => (
               <span
@@ -159,27 +152,26 @@ export default function ModelDetail({
 
           <p className="mt-6 leading-relaxed text-brand-grey">{model.description}</p>
 
-          {/* Color swatches */}
           <div className="mt-8">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-brand-grey-light">
               {dict.availableColours}
             </p>
             <div className="flex gap-3">
-              {model.colors.map((c, i) => (
+              {model.colors.map((color, index) => (
                 <button
-                  key={c.hex}
-                  onClick={() => handleColorChange(i)}
+                  key={color.hex}
+                  onClick={() => handleColorChange(index)}
                   className={`group relative h-11 w-11 rounded-full border-2 transition-all ${
-                    activeColor === i
+                    activeColor === index
                       ? 'scale-110 border-brand-accent-dark'
                       : 'border-transparent hover:border-brand-sand-dark'
                   }`}
-                  style={{ backgroundColor: c.hex }}
-                  title={c.name}
+                  style={{ backgroundColor: color.hex }}
+                  title={color.name}
                 >
-                  {activeColor === i && (
+                  {activeColor === index && (
                     <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] text-brand-grey-light">
-                      {c.name}
+                      {color.name}
                     </span>
                   )}
                 </button>
@@ -187,7 +179,6 @@ export default function ModelDetail({
             </div>
           </div>
 
-          {/* CTA */}
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
               href={`/${locale}/contact`}
@@ -214,7 +205,6 @@ export default function ModelDetail({
         </RevealOnScroll>
       </div>
 
-      {/* Tabs */}
       <div className="mt-20">
         <div className="flex gap-8 border-b border-brand-sand">
           {tabs.map((tab) => (
@@ -265,22 +255,22 @@ export default function ModelDetail({
                   </div>
                 ))}
                 {model.specs.length === 0 && (
-                  <p className="col-span-2 text-sm text-brand-grey">Teknik bilgi henüz eklenmemiş.</p>
+                  <p className="col-span-2 text-sm text-brand-grey">{dict.technicalEmpty}</p>
                 )}
               </div>
             )}
 
             {activeTab === 'gallery' && (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {(model.gallery.length > 0 ? model.gallery : [model.image]).map((src, i) => (
+                {(model.gallery.length > 0 ? model.gallery : [model.image]).map((src, index) => (
                   <div
-                    key={i}
+                    key={index}
                     className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-brand-cream"
                   >
                     {src && (
                       <img
                         src={src}
-                        alt={`${model.name} ${i + 1}`}
+                        alt={`${model.name} ${index + 1}`}
                         className="absolute inset-0 h-full w-full object-cover"
                       />
                     )}
