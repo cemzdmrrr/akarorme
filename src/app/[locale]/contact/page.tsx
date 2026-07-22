@@ -8,6 +8,8 @@ import ContactForm from '@/components/ContactForm';
 import { getPersistedPages, getPersistedSettings } from '@/lib/admin-blob-store';
 import { getPageBySlug, getPageSectionContent } from '@/data/page-content';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({
   params,
 }: {
@@ -38,6 +40,7 @@ export default async function ContactPage({
           title={getPageSectionContent(contactPage, 'hero_title', params.locale, dict.contact.heroTitle)}
           highlight={getPageSectionContent(contactPage, 'hero_highlight', params.locale, dict.contact.heroHighlight)}
           subtitle={getPageSectionContent(contactPage, 'hero_subtitle', params.locale, dict.contact.heroSubtitle)}
+          image={getPageSectionContent(contactPage, 'hero_image', params.locale, '')}
           breadcrumbs={[
             { label: dict.common.home, href: `/${params.locale}` },
             { label: dict.common.contact },
@@ -148,22 +151,17 @@ export default async function ContactPage({
                 sending: getPageSectionContent(contactPage, 'sending_text', params.locale, dict.contactForm.sending),
                 sent: getPageSectionContent(contactPage, 'sent_text', params.locale, dict.contactForm.sent),
                 error: getPageSectionContent(contactPage, 'error_text', params.locale, dict.contactForm.error),
+                mapUrl: getPageSectionContent(
+                  contactPage,
+                  'map_embed_url',
+                  params.locale,
+                  'https://www.google.com/maps?q=2VCH%2BQG+G%C3%BCng%C3%B6ren,+%C4%B0stanbul&output=embed',
+                ),
                 infoCards: {
                   address: getPageSectionContent(contactPage, 'info_address_title', params.locale, dict.contactForm.infoCards.address),
-                  addressLines: [
-                    getPageSectionContent(
-                      contactPage,
-                      'info_address_line_1',
-                      params.locale,
-                      dict.contactForm.infoCards.addressLines[0] ?? '',
-                    ),
-                    getPageSectionContent(
-                      contactPage,
-                      'info_address_line_2',
-                      params.locale,
-                      dict.contactForm.infoCards.addressLines[1] ?? '',
-                    ),
-                  ].filter(Boolean),
+                  addressLines: settings.address
+                    ? settings.address.split(/\r?\n/).map((line) => line.trim()).filter(Boolean)
+                    : dict.contactForm.infoCards.addressLines,
                   email: getPageSectionContent(contactPage, 'info_email_title', params.locale, dict.contactForm.infoCards.email),
                   emailLines: [settings.contactEmail || 'bilgi@akarorme.com'].filter(Boolean),
                   phone: getPageSectionContent(contactPage, 'info_phone_title', params.locale, dict.contactForm.infoCards.phone),

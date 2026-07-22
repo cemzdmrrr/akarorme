@@ -41,6 +41,7 @@ export default async function CollectionsPage({
           title={getPageSectionContent(collectionsPage, 'hero_title', params.locale, dict.collections.heroTitle)}
           highlight={getPageSectionContent(collectionsPage, 'hero_highlight', params.locale, dict.collections.heroHighlight)}
           subtitle={getPageSectionContent(collectionsPage, 'hero_subtitle', params.locale, dict.collections.heroSubtitle)}
+          image={getPageSectionContent(collectionsPage, 'hero_image', params.locale, '')}
           breadcrumbs={[
             { label: dict.common.home, href: `/${params.locale}` },
             { label: dict.common.collections },

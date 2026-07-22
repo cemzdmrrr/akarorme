@@ -25,6 +25,7 @@ interface FooterDict {
 export default function Footer({ locale, dict }: { locale: Locale; dict: FooterDict }) {
   const [footerText, setFooterText] = useState('');
   const [navLabels, setNavLabels] = useState(dict.nav);
+  const [logo, setLogo] = useState('/images/logo-full.png');
 
   const navLinks = [
     { href: `/${locale}`, label: navLabels.home },
@@ -54,6 +55,7 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: FooterD
           : null;
         const pageFooterText = getPageSectionContent(footerPage, 'copyright', locale, '');
         const resolvedText = pageFooterText || settings?.footerText || '';
+        setLogo(getPageSectionContent(globalPage, 'site_logo', locale, '/images/logo-full.png'));
 
         if (resolvedText) {
           setFooterText(resolvedText);
@@ -83,7 +85,7 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: FooterD
         <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
           <Link href={`/${locale}`} className="flex items-center">
             <Image
-              src="/images/logo-full.png"
+              src={logo}
               alt="AKAR ÖRME"
               width={120}
               height={32}

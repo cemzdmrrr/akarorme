@@ -47,6 +47,7 @@ export default async function BlogPage({
             params.locale,
             'Üretim, iplik, koleksiyon geliştirme ve sektör içgörülerine dair yazılarımızı keşfedin.',
           )}
+          image={getPageSectionContent(blogPage, 'hero_image', params.locale, '')}
           breadcrumbs={[
             { label: dict.common.home, href: `/${params.locale}` },
             { label: blogLabel },

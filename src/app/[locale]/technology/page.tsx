@@ -101,6 +101,7 @@ export default async function TechnologyPage({
             params.locale,
             dict.technology.heroSubtitle,
           )}
+          image={getPageSectionContent(technologyPage, 'hero_image', params.locale, '')}
           breadcrumbs={[
             { label: dict.common.home, href: `/${params.locale}` },
             { label: dict.common.technology },

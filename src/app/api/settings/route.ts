@@ -5,6 +5,7 @@ import {
   updatePersistedSettings,
 } from '@/lib/admin-blob-store';
 import { requireAdmin } from '@/lib/server-auth';
+import { locales } from '@/i18n/config';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,6 +27,9 @@ export async function PUT(request: Request) {
     const updated = await updatePersistedSettings(body);
     revalidatePath('/');
     revalidatePath('/[locale]', 'layout');
+    for (const locale of locales) {
+      revalidatePath(`/${locale}/contact`);
+    }
     return NextResponse.json(updated);
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to update settings';

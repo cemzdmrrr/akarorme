@@ -38,6 +38,7 @@ export default async function ReferencesPage({
           title={getPageSectionContent(referencesPage, 'hero_title', params.locale, dict.references.heroTitle)}
           highlight={getPageSectionContent(referencesPage, 'hero_highlight', params.locale, dict.references.heroHighlight)}
           subtitle={getPageSectionContent(referencesPage, 'hero_subtitle', params.locale, dict.references.heroSubtitle)}
+          image={getPageSectionContent(referencesPage, 'hero_image', params.locale, '')}
           breadcrumbs={[
             { label: dict.common.home, href: `/${params.locale}` },
             { label: dict.common.references },

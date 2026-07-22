@@ -27,6 +27,7 @@ export default function Navbar({ locale, dict }: { locale: string; dict: { nav: 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [navLabels, setNavLabels] = useState(dict.nav);
+  const [logo, setLogo] = useState('/images/logo-full.png');
 
   const navLinks = [
     { href: `/${locale}`, label: navLabels.home },
@@ -55,6 +56,7 @@ export default function Navbar({ locale, dict }: { locale: string; dict: { nav: 
         if (cancelled || !Array.isArray(pages)) return;
 
         const globalPage = getPageBySlug(pages as PageContent[], 'global');
+        setLogo(getPageSectionContent(globalPage, 'site_logo', locale as Locale, '/images/logo-full.png'));
         setNavLabels({
           ...dict.nav,
           home: getPageSectionContent(globalPage, 'nav_home', locale as Locale, dict.nav.home),
@@ -84,7 +86,7 @@ export default function Navbar({ locale, dict }: { locale: string; dict: { nav: 
         <nav className="container-xl flex items-center justify-between">
           <Link href={`/${locale}`} className="flex items-center">
             <Image
-              src="/images/logo-full.png"
+              src={logo}
               alt="AKAR ÖRME"
               width={120}
               height={32}

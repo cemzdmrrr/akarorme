@@ -10,17 +10,26 @@ export default function PageHero({
   highlight,
   subtitle,
   breadcrumbs,
+  image,
 }: {
   title: string;
   highlight: string;
   subtitle: string;
   breadcrumbs: BreadcrumbItem[];
+  image?: string;
 }) {
   return (
     <>
       <section className="relative flex min-h-[45vh] items-end overflow-hidden bg-white pb-16 pt-32">
         {/* Gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-brand-cream via-white to-brand-cream-dark" />
+
+        {image && (
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-15"
+            style={{ backgroundImage: `url(${image})` }}
+          />
+        )}
 
         {/* Subtle grid pattern */}
         <div

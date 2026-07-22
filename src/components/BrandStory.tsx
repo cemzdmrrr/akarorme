@@ -11,6 +11,7 @@ interface BrandStoryDict {
   paragraph1: string;
   paragraph2: string;
   link: string;
+  images: string[];
 }
 
 export default function BrandStory({ dict, locale }: { dict: BrandStoryDict; locale: string }) {
@@ -47,7 +48,7 @@ export default function BrandStory({ dict, locale }: { dict: BrandStoryDict; loc
           <div className="grid grid-cols-2 gap-4">
             <div className="relative aspect-square overflow-hidden rounded-2xl">
               <Image
-                src="/images/brand/brand-1.jpg"
+                src={dict.images[0]}
                 alt="Renkli iplik makaraları ve bobinler"
                 fill
                 className="object-cover"
@@ -56,7 +57,7 @@ export default function BrandStory({ dict, locale }: { dict: BrandStoryDict; loc
             </div>
             <div className="relative aspect-[3/4] translate-y-8 overflow-hidden rounded-2xl">
               <Image
-                src="/images/brand/brand-2.jpg"
+                src={dict.images[1]}
                 alt="Endüstriyel tekstil örme makinesi"
                 fill
                 className="object-cover"
@@ -65,7 +66,7 @@ export default function BrandStory({ dict, locale }: { dict: BrandStoryDict; loc
             </div>
             <div className="relative col-span-2 aspect-[2/1] overflow-hidden rounded-2xl">
               <Image
-                src="/images/brand/brand-3.jpg"
+                src={dict.images[2]}
                 alt="Fabrikada sıralanmış bitmiş kumaş ruloları"
                 fill
                 className="object-cover"

@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
     // Generate a unique filename
     const ext = file.type.split('/')[1] === 'jpeg' ? 'jpg' : file.type.split('/')[1];
-    const filename = `models/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const filename = `media/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
     await put(filename, file, {
       access: 'private',

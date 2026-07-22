@@ -33,6 +33,7 @@ interface ContactFormDict {
   sending: string;
   sent: string;
   error: string;
+  mapUrl: string;
   infoCards: {
     address: string;
     addressLines: string[];
@@ -218,7 +219,7 @@ export default function ContactForm({ dict }: { dict: ContactFormDict }) {
         <RevealOnScroll delay={0.3}>
           <div className="overflow-hidden rounded-2xl border border-brand-sand/60 bg-white">
             <iframe
-              src="https://www.google.com/maps?q=2VCH%2BQG+G%C3%BCng%C3%B6ren,+%C4%B0stanbul&output=embed"
+              src={dict.mapUrl}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Akar Orme Factory Location"

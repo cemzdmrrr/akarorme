@@ -44,6 +44,23 @@ export default async function AboutPage({
       description: getPageSectionContent(aboutPage, 'value_3_description', params.locale, t.values[2].description),
     },
   ];
+  const timelineEvents = dict.data.timeline.map((event, index) => ({
+    year: Number(
+      getPageSectionContent(aboutPage, `timeline_${index + 1}_year`, params.locale, String(event.year)),
+    ) || event.year,
+    title: getPageSectionContent(
+      aboutPage,
+      `timeline_${index + 1}_title`,
+      params.locale,
+      event.title,
+    ),
+    description: getPageSectionContent(
+      aboutPage,
+      `timeline_${index + 1}_description`,
+      params.locale,
+      event.description,
+    ),
+  }));
 
   return (
     <>
@@ -53,13 +70,21 @@ export default async function AboutPage({
           title={getPageSectionContent(aboutPage, 'hero_title', params.locale, t.heroTitle)}
           highlight={getPageSectionContent(aboutPage, 'hero_highlight', params.locale, t.heroHighlight)}
           subtitle={getPageSectionContent(aboutPage, 'hero_subtitle', params.locale, t.heroSubtitle)}
+          image={getPageSectionContent(aboutPage, 'hero_image', params.locale, '')}
           breadcrumbs={[
             { label: dict.common.home, href: `/${params.locale}` },
             { label: dict.common.about },
           ]}
         />
 
-        <Timeline dict={dict.timeline} events={dict.data.timeline} />
+        <Timeline
+          dict={{
+            label: getPageSectionContent(aboutPage, 'timeline_label', params.locale, dict.timeline.label),
+            heading: getPageSectionContent(aboutPage, 'timeline_heading', params.locale, dict.timeline.heading),
+            highlight: getPageSectionContent(aboutPage, 'timeline_highlight', params.locale, dict.timeline.highlight),
+          }}
+          events={timelineEvents}
+        />
 
         {/* Philosophy */}
         <section className="section-padding bg-brand-cream">
@@ -125,13 +150,10 @@ export default async function AboutPage({
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {t.factoryLabels.map((label, i) => {
-                const photos = [
-                  '/images/factory/knitting-hall.jpg',
-                  '/images/factory/yarn-warehouse.jpg',
-                  '/images/factory/quality-lab.jpg',
-                  '/images/factory/dyeing.jpg',
-                  '/images/factory/finishing.jpg',
-                ];
+                const defaults = ['/images/factory/knitting-hall.jpg', '/images/factory/yarn-warehouse.jpg', '/images/factory/quality-lab.jpg', '/images/factory/dyeing.jpg', '/images/factory/finishing.jpg'];
+                const photos = defaults.map((fallback, index) =>
+                  getPageSectionContent(aboutPage, `factory_image_${index + 1}`, params.locale, fallback),
+                );
                 return (
                   <div key={label} className="group relative overflow-hidden rounded-2xl">
                     <div className="relative aspect-[4/3]">

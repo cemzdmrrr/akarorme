@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const CONTACT_FORM_TO_EMAIL =
-  process.env.CONTACT_FORM_TO_EMAIL?.trim() || 'bilgi@akarorme.com';
-
 function sanitize(value: string) {
   return value.replace(/<[^>]*>/g, '').trim().slice(0, 2000);
 }
@@ -32,15 +29,27 @@ export async function POST(request: Request) {
     const { createPersistedMessage } = await import('@/lib/admin-blob-store');
     await createPersistedMessage(sanitizedData);
 
-    if (process.env.RESEND_API_KEY) {
-      try {
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        await resend.emails.send({
-          from: 'AKAR ÖRME İletişim <onboarding@resend.dev>',
-          to: CONTACT_FORM_TO_EMAIL,
-          replyTo: sanitizedData.email,
-          subject: `Yeni İletişim Formu: ${sanitizedData.subject}`,
-          html: `
+    if (!process.env.RESEND_API_KEY) {
+      console.error('Email sending failed: RESEND_API_KEY is not configured');
+      return NextResponse.json({ error: 'Email service is not configured' }, { status: 503 });
+    }
+
+    try {
+      const { getPersistedSettings } = await import('@/lib/admin-blob-store');
+      const settings = await getPersistedSettings();
+      const to = process.env.CONTACT_FORM_TO_EMAIL?.trim() || settings.contactEmail?.trim();
+
+      if (!to) {
+        return NextResponse.json({ error: 'Contact email is not configured' }, { status: 503 });
+      }
+
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      const result = await resend.emails.send({
+        from: process.env.RESEND_FROM_EMAIL?.trim() || 'AKAR ÖRME İletişim <bilgi@akarorme.com>',
+        to,
+        replyTo: sanitizedData.email,
+        subject: `Yeni İletişim Formu: ${sanitizedData.subject}`,
+        html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
               <h2 style="color: #1a1a2e; border-bottom: 2px solid #C9A84C; padding-bottom: 10px;">
                 Yeni İletişim Formu Mesajı
@@ -72,11 +81,15 @@ export async function POST(request: Request) {
                 Bu mesaj akarorme.com iletişim formundan gönderilmiştir.
               </p>
             </div>
-          `,
-        });
-      } catch (emailErr) {
-        console.error('Email sending failed:', emailErr);
+        `,
+      });
+
+      if (result.error) {
+        throw new Error(result.error.message);
       }
+    } catch (emailErr) {
+      console.error('Email sending failed:', emailErr);
+      return NextResponse.json({ error: 'Email could not be sent' }, { status: 502 });
     }
 
     return NextResponse.json({ success: true });

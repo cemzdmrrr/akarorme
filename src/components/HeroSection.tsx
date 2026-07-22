@@ -13,6 +13,8 @@ interface HeroDict {
   cta1: string;
   cta2: string;
   scroll: string;
+  image: string;
+  imageAlt: string;
 }
 
 export default function HeroSection({ dict, locale }: { dict: HeroDict; locale: string }) {
@@ -112,8 +114,8 @@ export default function HeroSection({ dict, locale }: { dict: HeroDict; locale: 
         >
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl">
             <Image
-              src="/images/hero/hero-showcase.jpg"
-              alt="Premium triko kumaş dokusunun yakın plan görünümü"
+              src={dict.image}
+              alt={dict.imageAlt}
               fill
               className="object-cover"
               priority

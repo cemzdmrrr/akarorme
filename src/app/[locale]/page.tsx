@@ -39,6 +39,8 @@ export default async function HomePage({
             description: getPageSectionContent(homePage, 'hero_description', params.locale, dict.hero.description),
             cta1: getPageSectionContent(homePage, 'hero_cta_primary', params.locale, dict.hero.cta1),
             cta2: getPageSectionContent(homePage, 'hero_cta_secondary', params.locale, dict.hero.cta2),
+            image: getPageSectionContent(homePage, 'hero_image', params.locale, '/images/hero/hero-showcase.jpg'),
+            imageAlt: getPageSectionContent(homePage, 'hero_image_alt', params.locale, 'Premium triko kumaş dokusu'),
           }}
         />
         <BrandStory
@@ -51,6 +53,11 @@ export default async function HomePage({
             paragraph1: getPageSectionContent(homePage, 'brand_paragraph1', params.locale, dict.brandStory.paragraph1),
             paragraph2: getPageSectionContent(homePage, 'brand_paragraph2', params.locale, dict.brandStory.paragraph2),
             link: getPageSectionContent(homePage, 'brand_link_text', params.locale, dict.brandStory.link),
+            images: [
+              getPageSectionContent(homePage, 'brand_image_1', params.locale, '/images/brand/brand-1.jpg'),
+              getPageSectionContent(homePage, 'brand_image_2', params.locale, '/images/brand/brand-2.jpg'),
+              getPageSectionContent(homePage, 'brand_image_3', params.locale, '/images/brand/brand-3.jpg'),
+            ],
           }}
         />
         <FabricCards

@@ -157,10 +157,17 @@ export default function PagesPage() {
     }
   };
 
-  const handleImageUpload = (sectionId: string, file: File) => {
-    const reader = new FileReader();
-    reader.onload = (e) => { updateField(sectionId, 'content', e.target?.result as string); };
-    reader.readAsDataURL(file);
+  const handleImageUpload = async (sectionId: string, file: File) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await fetch('/api/upload', { method: 'POST', body: formData });
+      const result = await response.json();
+      if (!response.ok || !result.url) throw new Error(result.error || 'Görsel yüklenemedi');
+      updateField(sectionId, 'content', result.url);
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Görsel yüklenemedi');
+    }
   };
 
   const inputCls = 'w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100';
