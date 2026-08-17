@@ -26,8 +26,14 @@ export async function POST(request: Request) {
       message: sanitize(message),
     };
 
-    const { createPersistedMessage } = await import('@/lib/admin-blob-store');
-    await createPersistedMessage(sanitizedData);
+    // Admin paneline kaydetme işlemi, e-posta gönderimini engellememeli.
+    // Blob bağlı değilse veya geçici olarak erişilemiyorsa mail yine gönderilir.
+    try {
+      const { createPersistedMessage } = await import('@/lib/admin-blob-store');
+      await createPersistedMessage(sanitizedData);
+    } catch (storageError) {
+      console.error('Contact message could not be persisted:', storageError);
+    }
 
     if (!process.env.RESEND_API_KEY) {
       console.error('Email sending failed: RESEND_API_KEY is not configured');
