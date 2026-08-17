@@ -168,7 +168,44 @@ export async function deletePersistedCollection(id: string): Promise<boolean> {
 // ─── FABRICS ────────────────────────────────────────
 export async function getPersistedFabrics(): Promise<AdminFabricType[]> {
   const data = await readBlob<AdminFabricType[]>(BLOB.fabrics);
-  return Array.isArray(data) ? data : [];
+  if (!Array.isArray(data)) return [];
+
+  const legacyCircularFabricNames = new Set([
+    'Single Jersey',
+    'Rib Knit',
+    'Interlock',
+    'Piqué Knit',
+    'French Terry',
+    'Jacquard',
+    'Cable Knit',
+  ]);
+
+  if (!data.some((fabric) => legacyCircularFabricNames.has(fabric.name))) {
+    return data;
+  }
+
+  const now = new Date().toISOString();
+  const flatKnitStructures = [
+    ['İnce Triko', '12–14 GG', 'Pamuk, viskon ve karışımlı iplikler', 'Hafif kazak, bluz ve yazlık triko ürünleri için ince ve dengeli örme yapıları.', '/images/fabrics/single-jersey.jpg'],
+    ['Ribana Yapılar', '7–14 GG', 'Projeye özel iplik seçenekleri', 'Esneklik ve form dayanımı sağlayan farklı ribana varyasyonları.', '/images/fabrics/rib-knit.jpg'],
+    ['Jakar Triko', 'Projeye özel', 'Tek ve çok renkli iplik seçenekleri', 'Markaya özel desenlerin düz triko makinelerinde örülerek oluşturulduğu jakar ürünler.', '/images/fabrics/jacquard.jpg'],
+    ['Saç Örgü Triko', 'Projeye özel', 'Pamuk, yün ve karışımlı iplikler', 'Kazak, hırka ve dış giyim ürünlerinde kullanılan dokulu saç örgü yapıları.', '/images/fabrics/cable-jacquard.jpg'],
+    ['Fully Fashioned Üretim', 'Modele özel', 'Koleksiyona uygun iplik seçenekleri', 'Ürün parçalarının forma uygun örülmesiyle fireyi ve ek işlemleri azaltan üretim yöntemi.', '/images/fabrics/milano-rib.jpg'],
+    ['Hırka ve Dış Giyim', 'Modele özel', 'Mevsime uygun iplik seçenekleri', 'Konfeksiyon, ütü ve son işlemleri tamamlanmış hırka ve triko dış giyim çözümleri.', '/images/fabrics/pique.jpg'],
+  ];
+
+  return flatKnitStructures.map(([name, gauge, composition, description, image], index) => ({
+    id: `flat-knit-${index + 1}`,
+    slug: slugify(name),
+    name,
+    gauge,
+    composition,
+    weight: '',
+    description,
+    image,
+    createdAt: now,
+    updatedAt: now,
+  }));
 }
 
 export async function createPersistedFabric(

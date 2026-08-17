@@ -326,7 +326,7 @@ export function mergePagesWithDefaults(pages: PageContent[]): PageContent[] {
     const mergedSections = defaultPage.sections.map((defaultSection) => {
       const existingSection = existingSectionsByKey.get(defaultSection.key);
       const containsLegacyUnsupportedClaim = existingSection
-        ? /15[.,]?000|120\+?|128\+?|25[.,]?000|500['’]?ü|500\+|32\+? (ülke|countr)|30['’]?dan fazla ülke|yuvarlak örme|circular knitting|ISO 9001|OEKO.?TEX|susuz boyama|waterless dyeing|güneş enerjili|solar-powered/i.test(
+        ? /15[.,]?000|120\+?|128\+?|25[.,]?000|500['’]?ü|500\+|32\+? (ülke|countr)|30['’]?dan fazla ülke|yuvarlak örme|circular knitting|ISO 9001|OEKO.?TEX|susuz boyama|waterless dyeing|güneş enerjili|solar-powered|Premium Triko Üretimi|Yüksek kaliteli iplerle|Türkiye'nin seçkin markaları|Sadece triko üretmiyoruz|Kumaş Yapıları|Üretim kabiliyetimizin merkezinde|500 adet de isteseniz/i.test(
             JSON.stringify(existingSection),
           )
         : false;
