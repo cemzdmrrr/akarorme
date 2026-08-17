@@ -1,9 +1,9 @@
 {
   "metadata": {
     "titleTemplate": "%s — AKAR ÖRME",
-    "defaultTitle": "AKAR ÖRME — Premium Triko Kumaş Üreticisi",
-    "description": "Akar Örme — Dünya markalarına özel triko kumaş ve konfeksiyon üretimi. 25 yıllık tecrübe, 15.000 m² tesis, ISO 9001 & OEKO-TEX® sertifikalı.",
-    "keywords": ["triko", "örme kumaş", "tekstil üretimi", "kumaş imalatı", "fason üretim", "premium iplik", "Akar Örme", "İstanbul tekstil"]
+    "defaultTitle": "AKAR ÖRME — Düz Triko ve Konfeksiyon Üreticisi",
+    "description": "Akar Örme; düz triko örme, konfeksiyon, ütü, kalite kontrol ve paketleme aşamalarını tek çatı altında gerçekleştiren İstanbul merkezli triko üreticisidir.",
+    "keywords": ["düz triko", "triko imalatı", "triko konfeksiyon", "fason triko üretimi", "kazak üretimi", "hırka üretimi", "Akar Örme", "İstanbul triko"]
   },
 
   "nav": {
@@ -17,11 +17,11 @@
   },
 
   "hero": {
-    "label": "Triko Kumaş & Konfeksiyon",
+    "label": "Düz Triko & Konfeksiyon",
     "heading1": "Her Dikişte",
     "heading2": "Aynı",
     "highlight": "Kalite",
-    "description": "25 yılı aşkın deneyimimizle, premium iplikten son ürüne kadar dünyanın önde gelen moda markalarına güvenle üretim yapıyoruz.",
+    "description": "Düz triko örmeden konfeksiyon ve ütüye, kalite kontrolden paketlemeye kadar bitmiş triko ürünlerinin tüm üretim aşamalarını tek çatı altında gerçekleştiriyoruz.",
     "cta1": "Koleksiyonları İncele",
     "cta2": "Numune Talep Et",
     "scroll": "AŞAĞI KAYDIR"
@@ -29,18 +29,18 @@
 
   "brandStory": {
     "label": "2000 Yılından Bugüne",
-    "heading": "İplikten Kumaşa,",
-    "highlight": "Kumaştan Markaya",
-    "paragraph1": "Akar Örme, 2000 yılından bu yana dünyanın en prestijli triko markalarının arkasındaki güvenilir üretim ortağıdır. İstanbul Güngören'deki 15.000 m²'lik entegre tesisimizde 120'yi aşkın son teknoloji örme makinesi, kendi boyahanemiz ve akredite kalite laboratuvarımızla ISO 9001 ve OEKO-TEX® standartlarında üretim gerçekleştiriyoruz.",
-    "paragraph2": "Sadece kumaş üretmiyoruz — her markanın ihtiyacına özel, iplik seçiminden son kalite kontrole kadar uçtan uca tekstil çözümleri sunuyoruz.",
+    "heading": "İplikten Ürüne,",
+    "highlight": "Tek Çatı Altında",
+    "paragraph1": "Akar Örme, düz triko örme makineleriyle kazak, hırka, süveter, yelek ve farklı triko ürün gruplarında üretim yapan İstanbul merkezli entegre bir üreticidir.",
+    "paragraph2": "Model geliştirme ve örmeden konfeksiyon, ütü, kalite kontrol ve paketlemeye kadar üretimin tüm aşamalarını deneyimli ekibimizle gerçekleştiriyoruz.",
     "link": "Hikayemizin Devamı"
   },
 
   "fabricCards": {
-    "label": "Kumaş Çeşitlerimiz",
-    "heading": "Üstün Kaliteli",
-    "highlight": "Kumaşlar",
-    "description": "Son teknoloji yuvarlak ve düz örme makinelerimizde üretilen altı ana kumaş grubumuz — her biri farklı kullanım alanlarına göre özenle geliştirilmiştir."
+    "label": "Düz Triko Kabiliyetimiz",
+    "heading": "Öne Çıkan",
+    "highlight": "Örme Yapıları",
+    "description": "Düz triko makinelerimizde farklı iplik, incelik ve desen seçenekleriyle geliştirdiğimiz ürün yapılarını inceleyin."
   },
 
   "modelGrid": {
@@ -56,7 +56,7 @@
     "label": "Projenizi Başlatın",
     "heading": "Birlikte",
     "highlight": "Üretelim mi?",
-    "description": "İster 500 metre ister 50.000 metre olsun — deneyimli ekibimiz markanıza özel triko çözümünü birlikte geliştirmek için hazır.",
+    "description": "Koleksiyon geliştirme, numune ve seri üretim ihtiyaçlarınız için deneyimli ekibimiz markanıza özel triko çözümünü birlikte geliştirmeye hazır.",
     "button1": "Bizimle İletişime Geçin",
     "button2": "Referanslarımızı İnceleyin"
   },
@@ -70,7 +70,7 @@
     "metaDescription": "Akar Örme'nin 25 yılı aşkın triko üretim hikayesi, fabrika felsefemiz, misyon ve vizyonumuz.",
     "heroTitle": "Bizi Yakından",
     "heroHighlight": "Tanıyın",
-    "heroSubtitle": "12 makineli küçük bir atölyeden, 120+ makineli dünya standartlarında bir üretim tesisine uzanan 25 yıllık yolculuğumuz.",
+    "heroSubtitle": "Düz triko örmeden bitmiş ürüne kadar üretimin tüm aşamalarını aynı kalite anlayışıyla yöneten entegre üretim yapımız.",
     "philosophyLabel": "Değerlerimiz",
     "philosophyTitle": "Üretim",
     "philosophyHighlight": "Felsefemiz",
@@ -85,17 +85,17 @@
       },
       {
         "title": "Sürdürülebilirlik",
-        "description": "Susuz boyama uygulamalarından güneş enerjisiyle çalışan tesislere kadar, çevreye duyarlı üretim anlayışımızın merkezinde yer almaktadır."
+        "description": "Kaynakları verimli kullanmayı ve sorumlu üretim yaklaşımını işimizin merkezinde tutuyoruz."
       }
     ],
     "missionTitle": "Misyonumuz",
-    "missionText": "İleri teknoloji, sıkı kalite kontrolü ve iş ortaklarımızla kurduğumuz yakın iş birliğiyle, beklentileri aşan triko kumaş ve konfeksiyon üretimi gerçekleştirmek.",
+    "missionText": "Düz triko örmeden konfeksiyon ve son kontrole kadar her aşamada titiz çalışarak iş ortaklarımızın beklentilerine uygun bitmiş triko ürünleri üretmek.",
     "visionTitle": "Vizyonumuz",
-    "visionText": "Teknoloji, sürdürülebilirlik ve ustalık üçgeninde triko sektörünün geleceğine yön vermek. 2030 yılına kadar karbon nötr üretim hedefimize ulaşmak için kararlılıkla çalışıyoruz.",
+    "visionText": "Teknoloji, sorumlu üretim ve ustalığı bir araya getirerek düz triko imalatında güvenilir ve uzun vadeli bir üretim ortağı olmak.",
     "factoryTitle": "Fabrikamızdan",
     "factoryHighlight": "Kareler",
-    "factoryDesc": "İstanbul'daki 15.000 m²'lik üretim tesisimizden görüntüler.",
-    "factoryLabels": ["Örme Bölümü", "İplik Deposu", "Kalite Laboratuvarı", "Boyahane", "Terbiye Hattı"]
+    "factoryDesc": "Düz triko üretiminin farklı aşamalarını aynı çatı altında yürüttüğümüz tesisimizden görüntüler.",
+    "factoryLabels": ["Düz Triko Örme", "İplik Deposu", "Konfeksiyon", "Ütü ve Son İşlemler", "Kalite Kontrol ve Paketleme"]
   },
 
   "collections": {
@@ -116,10 +116,10 @@
 
   "references": {
     "metaTitle": "Referanslar",
-    "metaDescription": "Akar Örme'nin 30'u aşkın ülkedeki iş ortaklıkları ve referans markaları.",
+    "metaDescription": "Akar Örme'nin düz triko ve konfeksiyon alanındaki üretim iş birlikleri.",
     "heroTitle": "İş",
     "heroHighlight": "Ortaklarımız",
-    "heroSubtitle": "30'dan fazla ülkede 500'ü aşkın markanın tercihi — kalite ve güvenilirlik üzerine kurulu uzun soluklu iş birlikleri."
+    "heroSubtitle": "Markalara düz triko ve konfeksiyon alanında kalite ve güvenilirlik odaklı üretim desteği sunuyoruz."
   },
 
   "notFound": {
@@ -273,11 +273,11 @@
 
   "dashboard": {
     "metaTitle": "Fabrika Verileri",
-    "metaDescription": "Akar Örme üretim kapasitesi — 128+ örme makinesi, günlük 25.000m kapasite, 32+ ülkeye ihracat.",
-    "heroTitle": "Fabrika",
-    "heroHighlight": "Verileri",
-    "heroSubtitle": "Üretim kapasitemiz, makine parkurumuz ve küresel ihracat ağımız — tek ekranda.",
-    "breadcrumb": "Fabrika Verileri"
+    "metaDescription": "Akar Örme'nin düz triko makine parkurunu ve örmeden paketlemeye uzanan entegre üretim aşamalarını keşfedin.",
+    "heroTitle": "Üretim",
+    "heroHighlight": "Aşamaları",
+    "heroSubtitle": "Düz triko örmeden paketlemeye kadar entegre üretim sürecimizi inceleyin.",
+    "breadcrumb": "Üretim Aşamaları"
   },
 
   "knitwearViewer": {
@@ -322,15 +322,15 @@
     "istanbulHQ": "İSTANBUL MRK",
     "regions": { "europe": "avrupa", "asia": "asya", "americas": "amerika", "africa": "afrika" },
     "metrics": {
-      "machines": { "label": "Örme Makineleri", "description": "En yeni dairesel ve düz örme makineleri" },
-      "capacity": { "label": "Günlük Kapasite", "description": "Günlük üretilen premium kumaş metre sayısı" },
+      "machines": { "label": "Düz Triko Makineleri", "description": "Farklı incelik ve desenlerde üretim kabiliyeti" },
+      "capacity": { "label": "Entegre Üretim", "description": "Örmeden paketlemeye kadar uçtan uca üretim" },
       "gauges": { "label": "Numara Türleri", "description": "3 GG ultra kalından 28 GG ultra inceye kadar" },
       "yarns": { "label": "İplik Seçenekleri", "description": "Doğal, sentetik ve karışık iplik çeşitleri" },
       "countries": { "label": "İhracat Ülkeleri", "description": "Beş kıtaya hizmet veren teslimatlar" },
       "employees": { "label": "Uzman Kadro", "description": "Yetenekli teknisyenler, tasarımcılar ve kalite ekipleri" }
     },
     "machineTypeNames": {
-      "circular": "Dairesel Örme",
+      "circular": "Düz Triko Örme",
       "flat": "Düz Örme",
       "jacquard": "Jakarlı",
       "seamless": "Dikişsiz (Whole Garment)"
@@ -354,20 +354,20 @@
       { "name": "Saç Örgü & Jakar", "gauge": "7 GG", "composition": "%80 Yün / %20 Naylon", "description": "Kumaşa karakter katan zengin ilmek desenleri. Kalın numara jakar ve saç örgü örmelerimiz, kış koleksiyonlarına ve vintage esintili tasarımlara zanaat değeri katar." }
     ],
     "timeline": [
-      { "year": 2000, "title": "Kuruluş", "description": "Akar Örme, 12 yuvarlak örme makinesiyle İstanbul'da kuruldu. Hedef: dünya standartlarında triko kumaş üretmek." },
+      { "year": 2000, "title": "Kuruluş", "description": "Akar Örme, İstanbul'da düz triko üretimi yapmak üzere faaliyetlerine başladı." },
       { "year": 2003, "title": "İlk İhracat", "description": "İskandinav bir moda markasıyla ilk uluslararası anlaşmamızı imzaladık ve küresel pazara adım attık." },
-      { "year": 2006, "title": "ISO 9001 Sertifikası", "description": "ISO 9001 kalite yönetim belgesi alarak üretimin her aşamasında uluslararası standartları benimsedik." },
-      { "year": 2010, "title": "Fabrika Genişlemesi", "description": "Boyahane, terbiye tesisi ve kalite laboratuvarı dahil 15.000 m²'lik entegre üretim tesisine taşındık." },
-      { "year": 2014, "title": "OEKO-TEX® Sertifikası", "description": "OEKO-TEX® Standard 100 belgesiyle tüm kumaşlarımızın insan sağlığına uygunluğunu belgeledik." },
-      { "year": 2018, "title": "120+ Makine", "description": "Makine parkurumuz 120'yi aşarak 3 GG'den 28 GG'ye kadar her numara grubunda üretim kapasitesine ulaştık." },
-      { "year": 2022, "title": "Sürdürülebilir Üretim", "description": "Susuz boyama teknolojisi ve güneş enerjili üretim hatlarıyla 2030 karbon nötr hedefimize doğru ilk adımları attık." },
-      { "year": 2025, "title": "Bugün", "description": "32 ülkede 500'ü aşkın markaya hizmet veriyoruz ve triko üretiminin geleceğine yatırım yapmaya devam ediyoruz." }
+      { "year": 2006, "title": "Üretim Deneyimi", "description": "Düz triko üretimindeki teknik bilgi birikimimizi ve ürün geliştirme kabiliyetimizi güçlendirdik." },
+      { "year": 2010, "title": "Entegre Üretim", "description": "Konfeksiyon ve son işlem aşamalarını üretim yapımıza dahil ederek uçtan uca hizmet vermeye başladık." },
+      { "year": 2014, "title": "Kalite Süreçleri", "description": "Üretimin her aşamasında ölçüm, kontrol ve izlenebilirlik süreçlerimizi geliştirdik." },
+      { "year": 2018, "title": "Makine Parkuru", "description": "Düz triko makine parkurumuzu farklı ürün, desen ve incelik ihtiyaçlarına cevap verecek şekilde geliştirdik." },
+      { "year": 2022, "title": "Üretim Gelişimi", "description": "Verimli kaynak kullanımı ve sorumlu üretim yaklaşımımızı güçlendirdik." },
+      { "year": 2025, "title": "Bugün", "description": "Örmeden konfeksiyon, ütü, kalite kontrol ve paketlemeye kadar tüm aşamaları tek çatı altında yürütüyoruz." }
     ],
     "stats": [
-      { "label": "Marka Ortağı", "value": 500 },
-      { "label": "İhracat Ülkesi", "value": 32 },
+      { "label": "Üretim Aşaması", "value": 6 },
+      { "label": "Entegre Üretim", "value": 1 },
       { "label": "Yıllık Deneyim", "value": 25 },
-      { "label": "Metre / Yıl", "value": 8, "suffix": "M+" }
+      { "label": "Kalite Kontrol", "value": 100, "suffix": "%" }
     ]
   },
 

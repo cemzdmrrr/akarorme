@@ -67,7 +67,7 @@ export default function BrandStory({ dict, locale }: { dict: BrandStoryDict; loc
             <div className="relative col-span-2 aspect-[2/1] overflow-hidden rounded-2xl">
               <Image
                 src={dict.images[2]}
-                alt="Fabrikada sıralanmış bitmiş kumaş ruloları"
+                alt="Ütü ve son işlemleri tamamlanan triko ürünleri"
                 fill
                 className="object-cover"
                 sizes="(min-width: 1024px) 50vw, 100vw"
