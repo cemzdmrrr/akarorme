@@ -1,4 +1,5 @@
-import type { Locale } from '@/i18n/config';
+import type { Metadata } from 'next';
+import { locales, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
@@ -12,6 +13,21 @@ import { getPersistedFabrics, getPersistedPages } from '@/lib/admin-blob-store';
 import { getPageBySlug, getPageSectionContent } from '@/data/page-content';
 
 export const revalidate = 60; // ISR: revalidate every 60 seconds
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: Locale };
+}): Promise<Metadata> {
+  return {
+    alternates: {
+      canonical: `https://www.akarorme.com/${params.locale}`,
+      languages: Object.fromEntries(
+        locales.map((locale) => [locale, `https://www.akarorme.com/${locale}`]),
+      ),
+    },
+  };
+}
 
 export default async function HomePage({
   params,

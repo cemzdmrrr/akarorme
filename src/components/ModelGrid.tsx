@@ -42,6 +42,9 @@ export default function ModelGrid({ models, dict, locale }: { models: KnitwearMo
                     <img
                       src={model.image}
                       alt={model.name}
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   )}

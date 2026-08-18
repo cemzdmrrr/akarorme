@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import type { Locale } from '@/i18n/config';
+import { locales, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
 import Navbar from '@/components/Navbar';
 import PageHero from '@/components/PageHero';
@@ -18,6 +18,12 @@ export async function generateMetadata({
   return {
     title: dict.technology.metaTitle,
     description: dict.technology.metaDescription,
+    alternates: {
+      canonical: `https://www.akarorme.com/${params.locale}/technology`,
+      languages: Object.fromEntries(
+        locales.map((locale) => [locale, `https://www.akarorme.com/${locale}/technology`]),
+      ),
+    },
   };
 }
 

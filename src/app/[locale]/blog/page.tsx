@@ -10,14 +10,34 @@ import { getPublishedBlogPosts } from '@/data/blog';
 import { getPageBySlug, getPageSectionContent } from '@/data/page-content';
 import { getPersistedPages } from '@/lib/admin-blob-store';
 
+const baseUrl = 'https://www.akarorme.com';
+
 export async function generateMetadata({
   params,
 }: {
   params: { locale: Locale };
 }): Promise<Metadata> {
+  const title = params.locale === 'tr' ? 'Triko Üretimi Blogu' : 'Knitwear Production Blog';
+  const description = params.locale === 'tr'
+    ? 'Düz triko üretimi, gauge seçimi, fully fashioned teknikleri ve koleksiyon geliştirme üzerine Akar Örme uzman içerikleri.'
+    : 'Expert articles from Akar Örme about flat knitwear production, gauge selection, fully fashioned techniques and collection development.';
+
   return {
-    title: 'Blog',
-    description: 'Akar Örme blog yazıları',
+    title,
+    description,
+    alternates: {
+      canonical: `${baseUrl}/${params.locale}/blog`,
+      languages: Object.fromEntries(
+        ['en', 'tr', 'ar', 'zh'].map((locale) => [locale, `${baseUrl}/${locale}/blog`]),
+      ),
+    },
+    openGraph: {
+      type: 'website',
+      url: `${baseUrl}/${params.locale}/blog`,
+      title,
+      description,
+      siteName: 'Akar Örme',
+    },
   };
 }
 
