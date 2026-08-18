@@ -61,6 +61,9 @@ export default function ModelDetail({
                     <img
                       src={activeImage}
                       alt={model.name}
+                      loading="eager"
+                      decoding="async"
+                      fetchPriority="high"
                       className="h-full w-full object-contain object-center"
                     />
                   ) : (
@@ -117,7 +120,7 @@ export default function ModelDetail({
                         : 'border-transparent opacity-70 hover:border-brand-sand-dark hover:opacity-100'
                     }`}
                   >
-                    <img src={image} alt="" className="h-full w-full object-cover" />
+                    <img src={image} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -271,6 +274,9 @@ export default function ModelDetail({
                       <img
                         src={src}
                         alt={`${model.name} ${index + 1}`}
+                        loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
                         className="absolute inset-0 h-full w-full object-cover"
                       />
                     )}
