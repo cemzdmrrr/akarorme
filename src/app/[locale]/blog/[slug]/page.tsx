@@ -10,6 +10,8 @@ import { getPublishedBlogPostBySlug, getPublishedBlogPosts } from '@/data/blog';
 import { getPageBySlug, getPageSectionContent } from '@/data/page-content';
 import { getPersistedPages } from '@/lib/admin-blob-store';
 
+const baseUrl = 'https://www.akarorme.com';
+
 export async function generateStaticParams() {
   const posts = await getPublishedBlogPosts();
   return posts.map((post) => ({ slug: post.slug }));
@@ -25,9 +27,39 @@ export async function generateMetadata({
     return { title: 'Blog' };
   }
 
+  const canonical = `${baseUrl}/${params.locale}/blog/${params.slug}`;
+  const image = post.coverImage
+    ? post.coverImage.startsWith('http') || post.coverImage.startsWith('data:')
+      ? post.coverImage
+      : `${baseUrl}${post.coverImage}`
+    : undefined;
+
   return {
     title: post.title,
     description: post.seoDescription || post.excerpt,
+    alternates: {
+      canonical,
+      languages: Object.fromEntries(
+        ['en', 'tr', 'ar', 'zh'].map((locale) => [locale, `${baseUrl}/${locale}/blog/${params.slug}`]),
+      ),
+    },
+    openGraph: {
+      type: 'article',
+      url: canonical,
+      title: post.title,
+      description: post.seoDescription || post.excerpt,
+      siteName: 'Akar Örme',
+      publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt,
+      authors: [post.author],
+      ...(image ? { images: [{ url: image, alt: post.title }] } : {}),
+    },
+    twitter: {
+      card: image ? 'summary_large_image' : 'summary',
+      title: post.title,
+      description: post.seoDescription || post.excerpt,
+      ...(image ? { images: [image] } : {}),
+    },
   };
 }
 
@@ -47,9 +79,49 @@ export default async function BlogDetailPage({
   const blogPage = getPageBySlug(pages, 'blog');
   const blogLabel = getPageSectionContent(getPageBySlug(pages, 'global'), 'nav_blog', params.locale, 'Blog');
   const paragraphs = post.content.split(/\n\s*\n/).filter(Boolean);
+  const articleUrl = `${baseUrl}/${params.locale}/blog/${post.slug}`;
+  const articleImage = post.coverImage
+    ? post.coverImage.startsWith('http') || post.coverImage.startsWith('data:')
+      ? post.coverImage
+      : `${baseUrl}${post.coverImage}`
+    : undefined;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Article',
+        '@id': `${articleUrl}#article`,
+        headline: post.title,
+        description: post.seoDescription || post.excerpt,
+        ...(articleImage ? { image: [articleImage] } : {}),
+        datePublished: post.publishedAt,
+        dateModified: post.updatedAt,
+        author: {
+          '@type': post.author === 'Akar Örme' ? 'Organization' : 'Person',
+          name: post.author,
+        },
+        publisher: { '@id': `${baseUrl}/#organization` },
+        mainEntityOfPage: articleUrl,
+        inLanguage: params.locale,
+        keywords: post.tags.join(', '),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: dict.common.home, item: `${baseUrl}/${params.locale}` },
+          { '@type': 'ListItem', position: 2, name: blogLabel, item: `${baseUrl}/${params.locale}/blog` },
+          { '@type': 'ListItem', position: 3, name: post.title, item: articleUrl },
+        ],
+      },
+    ],
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar locale={params.locale} dict={{ nav: dict.nav }} />
       <main>
         <PageHero
