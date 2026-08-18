@@ -92,7 +92,6 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: FooterD
               className="h-8 w-auto brightness-0 invert"
               quality={100}
               unoptimized
-              priority
             />
           </Link>
 
@@ -101,7 +100,7 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: FooterD
               <Link
                 key={link.href}
                 href={link.href}
-                className="py-2 text-sm text-white/60 transition-colors hover:text-white"
+                className="py-2 text-sm text-white/80 transition-colors hover:text-white"
               >
                 {link.label}
               </Link>
@@ -109,7 +108,7 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: FooterD
           </nav>
         </div>
 
-        <div className="mt-10 border-t border-white/10 pt-6 text-center text-xs text-white/40">
+        <div className="mt-10 border-t border-white/10 pt-6 text-center text-xs text-white/70">
           {footerText || dict.footer.copyright.replace('{year}', String(new Date().getFullYear()))}
         </div>
       </div>
