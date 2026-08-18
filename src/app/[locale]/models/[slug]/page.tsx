@@ -28,7 +28,7 @@ export async function generateMetadata({
 
   const title = `${model.name} — AKAR ÖRME`;
   const description = `${model.name} — ${model.tagline}. ${model.description.slice(0, 150)}`;
-  const url = `https://akarorme.com/${params.locale}/models/${params.slug}`;
+  const url = `https://www.akarorme.com/${params.locale}/models/${params.slug}`;
   const image = model.image || undefined;
 
   return {
@@ -37,7 +37,7 @@ export async function generateMetadata({
     alternates: {
       canonical: url,
       languages: Object.fromEntries(
-        locales.map((locale) => [locale, `https://akarorme.com/${locale}/models/${params.slug}`]),
+        locales.map((locale) => [locale, `https://www.akarorme.com/${locale}/models/${params.slug}`]),
       ),
     },
     openGraph: {
@@ -95,7 +95,7 @@ export default async function ModelPage({
     manufacturer: {
       '@type': 'Organization',
       name: 'AKAR ÖRME',
-      url: 'https://akarorme.com',
+      url: 'https://www.akarorme.com',
     },
   };
 
