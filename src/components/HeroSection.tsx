@@ -118,7 +118,8 @@ export default function HeroSection({ dict, locale }: { dict: HeroDict; locale: 
               alt={dict.imageAlt}
               fill
               className="object-cover"
-              priority
+              loading="eager"
+              fetchPriority="high"
               sizes="(min-width: 1024px) 50vw, 0vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/20 to-transparent" />
