@@ -22,7 +22,15 @@ export function middleware(request: NextRequest) {
   );
 
   if (pathnameHasLocale) {
-    return NextResponse.next();
+    const locale = locales.find(
+      (candidate) => pathname === `/${candidate}` || pathname.startsWith(`/${candidate}/`),
+    ) ?? defaultLocale;
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-site-locale', locale);
+
+    return NextResponse.next({
+      request: { headers: requestHeaders },
+    });
   }
 
   // Detect preferred locale from Accept-Language header
